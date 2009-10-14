@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+
+    <em:id>compatibility@addons.mozilla.org</em:id>
+    <em:type>2</em:type>
+    <em:name>Add-on Compatibility Reporter</em:name>
+    <em:version>0.1</em:version>
+    <em:creator>Mozilla Corporation</em:creator>
+    <em:contributor>Briks Software (http://briks.si)</em:contributor>
+    <em:description>Allows add-on compatibility issues to be reported to Mozilla</em:description>
+    <em:optionsURL>chrome://acr/content/ui/options.xul</em:optionsURL>
+    <em:iconURL>chrome://acr/skin/images/favicon.ico</em:iconURL>
+
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>3.5</em:minVersion>
+        <em:maxVersion>3.7a1pre</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <!-- Thunderbird -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
+        <em:minVersion>3.0a1</em:minVersion>
+        <em:maxVersion>3.1a1pre</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+  </Description>
+
+</RDF>
