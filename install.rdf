@@ -11,7 +11,7 @@
     <em:creator>Mozilla Corporation</em:creator>
     <em:contributor>Briks Software (http://briks.si)</em:contributor>
     <em:description>Allows add-on compatibility issues to be reported to Mozilla</em:description>
-    <em:optionsURL>chrome://acr/content/ui/options.xul</em:optionsURL>
+    <!--<em:optionsURL>chrome://acr/content/ui/options.xul</em:optionsURL>-->
     <em:iconURL>chrome://acr/skin/images/favicon.ico</em:iconURL>
 
     <!-- Firefox -->

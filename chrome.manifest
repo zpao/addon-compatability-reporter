@@ -2,5 +2,5 @@ content   acr                 jar:chrome/acr.jar!/content/
 skin      acr   classic/1.0   jar:chrome/acr.jar!/skin/
 locale    acr   en-US         jar:chrome/acr.jar!/locale/en-US/
 
-overlay   chrome://browser/content/browser.xul   chrome://acr/content/ui/overlays/overlay.xul
-overlay   chrome://mozapps/content/extensions/extensions.xul chrome://acr/content/ui/overlays/extensionsOverlay.xul
+#overlay   chrome://browser/content/browser.xul   chrome://acr/content/ui/overlays/overlay.xul
+overlay   chrome://mozapps/content/extensions/extensions.xul chrome://acr/content/view/extensionsOverlay.xul

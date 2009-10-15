@@ -1,17 +1,5 @@
-#acr-toolbar-button
+.compatibilityButton
 {
-  list-style-image: url("chrome://acr/skin/images/favicon3.ico");
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-#acr-toolbar-button:hover
-{
-  -moz-image-region: rect(24px 24px 48px  0px);
-}
-[iconsize="small"] #acr-toolbar-button
-{
-  -moz-image-region: rect( 0px 40px 16px 24px);
-}
-[iconsize="small"] #acr-toolbar-button:hover
-{
-  -moz-image-region: rect(24px 40px 40px 24px);
+    margin-top: 0;
+    margin-bottom: 0;
 }

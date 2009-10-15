@@ -38,12 +38,24 @@
 
 <!DOCTYPE overlay SYSTEM "chrome://acr/locale/extensionsOverlay.dtd" >
 
+<?xml-stylesheet href="chrome://acr/content/view/bindings.css" type="text/css"?>
 <?xml-stylesheet href="chrome://acr/skin/extensionsOverlay.css" type="text/css"?>
 
 <overlay id="acr-extensions-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <script src="chrome://acr/content/ui/overlays/extensionsOverlayController.js"/>
+    <script src="chrome://acr/content/model/acr.js"/>
+    <script src="chrome://acr/content/model/factory.js"/>
+    <script src="chrome://acr/content/model/logger.js"/>
+    <script src="chrome://acr/content/model/prefs.js"/>
+    <script src="chrome://acr/content/model/util.js"/>
+    <script src="chrome://acr/content/model/rpc/service.js"/>
+    <script src="chrome://acr/content/model/rpc/constants.js"/>
+    <script src="chrome://acr/content/model/rpc/error.js"/>
+    <script src="chrome://acr/content/model/rpc/event.js"/>
+    <script src="chrome://acr/content/model/rpc/net.js"/>
+
+    <script src="chrome://acr/content/controller/extensionsOverlayController.js"/>
 
     <!--
     <stringbundleset id="extensionsSet">

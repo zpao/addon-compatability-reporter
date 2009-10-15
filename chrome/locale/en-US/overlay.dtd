@@ -1,8 +1,0 @@
-<!ENTITY acr.label "Your localized menuitem">
-<!ENTITY acrContext.label "Your Menuitem">
-<!ENTITY acrContext.accesskey "Y">
-<!ENTITY acrToolbarButton.label "Your Toolbar Button">
-<!ENTITY acrToolbarButton.tooltip "This is your toolbar button!">
-<!ENTITY acrSidebar.label "Your Sidebar">
-<!ENTITY acrToolbar.name  "example">
-<!ENTITY acrToolbar.label "This is an example toolbar. You can hide it under View &gt; toolbars &gt; &acrToolbar.name;">

@@ -11,14 +11,15 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is Add-on Compatibility Reporter.
+ * The Original Code is ACR.
  *
  * The Initial Developer of the Original Code is
  * Mozilla Corporation.
- * Portions created by the Initial Developer are Copyright (C) 2009
+ * Portions created by the Initial Developer are Copyright (C) 2008
  * the Initial Developer. All Rights Reserved.
  *
- * Contributor(s): Brian King <brian (at) briks (dot) si>
+ * Contributor(s): David McNamara
+ *                 Brian King
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -34,14 +35,33 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ACR.Controller.ExtensionsOverlay = new function()
-{
 
+ACR.RPC.Error = function(code, message)
+{
+        this.code = (code != null?code:0);
+        this.message = message;
+        this.url = null;
 }
 
-ACR.Controller.ExtensionsOverlay.init = function()
+ACR.RPC.Error.prototype.getCode = function()
 {
-
+        return this.code;
 }
 
-window.addEventListener("load", ACR.Controller.ExtensionsOverlay.init, true);
+ACR.RPC.Error.prototype.getMessage = function()
+{
+        if (this.message == null || this.message == "")
+        {
+                return "(error " + this.code + ")";
+        }
+        else
+        {
+                return this.message;
+        }
+}
+
+ACR.RPC.Error.prototype.toString = function()
+{
+        return "Error " + this.getCode() + ": " + this.getMessage();
+}
+

@@ -1,0 +1,4 @@
+acrCompatibilityButton
+{
+      -moz-binding: url("chrome://acr/content/view/bindings.xml#acr-compatibility-button");
+}
