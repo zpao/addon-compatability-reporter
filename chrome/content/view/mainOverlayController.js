@@ -34,73 +34,45 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-top.ACR = new function() {}
+ACR.Controller.MainOverlay = new function() {}
 
-ACR.Controller = new function() {}
-ACR.RPC = new function() {}
-
-ACR.FIRSTRUN_LANDING_PAGE = "https://%%AMO_HOST%%/pages/compatibility_firstrun";
-
-ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
+ACR.Controller.MainOverlay.initACR = function()
 {
-    ACR.Logger.debug("In ACR.submitReport()");
+    ACR.Controller.MainOverlay._delayedInitACR();
+}
 
-    details = details.trim();
+ACR.Controller.MainOverlay._delayedInitACR = function()
+{
+    //ACR.Controller.MainOverlay._removeLoadListener();
 
-    var otherAddons = [];
-
-    if (includeOtherAddons)
+    if (ACR.Preferences.getPreference("firstrun") == true)
     {
-        var installedExtensions = ACR.Util.getInstalledExtensions();
+        ACR.Preferences.setPreference("firstrun", false);
+        ACR.Controller.MainOverlay.firstrun();
+    }
+}
 
-        for (var i=0; i<installedExtensions.length; i++)
+ACR.Controller.MainOverlay._removeLoadListener = function()
+{
+    window.removeEventListener("load", ACR.init, true);
+}
+
+ACR.Controller.MainOverlay.firstrun = function()
+{
+    ACR.Logger.info("This is ACR's firstrun. Welcome!");
+
+    var url = ACR.FIRSTRUN_LANDING_PAGE.replace("%%AMO_HOST%%", ACR.Preferences.getPreference("amo_host"));
+
+    if (ACR.Util.getHostEnvironmentInfo().appName == "Firefox")
+    {
+        window.setTimeout(function()
         {
-            otherAddons.push([installedExtensions[i].id, installedExtensions[i].version]);
-        }
+            var tab = window.getBrowser().addTab(url);
+            window.getBrowser().selectedTab = tab;
+        },
+        1000);
     }
-
-    var envInfo = ACR.Util.getHostEnvironmentInfo();
-
-    var internalCallback = function(event)
-    {
-        if (!event.isError())
-        {
-            addon.state = (stillWorks ? 1 : 2);
-            ACR.Factory.saveAddon(addon);
-        }
-
-        callback(event);
-    }
-
-    ACR.getService().submitReport(
-        addon.guid,
-        stillWorks,
-        envInfo.appGUID,
-        envInfo.appVersion,
-        envInfo.appBuildID,
-        envInfo.osVersion,
-        details,
-        otherAddons,
-        internalCallback
-    );
+    // XX TODO A Thunderbird firstrun story
 }
 
-ACR.disableAddon = function(addon)
-{
-    var em = Components.classes["@mozilla.org/extensions/manager;1"]
-        .getService(Components.interfaces.nsIExtensionManager);
-
-    em.disableItem(addon.guid);
-}
-
-ACR.getService = function()
-{
-    if (!this._service)
-    {
-        this._service = new ACR.RPC.Service();
-        this._service.registerLogger(ACR.Logger);
-    }
-
-    return this._service;
-}
-
+window.addEventListener("load", ACR.Controller.MainOverlay.initACR, true);
