@@ -117,9 +117,10 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
 
     ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddon(selectedExtensionGUID, selectedExtensionVersion);
     ACR.Controller.ExtensionsOverlay._addon.name = elemExtension.getAttribute("name");
-    ACR.Controller.ExtensionsOverlay._addon.compatible = elemExtension.getAttribute("compatible");
+    ACR.Controller.ExtensionsOverlay._addon.compatible = elemExtension.getAttribute("compatible") == "true";
 
     ACR.Logger.debug("Addon name is " + ACR.Controller.ExtensionsOverlay._addon.name);
+    ACR.Logger.debug("Addon " + (ACR.Controller.ExtensionsOverlay._addon.compatible?"IS":"IS NOT") + " compatible with this version of firefox");
     ACR.Logger.debug("Factory says addon '" + ACR.Controller.ExtensionsOverlay._addon.guid + "/" + selectedExtensionVersion + "' has state '" + ACR.Controller.ExtensionsOverlay._addon.state + "'");
 
     ACR.Controller.ExtensionsOverlay._compatibilityButton.addon = ACR.Controller.ExtensionsOverlay._addon;
