@@ -104,23 +104,14 @@ ACR.RPC.Net = function()
 
         try
         {
-            var xmlStr = rpcnetrequest.responseText;
-
-            // dave@briks: The following hacks are workarounds for E4X
-            // bugs/features. If anyone knows the dark secrets of namespace
-            // support in e4x please let me know!
-
-            xmlStr = xmlStr.replace(/^<\?xml\s+version\s*=\s*(["'])[^\1]+\1[^?]*\?>/, ""); // bug 336551
-            xmlStr = xmlStr.replace(/xmlns="http:\/\/addons.mozilla.org\/"/gi, "");
-            xmlStr = xmlStr.replace(/xml:base=/gi, "xmlbase=");
-
-            response = new XML(xmlStr);
-
-            //rpcnet._logger.debug("ACR.RPC.Net.send.onreadystatechange: ' + rpcnet.id + ': XML representation: '" + response.toXMLString() + "'");
+            if (rpcnetrequest.responseText != "")
+                response = JSON.parse(rpcnetrequest.responseText);
+            else
+                response = "";
         }
         catch (e)
         {
-            rpcnet._logger.error('ACR.RPC.Net.send.onreadystatechange: ' + rpcnet.id + ": can't evaluate XML response... '" + e + "'");
+            rpcnet._logger.error('ACR.RPC.Net.send.onreadystatechange: ' + rpcnet.id + ": can't parse JSON response... '" + e + "'");
             lastErr = e;
         }
 
@@ -151,7 +142,7 @@ ACR.RPC.Net = function()
 
         try 
         {
-            lastErr = (response.attribute("reason")?response.attribute("reason"):"?");
+            lastErr = response.error + ": " + response.details;
             rpcnet._logger.debug('ACR.RPC.Net.send.onreadystatechange: ' + rpcnet.id + ": completed, response error message = '" + lastErr + "'");
         }
         catch (e)
@@ -330,7 +321,7 @@ ACR.RPC.Net.prototype.send = function()
 
     if ('POST' == rpcnet._method)
     {
-        rpcnetrequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        rpcnetrequest.setRequestHeader('Content-type', 'application/json');
     }
 
     if (('POST' == rpcnet._method || 'PUT' == rpcnet._method) && postData)
@@ -358,5 +349,7 @@ ACR.RPC.Net.prototype.send = function()
 
     rpcnet._logger.debug('ACR.RPC.Net.send: ' + rpcnet.id + ': sending XMLHttpRequest ' + (postData?' with data "' + postData + '"':''));
 
-    rpcnetrequest.send(postData);
+    // have to send as binary, otherwise moz stuffs a charset in the content-type header, which is rejected by the api
+
+    rpcnetrequest.sendAsBinary(postData);
 }

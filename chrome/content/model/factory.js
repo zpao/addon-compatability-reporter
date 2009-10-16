@@ -54,3 +54,16 @@ ACR.Factory.getAddon = function(guid, version)
     return addon;
 }
 
+ACR.Factory.saveAddon = function(addon)
+{
+    ACR.Logger.debug("ACL.Factory.saveAddon(): Saving addon guid = '" + addon.guid + "', version = '" + addon.version + "'");
+
+    var map = ACR.Preferences.getPreferenceMap("addons");
+
+    var id = addon.guid + "/" + addon.version;
+
+    map[id] = addon.state;
+
+    ACR.Preferences.setPreferenceMap("addons", map);
+}
+

@@ -38,7 +38,7 @@
 ACR.RPC.Constants = new function()
 {
     //this.ACR_RPC_SERVICE_BASE = "https://%%AMO_HOST%%/en-US/firefox/api/1.3/";
-    this.ACR_RPC_SERVICE_BASE = "https://%%AMO_HOST%%/en-US/firefox/api/1.3";
+    this.ACR_RPC_SERVICE_BASE = "https://%%AMO_HOST%%/en-US/firefox";
     this.ACR_RPC_SUBMIT_REPORT = "/compatibility/incoming";
     
     this.ACR_RPC_ENABLE_CACHE_BUSTER = 1;

@@ -53,9 +53,7 @@
     <script src="chrome://acr/content/controller/dialog.js"/>
     <script src="chrome://acr/content/controller/submitReportController.js"/>
 
-    <!--
-    <stringbundle id="bandwagon-strings" src="chrome://bandwagon/locale/publish.properties"/>
-    -->
+    <stringbundle id="acr-strings" src="chrome://acr/locale/submitReport.properties"/>
 
     <hbox>
         <label value="&addon.label;"/>
@@ -89,6 +87,8 @@
             <label value="&informationIsPublic.label;"/>
         </hbox>
     </vbox>
+
+    <label id="result" collapsed="true"/>
 
     <hbox flex="1">
         <checkbox label="&disableThisAddon.label;" id="disableThisAddon" collapsed="true"/>

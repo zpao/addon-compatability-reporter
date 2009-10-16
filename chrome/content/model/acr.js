@@ -45,12 +45,10 @@ ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, call
 
     details = details.trim();
 
-    var otherAddons = null;
+    var otherAddons = [];
 
     if (includeOtherAddons)
     {
-        otherAddons = [];
-
         var installedExtensions = ACR.Util.getInstalledExtensions();
 
         for (var i=0; i<installedExtensions.length; i++)
@@ -61,6 +59,17 @@ ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, call
 
     var envInfo = ACR.Util.getHostEnvironmentInfo();
 
+    var internalCallback = function(event)
+    {
+        if (!event.isError())
+        {
+            addon.state = (stillWorks ? 1 : 2);
+            ACR.Factory.saveAddon(addon);
+        }
+
+        callback(event);
+    }
+
     ACR.getService().submitReport(
         addon.guid,
         stillWorks,
@@ -70,8 +79,16 @@ ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, call
         envInfo.osVersion,
         details,
         otherAddons,
-        callback
+        internalCallback
     );
+}
+
+ACR.disableAddon = function(addon)
+{
+    var em = Components.classes["@mozilla.org/extensions/manager;1"]
+        .getService(Components.interfaces.nsIExtensionManager);
+
+    em.disableItem(addon.guid);
 }
 
 ACR.getService = function()

@@ -40,6 +40,8 @@ ACR.Controller.SubmitReportController.init = function()
 {
     ACR.Logger.debug("In ACR.Controller.SubmitReportController.init()");
 
+    ACR.Controller.SubmitReportController.stringBundle = document.getElementById("acr-strings");
+
     var windowArgs = window.arguments[0];
 
     ACR.Controller.SubmitReportController._addon = windowArgs.addon;
@@ -78,20 +80,35 @@ ACR.Controller.SubmitReportController.doAccept = function()
         document.getElementById("details").value,
         document.getElementById("includeAddonList").checked,
         ACR.Controller.SubmitReportController.finished);
+
+    return false;
 }
 
 ACR.Controller.SubmitReportController.finished = function(event)
 {
     if (event.isError())
     {
-        // TODO better error reporting
-        alert(event.getError().getMessage());
-        return;
+        ACR.Logger.debug(event.getError().toString());
+
+        document.getElementById("result").value = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.error");
+        document.getElementById("result").class = "error";
+        document.getElementById("result").collapsed = false;
     }
+    else
+    {
+        if (document.getElementById("disableThisAddon").checked)
+        {
+            ACR.disableAddon(ACR.Controller.SubmitReportController._addon);
+        }
 
-    // TODO disable addon if checked
+        document.getElementById("result").value = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.success");
+        document.getElementById("result").class = "success";
+        document.getElementById("result").collapsed = false;
 
-    document.getElementById("acr-submit-report").cancelDialog();
+        document.getElementById("acr-submit-report").getButton("accept").collapsed = true;
+        document.getElementById("acr-submit-report").getButton("cancel").label = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.close");
+
+    }
 }
 
 window.addEventListener("load", ACR.Controller.SubmitReportController.init, true);

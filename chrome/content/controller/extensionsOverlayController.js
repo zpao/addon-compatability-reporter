@@ -69,6 +69,8 @@ ACR.Controller.ExtensionsOverlay._openSubmitReportDialog = function(params)
 {
     window.openDialog("chrome://acr/content/view/submitReport.xul", "",
             "chrome,titlebar,centerscreen,modal", params);
+
+    ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton();
 }
 
 /**
@@ -79,6 +81,11 @@ ACR.Controller.ExtensionsOverlay._openSubmitReportDialog = function(params)
 ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
 {
     ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton()");
+
+    if (ACR.Controller.ExtensionsOverlay._compatibilityButton && ACR.Controller.ExtensionsOverlay._compatibilityButton.parentNode)
+    {
+        ACR.Controller.ExtensionsOverlay._compatibilityButton.parentNode.removeChild(ACR.Controller.ExtensionsOverlay._compatibilityButton);
+    }
 
     if (ACR.Preferences.getGlobalPreference("extensions.checkCompatibility", true) == true)
     {
@@ -96,8 +103,8 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
     if (!elemSelectedButtons)
         return;
 
-    // No publish for plugins and items that can't be updated, the latter includes the default theme
-    if (elemExtension.getAttribute("plugin") == "true" || elemExtension.getAttribute("updateable") == "false")
+    // No publish for plugins 
+    if (elemExtension.getAttribute("plugin") == "true")
         return;
 
     var selectedExtensionGUID = elemExtension.getAttribute("addonID");
@@ -108,13 +115,9 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
     if (!selectedExtensionGUID)
         return;
 
-    if (ACR.Controller.ExtensionsOverlay._compatibilityButton && ACR.Controller.ExtensionsOverlay._compatibilityButton.parentNode)
-    {
-        ACR.Controller.ExtensionsOverlay._compatibilityButton.parentNode.removeChild(ACR.Controller.ExtensionsOverlay._compatibilityButton);
-    }
-
     ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddon(selectedExtensionGUID, selectedExtensionVersion);
     ACR.Controller.ExtensionsOverlay._addon.name = elemExtension.getAttribute("name");
+    ACR.Controller.ExtensionsOverlay._addon.compatible = elemExtension.getAttribute("compatible");
 
     ACR.Logger.debug("Addon name is " + ACR.Controller.ExtensionsOverlay._addon.name);
     ACR.Logger.debug("Factory says addon '" + ACR.Controller.ExtensionsOverlay._addon.guid + "/" + selectedExtensionVersion + "' has state '" + ACR.Controller.ExtensionsOverlay._addon.state + "'");
