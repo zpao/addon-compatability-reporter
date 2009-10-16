@@ -82,7 +82,7 @@
 
         <description>&pleaseProvideDetails.label;</description>
 
-        <textbox id="details" mutliline="true"/>
+        <textbox id="details" mutliline="true" rows="5"/>
 
         <checkbox label="&includeAddonList.label;" checked="false" id="includeAddonList"/>
 
@@ -93,7 +93,10 @@
         </hbox>
     </vbox>
 
-    <label id="result" collapsed="true"/>
+    <hbox pack="start" align="center" flex="1" style="min-height: 16px;">
+        <image id="spinner" src="chrome://acr/skin/images/spinner.gif" collapsed="true"/>
+        <label id="result" collapsed="true" flex="1"/>
+    </hbox>
 
     <hbox>
         <checkbox label="&disableThisAddon.label;" id="disableThisAddon" class="boldtxt" collapsed="true"/>

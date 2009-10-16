@@ -125,6 +125,7 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
 
     ACR.Controller.ExtensionsOverlay._compatibilityButton.addon = ACR.Controller.ExtensionsOverlay._addon;
 
+    /*
     try 
     {
         ACR.Controller.ExtensionsOverlay._compatibilityButton.invalidate();
@@ -133,6 +134,7 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
     {
         ACR.Logger.warn(e);
     }
+    */
 
     for (var i=0; i<elemSelectedButtons.childNodes.length; i++)
     {

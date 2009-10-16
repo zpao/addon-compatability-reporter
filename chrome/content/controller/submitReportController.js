@@ -75,6 +75,8 @@ ACR.Controller.SubmitReportController.doAccept = function()
 {
     ACR.Logger.debug("In ACR.Controller.SubmitReportController.doAccept()");
 
+    ACR.Controller.SubmitReportController.disableFormAndShowSpinner();
+
     ACR.submitReport(ACR.Controller.SubmitReportController._addon,
         ACR.Controller.SubmitReportController._stillWorks,
         document.getElementById("details").value,
@@ -84,6 +86,29 @@ ACR.Controller.SubmitReportController.doAccept = function()
     return false;
 }
 
+ACR.Controller.SubmitReportController.enableFormAndHideSpinner = function()
+{
+    document.getElementById("details").disabled = false;
+    document.getElementById("includeAddonList").disabled = false;
+    document.getElementById("disableThisAddon").disabled = false;
+
+    ACR.Controller.SubmitReportController.hideSpinner();
+}
+
+ACR.Controller.SubmitReportController.disableFormAndShowSpinner = function()
+{
+    document.getElementById("details").disabled = true;
+    document.getElementById("includeAddonList").disabled = true;
+    document.getElementById("disableThisAddon").disabled = true;
+
+    document.getElementById("spinner").collapsed = false;
+}
+
+ACR.Controller.SubmitReportController.hideSpinner = function()
+{
+    document.getElementById("spinner").collapsed = true;
+}
+
 ACR.Controller.SubmitReportController.finished = function(event)
 {
     if (event.isError())
@@ -91,18 +116,22 @@ ACR.Controller.SubmitReportController.finished = function(event)
         ACR.Logger.debug(event.getError().toString());
 
         document.getElementById("result").value = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.error");
-        document.getElementById("result").class = "error";
+        document.getElementById("result").setAttribute("class", "error");
         document.getElementById("result").collapsed = false;
+
+        ACR.Controller.SubmitReportController.enableFormAndHideSpinner();
     }
     else
     {
+        ACR.Controller.SubmitReportController.hideSpinner();
+
         if (document.getElementById("disableThisAddon").checked)
         {
             ACR.disableAddon(ACR.Controller.SubmitReportController._addon);
         }
 
         document.getElementById("result").value = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.success");
-        document.getElementById("result").class = "success";
+        document.getElementById("result").setAttribute("class", "success");
         document.getElementById("result").collapsed = false;
 
         document.getElementById("acr-submit-report").getButton("accept").collapsed = true;
