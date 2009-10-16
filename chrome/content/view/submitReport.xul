@@ -80,6 +80,8 @@
     <vbox id="noLongerWorks" collapsed="true">
         <label id="noLongerWorks" value="&thisAddonNoLongerWorks.label;"/>
 
+        <separator/>
+
         <description>&pleaseProvideDetails.label;</description>
 
         <textbox id="details" mutliline="true" rows="5"/>
