@@ -112,4 +112,3 @@ ACR.Controller.SubmitReportController.finished = function(event)
 }
 
 window.addEventListener("load", ACR.Controller.SubmitReportController.init, true);
-

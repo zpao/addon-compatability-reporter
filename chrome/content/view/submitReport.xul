@@ -45,8 +45,9 @@
         windowtype="ACR:SubmitReport"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         title="&window.title;"
-        orient="verical"
         style="width: 35em;"
+        buttonlabelcancel="&cancel.label;"
+        buttonlabelaccept="&submitReport.label;"
         ondialogaccept="return ACR.Controller.SubmitReportController.doAccept();"
         ondialogcancel="return ACR.Controller.SubmitReportController.doCancel();">
 
@@ -94,11 +95,8 @@
 
     <label id="result" collapsed="true"/>
 
-    <hbox flex="1">
+    <hbox>
         <checkbox label="&disableThisAddon.label;" id="disableThisAddon" class="boldtxt" collapsed="true"/>
-        <spacer flex="1"/>
-        <button dlgtype="accept" label="&submitReport.label;"/>
-        <button dlgtype="cancel" label="&cancel.label;"/>
     </hbox>
 
 </dialog>
