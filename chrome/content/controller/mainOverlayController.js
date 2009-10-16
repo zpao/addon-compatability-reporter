@@ -47,9 +47,13 @@ ACR.Controller.MainOverlay._delayedInitACR = function()
 
     if (ACR.Preferences.getPreference("firstrun") == true)
     {
+        ACR.Logger.debug("This is firstrun");
         ACR.Preferences.setPreference("firstrun", false);
+        ACR.firstrun();
         ACR.Controller.MainOverlay.firstrun();
     }
+
+    ACR.registerUninstallObserver();
 }
 
 ACR.Controller.MainOverlay._removeLoadListener = function()

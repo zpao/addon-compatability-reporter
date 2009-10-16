@@ -40,6 +40,7 @@ ACR.Controller = new function() {}
 ACR.RPC = new function() {}
 
 ACR.FIRSTRUN_LANDING_PAGE = "https://%%AMO_HOST%%/pages/compatibility_firstrun";
+ACR.EM_ID = "compatibility@addons.mozilla.org";
 
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
@@ -102,5 +103,88 @@ ACR.getService = function()
     }
 
     return this._service;
+}
+
+ACR.firstrun = function()
+{
+    var previousCheckCompatibilityPreference = ACR.Preferences.getGlobalPreference("extensions.checkCompatibility", true);
+
+    if (previousCheckCompatibilityPreference == null)
+        previousCheckCompatibilityPreference = true;
+
+    ACR.Preferences.setPreference("previousCheckCompatibility", previousCheckCompatibilityPreference);
+
+    var prefSvc = Components.classes["@mozilla.org/preferences-service;1"].
+        getService(Components.interfaces.nsIPrefService);
+
+    prefSvc.setBoolPref("extensions.checkCompatibility", false);
+}
+
+ACR.lastrun = function()
+{
+    ACR.Preferences.setGlobalPreference("extensions.checkCompatibility", ACR.Preferences.getPreference("previousCheckCompatibility"));
+}
+
+ACR.registerUninstallObserver = function()
+{
+    if (ACR._uninstallObserverRegistered) return;
+
+    var action =
+    {
+        observe: function (subject, topic, data)
+        {
+            if ((data == "item-uninstalled")
+                &&
+                (subject instanceof Components.interfaces.nsIUpdateItem)
+                &&
+                (subject.id == ACR.EM_ID))
+            {
+                ACR.lastrun();
+            }
+        }
+    };
+
+    var observer = 
+    {
+        onAssert: function (ds, subject, predicate, target)
+        {
+            if ((predicate.Value == "http://www.mozilla.org/2004/em-rdf#toBeUninstalled")
+                    &&
+                    (target instanceof Components.interfaces.nsIRDFLiteral)
+                    &&
+                    (target.Value == "true")
+                    &&
+                    (subject.Value == "urn:mozilla:extension:" + ACR.EM_ID))
+            {
+                ACR.lastrun();
+            }
+        },
+        onUnassert: function (ds, subject, predicate, target) {},
+        onChange: function (ds, subject, predicate, oldtarget, newtarget) {},
+        onMove: function (ds, oldsubject, newsubject, predicate, target) {},
+        onBeginUpdateBatch: function() {},
+        onEndUpdateBatch: function() {}
+    };
+
+    var extService = Components.classes["@mozilla.org/extensions/manager;1"]
+        .getService(Components.interfaces.nsIExtensionManager);
+
+    if (extService && ("uninstallItem" in extService))
+    {
+        var observerService = Components.classes["@mozilla.org/observer-service;1"]
+            .getService(Components.interfaces.nsIObserverService);
+        observerService.addObserver(action, "em-action-requested", false);
+        ACR._uninstallObserverRegistered = true;
+    }
+    else
+    {
+        try
+        {
+            extService.datasource.AddObserver(observer);
+            ACR._uninstallObserverRegistered = true;
+        }
+        catch (e) { }
+    }
+
 }
 

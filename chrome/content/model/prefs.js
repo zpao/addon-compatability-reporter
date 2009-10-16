@@ -171,6 +171,34 @@ ACR.Preferences.notifyObservers = function(data)
               .notifyObservers(null, "nsPref:changed", data);
 }
 
+ACR.Preferences.setGlobalPreference = function(name, value)
+{
+    var prefSvc = this.Cc["@mozilla.org/preferences-service;1"].
+        getService(this.Ci.nsIPrefService);
+
+    try
+    {
+        var type = prefSvc.getPrefType(name);
+
+        if (prefSvc.PREF_BOOL == type)
+        {
+            prefSvc.setBoolPref(name, value);
+        }
+        else if (prefSvc.PREF_INT == type)
+        {
+            prefSvc.setIntPref(name, value);
+        }
+        else if (prefSvc.PREF_STRING == type)
+        {
+            prefSvc.setCharPref(name, value);
+        }
+    }
+    catch (e)
+    {
+        ACR.Logger.error(e);
+    }
+}
+
 ACR.Preferences.getGlobalPreference = function(name, failSilently)
 {
     var prefSvc = this.Cc["@mozilla.org/preferences-service;1"].
