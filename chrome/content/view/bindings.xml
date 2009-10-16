@@ -67,8 +67,10 @@
                                   oncommand="ACR.Controller.ExtensionsOverlay.doNoLongerWorks();"/>
                  </xul:menupopup>
             </xul:button>
-            <xul:label value="&worksproperly.label;" anonid="worksproperly" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()"/>
-            <xul:label value="&compatibilityproblems.label;" anonid="compatibilityproblems" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()"/>
+            <xul:hbox align="center">
+                <xul:label value="&worksproperly.label;" anonid="worksproperly" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()"/>
+                <xul:label value="&compatibilityproblems.label;" anonid="compatibilityproblems" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()"/>
+            </xul:hbox>
         </content>
 
         <implementation>
