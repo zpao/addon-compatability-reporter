@@ -55,20 +55,22 @@
 
     <stringbundle id="acr-strings" src="chrome://acr/locale/submitReport.properties"/>
 
-    <hbox>
+    <hbox align="center">
         <label value="&addon.label;"/>
-        <label id="addon"/>
+        <label id="addon" class="boldtxt"/>
     </hbox>
 
-    <hbox>
+    <hbox align="center">
         <label value="&application.label;"/>
-        <label id="application"/>
+        <label id="application" class="boldtxt"/>
     </hbox>
 
-    <hbox>
+    <hbox align="center">
         <label value="&operatingSystem.label;"/>
-        <label id="operatingSystem"/>
+        <label id="operatingSystem" class="boldtxt"/>
     </hbox>
+
+    <separator/>
 
     <vbox id="stillWorks" collapsed="true">
         <label value="&thisAddonStillWorks.label;"/>
@@ -83,6 +85,8 @@
 
         <checkbox label="&includeAddonList.label;" checked="false" id="includeAddonList"/>
 
+        <separator/>
+
         <hbox flex="1" pack="end">
             <label value="&informationIsPublic.label;"/>
         </hbox>
@@ -91,7 +95,7 @@
     <label id="result" collapsed="true"/>
 
     <hbox flex="1">
-        <checkbox label="&disableThisAddon.label;" id="disableThisAddon" collapsed="true"/>
+        <checkbox label="&disableThisAddon.label;" id="disableThisAddon" class="boldtxt" collapsed="true"/>
         <spacer flex="1"/>
         <button dlgtype="accept" label="&submitReport.label;"/>
         <button dlgtype="cancel" label="&cancel.label;"/>

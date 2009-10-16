@@ -35,9 +35,10 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY window.title                  "Compatibility Report">
-<!ENTITY addon.label                   "Add-on">
-<!ENTITY application.label             "Application">
-<!ENTITY operatingSystem.label         "Operating System">
+
+<!ENTITY addon.label                   "Add-on:">
+<!ENTITY application.label             "Application:">
+<!ENTITY operatingSystem.label         "Operating System:">
 <!ENTITY cancel.label                  "Cancel">
 <!ENTITY submitReport.label            "Submit Report">
 <!ENTITY thisAddonStillWorks.label     "This add-on still works the way it did in previous versions.">
