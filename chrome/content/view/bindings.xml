@@ -57,19 +57,24 @@
                         class="compatibilityButton"
                         collapsed="true">
                 <xul:menupopup>
-                    <xul:menuitem anonid="stillworks" label="&stillworks.label;"
-                                  type="checkbox"
-                                  checked="true"
+                    <xul:menuitem anonid="stillworks"
+                                  label="&stillworks.label;"
+                                  class="menuitem-iconic"
+                                  image="chrome://acr/skin/images/greentick.png"
                                   oncommand="ACR.Controller.ExtensionsOverlay.doStillWorks();"/>
                     <xul:menuitem label="&nolongerworks.label;"
                                   class="menuitem-iconic"
-                                  image="chrome://global/skin/console/bullet-error.png"
+                                  image="chrome://acr/skin/images/redx.png"
                                   oncommand="ACR.Controller.ExtensionsOverlay.doNoLongerWorks();"/>
                  </xul:menupopup>
             </xul:button>
-            <xul:hbox align="center">
-                <xul:label value="&worksproperly.label;" anonid="worksproperly" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()"/>
-                <xul:label value="&compatibilityproblems.label;" anonid="compatibilityproblems" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()"/>
+            <xul:hbox anonid="worksproperly" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()" align="center">
+                <xul:image src="chrome://acr/skin/images/greentick.png" width="16" height="16"/>
+                <xul:label value="&worksproperly.label;"/>
+            </xul:hbox>
+            <xul:hbox anonid="compatibilityproblems" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()" align="center">
+                <xul:image src="chrome://acr/skin/images/redx.png" width="16" height="16"/>
+                <xul:label value="&compatibilityproblems.label;"/>
             </xul:hbox>
         </content>
 
