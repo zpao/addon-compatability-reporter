@@ -57,8 +57,14 @@
                         class="compatibilityButton"
                         collapsed="true">
                 <xul:menupopup>
-                    <xul:menuitem anonid="stillworks" label="&stillworks.label;" oncommand="ACR.Controller.ExtensionsOverlay.doStillWorks();"/>
-                    <xul:menuitem label="&nolongerworks.label;" oncommand="ACR.Controller.ExtensionsOverlay.doNoLongerWorks();"/>
+                    <xul:menuitem anonid="stillworks" label="&stillworks.label;"
+                                  type="checkbox"
+                                  checked="true"
+                                  oncommand="ACR.Controller.ExtensionsOverlay.doStillWorks();"/>
+                    <xul:menuitem label="&nolongerworks.label;"
+                                  class="menuitem-iconic"
+                                  image="chrome://global/skin/console/bullet-error.png"
+                                  oncommand="ACR.Controller.ExtensionsOverlay.doNoLongerWorks();"/>
                  </xul:menupopup>
             </xul:button>
             <xul:label value="&worksproperly.label;" anonid="worksproperly" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()"/>
