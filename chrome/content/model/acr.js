@@ -105,6 +105,19 @@ ACR.getService = function()
     return this._service;
 }
 
+ACR.checkForApplicationUpgrade = function()
+{
+    var env = ACR.Util.getHostEnvironmentInfo()
+    var appString = env.appName + " " + env.appVersion;
+
+    if (ACR.Preferences.getPreference("previousApplicationVersion") != appString)
+    {
+        ACR.Logger.info("Detected an application upgrade (previous was '" + ACR.Preferences.getPreference("previousApplicationVersion") + "', current is '" + appString + "'), clearing addon states.");
+        ACR.Preferences.setPreference("previousApplicationVersion", appString);
+        ACR.Preferences.setPreference("addons", "");
+    }
+}
+
 ACR.firstrun = function()
 {
     var previousCheckCompatibilityPreference = ACR.Preferences.getGlobalPreference("extensions.checkCompatibility", true);

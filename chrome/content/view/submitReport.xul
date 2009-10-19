@@ -84,7 +84,7 @@
 
         <description>&pleaseProvideDetails.label;</description>
 
-        <textbox id="details" mutliline="true" rows="5"/>
+        <textbox id="details" multiline="true"/>
 
         <checkbox label="&includeAddonList.label;" checked="false" id="includeAddonList"/>
 

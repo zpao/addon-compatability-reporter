@@ -44,6 +44,8 @@ ACR.Controller.ExtensionsOverlay.init = function()
 {
     ACR.Logger.debug("In ExtensionsOverlay.init()");
 
+    ACR.checkForApplicationUpgrade();
+
     document.getElementById("extensionsView").addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton, true);
 }
 
