@@ -64,7 +64,7 @@
                                   oncommand="ACR.Controller.ExtensionsOverlay.doStillWorks();"/>
                     <xul:menuitem label="&nolongerworks.label;"
                                   class="menuitem-iconic"
-                                  image="chrome://acr/skin/images/redx.png"
+                                  image="chrome://acr/skin/images/exclamation.png"
                                   oncommand="ACR.Controller.ExtensionsOverlay.doNoLongerWorks();"/>
                  </xul:menupopup>
             </xul:button>
@@ -73,7 +73,7 @@
                 <xul:label value="&worksproperly.label;"/>
             </xul:hbox>
             <xul:hbox anonid="compatibilityproblems" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()" align="center">
-                <xul:image src="chrome://acr/skin/images/redx.png" width="16" height="16"/>
+                <xul:image src="chrome://acr/skin/images/exclamation.png" width="16" height="16"/>
                 <xul:label value="&compatibilityproblems.label;"/>
             </xul:hbox>
         </content>
