@@ -12,8 +12,8 @@
     <em:contributor>Briks Software (http://briks.si)</em:contributor>
     <em:contributor>Some icons used are from the famfamfam Silk Icon Set, licensed under a Creative Commons Attribution 2.5 License</em:contributor>
     <em:description>Allows add-on compatibility issues to be reported to Mozilla</em:description>
-    <!--<em:optionsURL>chrome://acr/content/ui/options.xul</em:optionsURL>-->
-    <em:iconURL>chrome://acr/skin/images/star32.png</em:iconURL>
+    <!-- <em:optionsURL>chrome://acr/content/ui/options.xul</em:optionsURL>
+    <em:iconURL>chrome://acr/skin/images/star32.png</em:iconURL> -->
 
     <!-- Firefox -->
     <em:targetApplication>
