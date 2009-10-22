@@ -105,8 +105,12 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
     if (!elemSelectedButtons)
         return;
 
-    // No publish for plugins 
+    // No compatibility for plugins 
     if (elemExtension.getAttribute("plugin") == "true")
+        return;
+
+    // No compatibility for personas 
+    if (elemExtension.getAttribute("lwtheme") == "true")
         return;
 
     var selectedExtensionGUID = elemExtension.getAttribute("addonID");
