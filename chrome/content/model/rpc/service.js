@@ -209,7 +209,7 @@ ACR.RPC.Service.prototype.unregisterObserver = function(observerId)
  * ACR Protocol Methods Below Here
  */
 
-ACR.RPC.Service.prototype.submitReport = function(guid, worksProperly, appGUID, appVersion, appBuild, clientOS, comments, otherAddons, callback)
+ACR.RPC.Service.prototype.submitReport = function(guid, addonVersion, worksProperly, appGUID, appVersion, appBuild, clientOS, comments, otherAddons, callback)
 {
     var service = this;
 
@@ -217,6 +217,7 @@ ACR.RPC.Service.prototype.submitReport = function(guid, worksProperly, appGUID, 
 
     var data = {
         guid: guid,
+        version: addonVersion,
         worksProperly: worksProperly,
         appGUID: appGUID,
         appVersion: appVersion,

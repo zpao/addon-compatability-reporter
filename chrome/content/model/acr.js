@@ -75,6 +75,7 @@ ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, call
 
     ACR.getService().submitReport(
         addon.guid,
+        addon.version,
         stillWorks,
         envInfo.appGUID,
         envInfo.appVersion,
