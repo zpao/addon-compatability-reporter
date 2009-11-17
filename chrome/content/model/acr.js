@@ -131,12 +131,34 @@ ACR.firstrun = function()
     var prefSvc = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService);
 
-    prefSvc.setBoolPref("extensions.checkCompatibility", false);
+    try
+    {
+        prefSvc.setBoolPref("extensions.checkCompatibility", false);
+        prefSvc.setBoolPref("extensions.checkCompatibility.3.6b", false);
+        prefSvc.setBoolPref("extensions.checkCompatibility.3.6", false);
+        prefSvc.setBoolPref("extensions.checkCompatibility.3.7a", false);
+    }
+    catch (e)
+    {
+        ACR.Logger.warn("Could not set a checkCompatibility pref: " + e);
+    }
 }
 
 ACR.lastrun = function()
 {
-    ACR.Preferences.setGlobalPreference("extensions.checkCompatibility", ACR.Preferences.getPreference("previousCheckCompatibility"));
+    var previousCheckCompatibility = ACR.Preferences.getPreference("previousCheckCompatibility");
+
+    try
+    {
+        ACR.Preferences.setGlobalPreference("extensions.checkCompatibility", previousCheckCompatibility);
+        ACR.Preferences.setGlobalPreference("extensions.checkCompatibility.3.6b", previousCheckCompatibility);
+        ACR.Preferences.setGlobalPreference("extensions.checkCompatibility.3.6", previousCheckCompatibility);
+        ACR.Preferences.setGlobalPreference("extensions.checkCompatibility.3.7a", previousCheckCompatibility);
+    }
+    catch (e)
+    {
+        ACR.Logger.warn("Could not reset a checkCompatibility pref: " + e);
+    }
 }
 
 ACR.registerUninstallObserver = function()
