@@ -1,6 +1,13 @@
 content   acr                 jar:chrome/acr.jar!/content/
 skin      acr   classic/1.0   jar:chrome/acr.jar!/skin/
 locale    acr   en-US         jar:chrome/acr.jar!/locale/en-US/
+locale    acr   cs            jar:chrome/acr.jar!/locale/cs/
+locale    acr   ja            jar:chrome/acr.jar!/locale/ja/
+locale    acr   nl            jar:chrome/acr.jar!/locale/nl/
+locale    acr   pl            jar:chrome/acr.jar!/locale/pl/
+locale    acr   sk            jar:chrome/acr.jar!/locale/sk/
+locale    acr   uk            jar:chrome/acr.jar!/locale/uk/
+locale    acr   vi            jar:chrome/acr.jar!/locale/vi/
 
 overlay   chrome://browser/content/browser.xul   chrome://acr/content/view/mainOverlay.xul
 overlay   chrome://mozapps/content/extensions/extensions.xul chrome://acr/content/view/extensionsOverlay.xul
