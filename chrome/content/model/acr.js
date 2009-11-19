@@ -42,6 +42,8 @@ ACR.RPC = new function() {}
 ACR.FIRSTRUN_LANDING_PAGE = "https://%%AMO_HOST%%/pages/compatibility_firstrun";
 ACR.EM_ID = "compatibility@addons.mozilla.org";
 
+ACR.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility", "extensions.checkCompatibility.3.6b", "extensions.checkCompatibility.3.6", "extensions.checkCompatibility.3.7a"];
+
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
     ACR.Logger.debug("In ACR.submitReport()");
@@ -116,6 +118,8 @@ ACR.checkForApplicationUpgrade = function()
         ACR.Logger.info("Detected an application upgrade (previous was '" + ACR.Preferences.getPreference("previousApplicationVersion") + "', current is '" + appString + "'), clearing addon states.");
         ACR.Preferences.setPreference("previousApplicationVersion", appString);
         ACR.Preferences.setPreference("addons", "");
+
+        ACR.disableCheckCompatibilityPrefs();
     }
 }
 
@@ -128,15 +132,22 @@ ACR.firstrun = function()
 
     ACR.Preferences.setPreference("previousCheckCompatibility", previousCheckCompatibilityPreference);
 
+    ACR.disableCheckCompatibilityPrefs();
+}
+
+ACR.disableCheckCompatibilityPrefs = function()
+{
+    ACR.Logger.info("Disabling all checkCompatibility preferences.");
+
     var prefSvc = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService);
 
     try
     {
-        prefSvc.setBoolPref("extensions.checkCompatibility", false);
-        prefSvc.setBoolPref("extensions.checkCompatibility.3.6b", false);
-        prefSvc.setBoolPref("extensions.checkCompatibility.3.6", false);
-        prefSvc.setBoolPref("extensions.checkCompatibility.3.7a", false);
+        for (var i=0; i<ACR.CHECK_COMPATIBILITY_PREFS.length; i++)
+        {
+            prefSvc.setBoolPref(ACR.CHECK_COMPATIBILITY_PREFS[i], false);
+        }
     }
     catch (e)
     {
@@ -150,10 +161,10 @@ ACR.lastrun = function()
 
     try
     {
-        ACR.Preferences.setGlobalPreference("extensions.checkCompatibility", previousCheckCompatibility);
-        ACR.Preferences.setGlobalPreference("extensions.checkCompatibility.3.6b", previousCheckCompatibility);
-        ACR.Preferences.setGlobalPreference("extensions.checkCompatibility.3.6", previousCheckCompatibility);
-        ACR.Preferences.setGlobalPreference("extensions.checkCompatibility.3.7a", previousCheckCompatibility);
+        for (var i=0; i<ACR.CHECK_COMPATIBILITY_PREFS.length; i++)
+        {
+            ACR.Preferences.setGlobalPreference(ACR.CHECK_COMPATIBILITY_PREFS[i], previousCheckCompatibility);
+        }
     }
     catch (e)
     {
