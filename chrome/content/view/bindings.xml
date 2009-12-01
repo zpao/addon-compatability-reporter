@@ -101,7 +101,7 @@
                     worksProperly.collapsed = true;
                     compatibilityProblems.collapsed = true;
 
-                    stillWorks.collapsed = this.addon.compatible;
+                    stillWorks.disabled = this.addon.compatible;
 
                     if (forceShowButton)
                     {
