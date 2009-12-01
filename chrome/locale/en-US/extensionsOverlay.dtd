@@ -35,6 +35,7 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Compatibility">
+<!ENTITY devcompatible.label                "Marked as compatible by developer">
 <!ENTITY stillworks.label                   "This add-on still works">
 <!ENTITY nolongerworks.label                "This add-on no longer works">
 <!ENTITY worksproperly.label                "Works properly">

@@ -35,6 +35,7 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Сумісність">
+<!ENTITY devcompatible.label                "Marked as compatible by developer">
 <!ENTITY stillworks.label                   "Цей додаток все ще працює">
 <!ENTITY nolongerworks.label                "Цей додаток більше не працює">
 <!ENTITY worksproperly.label                "Працює як слід">

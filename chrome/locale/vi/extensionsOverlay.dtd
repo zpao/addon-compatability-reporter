@@ -35,6 +35,7 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Tính tương thích">
+<!ENTITY devcompatible.label                "Marked as compatible by developer">
 <!ENTITY stillworks.label                   "Tiện ích này vẫn hoạt động">
 <!ENTITY nolongerworks.label                "Tiện ích này không còn hoạt động">
 <!ENTITY worksproperly.label                "Hoạt động bình thường">

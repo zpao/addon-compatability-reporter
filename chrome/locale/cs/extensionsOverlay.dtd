@@ -35,6 +35,7 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Kompatibilita">
+<!ENTITY devcompatible.label                "Marked as compatible by developer">
 <!ENTITY stillworks.label                   "Doplněk stále funguje">
 <!ENTITY nolongerworks.label                "Doplněk již nefunguje">
 <!ENTITY worksproperly.label                "Funguje korektně">

@@ -57,6 +57,9 @@
                         class="compatibilityButton"
                         collapsed="true">
                 <xul:menupopup>
+                    <xul:menuitem anonid="devcompatible"
+                                  label="&devcompatible.label;"
+                                  disabled="true"/>
                     <xul:menuitem anonid="stillworks"
                                   label="&stillworks.label;"
                                   class="menuitem-iconic"
@@ -96,12 +99,14 @@
                     var worksProperly = document.getAnonymousElementByAttribute(this, "anonid", "worksproperly");
                     var compatibilityProblems = document.getAnonymousElementByAttribute(this, "anonid", "compatibilityproblems");
                     var stillWorks = document.getAnonymousElementByAttribute(this, "anonid", "stillworks");
+                    var devCompatible = document.getAnonymousElementByAttribute(this, "anonid", "devcompatible");
 
                     compatibilityButton.collapsed = true;
                     worksProperly.collapsed = true;
                     compatibilityProblems.collapsed = true;
 
-                    stillWorks.disabled = this.addon.compatible;
+                    stillWorks.collapsed = this.addon.compatible;
+                    devCompatible.collapsed = !this.addon.compatible;
 
                     if (forceShowButton)
                     {
