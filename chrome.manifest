@@ -6,6 +6,7 @@ locale    acr   ja            jar:chrome/acr.jar!/locale/ja/
 locale    acr   nl            jar:chrome/acr.jar!/locale/nl/
 locale    acr   pl            jar:chrome/acr.jar!/locale/pl/
 locale    acr   sk            jar:chrome/acr.jar!/locale/sk/
+locale    acr   sl            jar:chrome/acr.jar!/locale/sl/
 locale    acr   uk            jar:chrome/acr.jar!/locale/uk/
 locale    acr   vi            jar:chrome/acr.jar!/locale/vi/
 
