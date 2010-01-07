@@ -42,7 +42,12 @@ ACR.RPC = new function() {}
 ACR.FIRSTRUN_LANDING_PAGE = "https://%%AMO_HOST%%/pages/compatibility_firstrun";
 ACR.EM_ID = "compatibility@addons.mozilla.org";
 
-ACR.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility", "extensions.checkCompatibility.3.6b", "extensions.checkCompatibility.3.6", "extensions.checkCompatibility.3.7a"];
+ACR.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
+                                 "extensions.checkCompatibility.3.6b",
+                                 "extensions.checkCompatibility.3.6",
+                                 "extensions.checkCompatibility.3.6p",
+                                 "extensions.checkCompatibility.3.6pre",
+                                 "extensions.checkCompatibility.3.7a"];
 
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
