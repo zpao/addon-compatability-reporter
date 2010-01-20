@@ -199,10 +199,34 @@ ACR.Preferences.setGlobalPreference = function(name, value)
     }
 }
 
+ACR.Preferences.globalHasUserValue = function(name)
+{
+    var prefs = this.Cc["@mozilla.org/preferences-service;1"].
+        getService(this.Ci.nsIPrefService);
+
+    var branch = name.substring(0, name.lastIndexOf(".")+1);
+
+    if (branch != "")
+    {
+        prefs = prefs.getBranch(branch);
+        name = name.substring(name.lastIndexOf(".")+1);
+    }
+
+    return prefs.prefHasUserValue(name);
+}
+
 ACR.Preferences.getGlobalPreference = function(name, failSilently)
 {
     var prefSvc = this.Cc["@mozilla.org/preferences-service;1"].
         getService(this.Ci.nsIPrefService);
+
+    var branch = name.substring(0, name.lastIndexOf(".")+1);
+
+    if (branch != "")
+    {
+        prefSvc = prefSvc.getBranch(branch);
+        name = name.substring(name.lastIndexOf(".")+1);
+    }
 
     var val = null;
 
@@ -224,13 +248,17 @@ ACR.Preferences.getGlobalPreference = function(name, failSilently)
         }
         else if (failSilently == undefined || failSilently == false)
         {
-                ACR.Logger.error("Invalid pref: " + name);
+            ACR.Logger.error("Invalid pref: " + name);
+            return null;
         }
     }
     catch (e)
     {
         if (failSilently == undefined || failSilently == false)
+        {
             ACR.Logger.error(e);
+            return null;
+        }
 
         return null;
     }

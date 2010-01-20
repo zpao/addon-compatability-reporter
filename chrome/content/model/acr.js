@@ -47,7 +47,7 @@ ACR.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
                                  "extensions.checkCompatibility.3.6",
                                  "extensions.checkCompatibility.3.6p",
                                  "extensions.checkCompatibility.3.6pre",
-                                 "extensions.checkCompatibility.3.7a"];
+                                 "extensions.checkCompatibility.3.7a"]; // remember to also add to components.acrService.js
 
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
@@ -130,12 +130,17 @@ ACR.checkForApplicationUpgrade = function()
 
 ACR.firstrun = function()
 {
-    var previousCheckCompatibilityPreference = ACR.Preferences.getGlobalPreference("extensions.checkCompatibility", true);
+    var userHasSetCheckCompatibilityPreference = ACR.Preferences.globalHasUserValue("extensions.checkCompatibility");
 
-    if (previousCheckCompatibilityPreference == null)
-        previousCheckCompatibilityPreference = true;
-
-    ACR.Preferences.setPreference("previousCheckCompatibility", previousCheckCompatibilityPreference);
+    if (userHasSetCheckCompatibilityPreference == true)
+    {
+        var previousCheckCompatibilityPreference = ACR.Preferences.getGlobalPreference("extensions.checkCompatibility", true);
+        ACR.Preferences.setPreference("previousCheckCompatibility", previousCheckCompatibilityPreference);
+    }
+    else
+    {
+        ACR.Preferences.setPreference("previousCheckCompatibility", true);
+    }
 
     ACR.disableCheckCompatibilityPrefs();
 }

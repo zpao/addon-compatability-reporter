@@ -27,7 +27,9 @@ acrService.prototype = {
         this.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
                                           "extensions.checkCompatibility.3.6b",
                                           "extensions.checkCompatibility.3.6",
-                                          "extensions.checkCompatibility.3.7a"];
+                                          "extensions.checkCompatibility.3.6p",
+                                          "extensions.checkCompatibility.3.6pre",
+                                          "extensions.checkCompatibility.3.7a"]; // remember to also add to chrome/content/model/acr.js
     },
 
     // Observer Service
@@ -55,7 +57,10 @@ acrService.prototype = {
 
     _onAppStartup : function acr_onAppStartup()
     {
-      this._disableCheckCompatibilityPrefs();
+      if (this.prefsGlobal.getBoolPref("extensions.acr.firstrun") == false)
+      {
+          this._disableCheckCompatibilityPrefs();
+      }
     },
 
     _disableCheckCompatibilityPrefs : function acr_disableCheckCompatibilityPrefs()
