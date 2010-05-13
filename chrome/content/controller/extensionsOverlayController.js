@@ -46,7 +46,17 @@ ACR.Controller.ExtensionsOverlay.init = function()
 
     ACR.checkForApplicationUpgrade();
 
-    document.getElementById("extensionsView").addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton, true);
+    var list = document.getElementById("extensionsView");
+    if (list)
+    {
+        // Firefox 3.6 and below
+        list.addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton, true);
+    }
+    else
+    {
+        //Firefox 3.7+
+        document.getElementById("addon-list").addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton, true);
+    }
 }
 
 ACR.Controller.ExtensionsOverlay.doStillWorks = function()
@@ -156,4 +166,4 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
     }
 }
 
-window.addEventListener("load", ACR.Controller.ExtensionsOverlay.init, true);
+addEventListener("load", ACR.Controller.ExtensionsOverlay.init, false);

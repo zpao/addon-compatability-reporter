@@ -39,7 +39,7 @@
 <!DOCTYPE overlay SYSTEM "chrome://acr/locale/extensionsOverlay.dtd" >
 
 <?xml-stylesheet href="chrome://acr/content/view/bindings.css" type="text/css"?>
-<?xml-stylesheet href="chrome://acr/skin/extensionsOverlay.css" type="text/css"?>
+<?xml-stylesheet href="chrome://acr/skin/overlay.css" type="text/css"?>
 
 <overlay id="acr-extensions-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">

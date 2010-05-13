@@ -34,7 +34,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-top.ACR = new function() {}
+ACR = new function() {}
 
 ACR.Controller = new function() {}
 ACR.RPC = new function() {}
