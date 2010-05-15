@@ -19,6 +19,7 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s): Brian King <brian (at) briks (dot) si>
+ *                 David McNamara
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -60,8 +61,6 @@ ACR.Controller.ExtensionsOverlay.init = function()
             ACR.Controller.ExtensionsOverlay._updateCommandsStack();
             ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
         }
-
-        // TODO also stuff on details page?
     }
 }
 
@@ -162,44 +161,69 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
     {
         ACR.Logger.debug("in stuffer()");
 
-        for (var i=0; i<document.getElementById("addon-list").itemCount; i++)
+        if (document.getElementById("view-port").selectedPanel.id == "list-view")
         {
-            var item = document.getElementById("addon-list").getItemAtIndex(i);
-            var controlContainer = document.getAnonymousElementByAttribute(item, 'anonid', 'control-container');
-
-            if (!controlContainer) ACR.Logger.warn("no control container");
-
-            var callback = let (cc = controlContainer) function(acrAddon)
+            for (var i=0; i<document.getElementById("addon-list").itemCount; i++)
             {
-                if (!acrAddon) return;
+                var item = document.getElementById("addon-list").getItemAtIndex(i);
+                var controlContainer = document.getAnonymousElementByAttribute(item, 'anonid', 'control-container');
 
-                var existings = cc.getElementsByTagName("acrCompatibilityButton");
-                var cb;
+                if (!controlContainer) ACR.Logger.warn("no control container");
 
-                if (existings.length)
+                var callback = let (cc = controlContainer) function(acrAddon)
                 {
-                    cb = existings[0];
-                }
-                else
-                {
-                    cb = document.createElement("acrCompatibilityButton");
-                    cc.insertBefore(cb, cc.firstChild);
-                }
+                    if (!acrAddon) return;
 
-                ACR.Logger.debug("Add-on: '" + acrAddon.guid + "/" + acrAddon.version + "' state: '" + acrAddon.state + "' compatibility: " + (acrAddon.compatible?"IS":"IS NOT") + " compatible with this version of the platform.");
+                    var existings = cc.getElementsByTagName("acrCompatibilityButton");
+                    var cb;
 
-                cb.addon = acrAddon;
-                try { cb.invalidate(); } catch (e) {}
+                    if (existings.length)
+                    {
+                        cb = existings[0];
+                    }
+                    else
+                    {
+                        cb = document.createElement("acrCompatibilityButton");
+                        cc.insertBefore(cb, cc.firstChild);
+                    }
 
-                ACR.Logger.debug("invalidated/stuffed a button");
-            };
+                    ACR.Logger.debug("Add-on: '" + acrAddon.guid + "/" + acrAddon.version + "' state: '" + acrAddon.state + "' compatibility: " + (acrAddon.compatible?"IS":"IS NOT") + " compatible with this version of the platform.");
 
-            ACR.Controller.ExtensionsOverlay._getAddonFromListItem(item, callback);
+                    cb.addon = acrAddon;
+                    try { cb.invalidate(); } catch (e) {}
+
+                    ACR.Logger.debug("invalidated/stuffed a button");
+                };
+
+                ACR.Controller.ExtensionsOverlay._getAddonFromListItem(item, callback);
+            }
+        }
+        else if (document.getElementById("view-port").selectedPanel.id == "detail-view")
+        {
+            if (!ACR.Controller.ExtensionsOverlay._addon)
+                return;
+
+            var existings = document.getElementById("detail-view").getElementsByTagName("acrCompatibilityButton");
+            var cb;
+
+            if (existings.length)
+            {
+                cb = existings[0];
+            }
+            else
+            {
+                cb = document.createElement("acrCompatibilityButton");
+                document.getElementById("detail-uninstall").parentNode.insertBefore(cb, document.getElementById("detail-uninstall"));
+            }
+
+            cb.addon = ACR.Controller.ExtensionsOverlay._addon;
+            try { cb.invalidate(); } catch (e) {}
         }
     }
 
-    if (ACR.Controller.ExtensionsOverlay._stuffTimeout) clearTimeout(stuffer);
-    ACR.Controller.ExtensionsOverlay._stuffTimeout = setTimeout(stuffer, 200);
+    //if (ACR.Controller.ExtensionsOverlay._stuffTimeout) clearTimeout(stuffer);
+    //ACR.Controller.ExtensionsOverlay._stuffTimeout = setTimeout(stuffer, 200);
+    stuffer();
 }
 
 /**

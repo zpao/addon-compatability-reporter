@@ -53,54 +53,72 @@ ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, call
 {
     ACR.Logger.debug("In ACR.submitReport()");
 
-    details = details.trim();
-
-    var otherAddons = [];
-
-    if (includeOtherAddons)
+    var submitReport = function(installedExtensions)
     {
-        var installedExtensions = ACR.Util.getInstalledExtensions();
+        details = details.trim();
+
+        var otherAddons = [];
 
         for (var i=0; i<installedExtensions.length; i++)
         {
             otherAddons.push([installedExtensions[i].id, installedExtensions[i].version]);
         }
-    }
 
-    var envInfo = ACR.Util.getHostEnvironmentInfo();
+        var envInfo = ACR.Util.getHostEnvironmentInfo();
 
-    var internalCallback = function(event)
-    {
-        if (!event.isError())
+        var internalCallback = function(event)
         {
-            addon.state = (stillWorks ? 1 : 2);
-            ACR.Factory.saveAddon(addon);
+            if (!event.isError())
+            {
+                addon.state = (stillWorks ? 1 : 2);
+                ACR.Factory.saveAddon(addon);
+            }
+
+            callback(event);
         }
 
-        callback(event);
-    }
+        ACR.getService().submitReport(
+            addon.guid,
+            addon.version,
+            stillWorks,
+            envInfo.appGUID,
+            envInfo.appVersion,
+            envInfo.appBuildID,
+            envInfo.osVersion,
+            details,
+            otherAddons,
+            internalCallback
+        );
+    };
 
-    ACR.getService().submitReport(
-        addon.guid,
-        addon.version,
-        stillWorks,
-        envInfo.appGUID,
-        envInfo.appVersion,
-        envInfo.appBuildID,
-        envInfo.osVersion,
-        details,
-        otherAddons,
-        internalCallback
-    );
+    if (includeOtherAddons)
+    {
+        ACR.Util.getInstalledExtensions(submitReport);
+    }
+    else
+    {
+        submitReport([]);
+    }
 }
 
 ACR.disableAddon = function(addon)
 {
-    // TODO fix for new EM
-    var em = Components.classes["@mozilla.org/extensions/manager;1"]
-        .getService(Components.interfaces.nsIExtensionManager);
+    if (AddonManager)
+    {
+        AddonManager.getAddonByID(addon.guid, function(addon)
+        {
+            if (addon)
+                addon.userDisabled = true;
+        });
+    }
+    else
+    {
+        // Legacy EM stuff
+        var em = Components.classes["@mozilla.org/extensions/manager;1"]
+            .getService(Components.interfaces.nsIExtensionManager);
 
-    em.disableItem(addon.guid);
+        em.disableItem(addon.guid);
+    }
 }
 
 ACR.getService = function()
@@ -185,6 +203,8 @@ ACR.lastrun = function()
 
 ACR.registerUninstallObserver = function()
 {
+    // TODO fix for new EM
+
     if (ACR._uninstallObserverRegistered) return;
 
     var action =

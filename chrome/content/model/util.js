@@ -64,6 +64,7 @@ ACR.Util.getMostRecentAppWindow = function()
     return appWindow;
 }
 
+/*
 ACR.Util.getExtensionVersion = function(emid)
 {
     var bits = {major: 1, minor: 0, revision: 0, increment: 0};
@@ -77,6 +78,7 @@ ACR.Util.getExtensionVersion = function(emid)
 
     return this.splitVersionString(versionString);
 }
+*/
 
 ACR.Util.splitVersionString = function(versionString)
 {
@@ -349,15 +351,18 @@ ACR.Util._initExtensionServices = function()
     }
 }
 
-ACR.Util.getInstalledExtensions = function()
+ACR.Util.getInstalledExtensions = function(callback)
 {
-    // TODO fix for new EM
-
-    this._initExtensionServices();
-
-    var items = this._extensionManager.getItemList(this.Ci.nsIUpdateItem.TYPE_ANY, { });
-
-    return items;
+    if (AddonManager)
+    {
+        AddonManager.getAllAddons(callback);
+    }
+    else
+    {
+        // legacy EM stuff
+        this._initExtensionServices();
+        callback(this._extensionManager.getItemList(this.Ci.nsIUpdateItem.TYPE_ANY, { }));
+    }
 }
 
 ACR.Util.isExtensionInstalled = function(guid)
@@ -375,6 +380,7 @@ ACR.Util.isExtensionInstalled = function(guid)
     return false;
 }
 
+/*
 ACR.Util.getExtensionProperty = function(id, propertyName)
 {
     this._initExtensionServices();
@@ -411,6 +417,7 @@ ACR.Util.getExtensionProperty = function(id, propertyName)
 
     return value === undefined ? "" : value;
 }
+*/
 
 ACR.Util.ISO8601toDate = function(dString)
 {
