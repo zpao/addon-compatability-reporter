@@ -38,6 +38,8 @@ ACR.Controller.MainOverlay = new function() {}
 
 ACR.Controller.MainOverlay.initACR = function()
 {
+    ACR.Logger.info("Initializing ACR");
+
     ACR.Controller.MainOverlay._delayedInitACR();
 }
 

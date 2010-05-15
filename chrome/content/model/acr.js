@@ -19,6 +19,7 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s): Brian King <brian (at) briks (dot) si>
+ *                 David McNamara
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -203,66 +204,84 @@ ACR.lastrun = function()
 
 ACR.registerUninstallObserver = function()
 {
-    // TODO fix for new EM
-
     if (ACR._uninstallObserverRegistered) return;
 
-    var action =
+    try
     {
-        observe: function (subject, topic, data)
-        {
-            if ((data == "item-uninstalled")
-                &&
-                (subject instanceof Components.interfaces.nsIUpdateItem)
-                &&
-                (subject.id == ACR.EM_ID))
-            {
-                ACR.lastrun();
-            }
-        }
-    };
+        Components.utils.import("resource://gre/modules/AddonManager.jsm");
+    } catch (e) {}
 
-    var observer = 
+    if (AddonManager)
     {
-        onAssert: function (ds, subject, predicate, target)
-        {
-            if ((predicate.Value == "http://www.mozilla.org/2004/em-rdf#toBeUninstalled")
-                    &&
-                    (target instanceof Components.interfaces.nsIRDFLiteral)
-                    &&
-                    (target.Value == "true")
-                    &&
-                    (subject.Value == "urn:mozilla:extension:" + ACR.EM_ID))
-            {
-                ACR.lastrun();
-            }
-        },
-        onUnassert: function (ds, subject, predicate, target) {},
-        onChange: function (ds, subject, predicate, oldtarget, newtarget) {},
-        onMove: function (ds, oldsubject, newsubject, predicate, target) {},
-        onBeginUpdateBatch: function() {},
-        onEndUpdateBatch: function() {}
-    };
+        var listener = {
+            onUninstalling: function(addon) { if (addon.id == ACR.EM_ID) ACR.lastrun(); },
+            onUninstalled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is uninstalled"); },
+            onDisabling: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabling"); },
+            onDisabled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabled"); },
+        };
 
-    var extService = Components.classes["@mozilla.org/extensions/manager;1"]
-        .getService(Components.interfaces.nsIExtensionManager);
-
-    if (extService && ("uninstallItem" in extService))
-    {
-        var observerService = Components.classes["@mozilla.org/observer-service;1"]
-            .getService(Components.interfaces.nsIObserverService);
-        observerService.addObserver(action, "em-action-requested", false);
+        AddonManager.addAddonListener(listener);
         ACR._uninstallObserverRegistered = true;
     }
     else
     {
-        try
+        // Legacy EM stuff
+        var action =
         {
-            extService.datasource.AddObserver(observer);
+            observe: function (subject, topic, data)
+            {
+                if ((data == "item-uninstalled")
+                    &&
+                    (subject instanceof Components.interfaces.nsIUpdateItem)
+                    &&
+                    (subject.id == ACR.EM_ID))
+                {
+                    ACR.lastrun();
+                }
+            }
+        };
+
+        var observer = 
+        {
+            onAssert: function (ds, subject, predicate, target)
+            {
+                if ((predicate.Value == "http://www.mozilla.org/2004/em-rdf#toBeUninstalled")
+                        &&
+                        (target instanceof Components.interfaces.nsIRDFLiteral)
+                        &&
+                        (target.Value == "true")
+                        &&
+                        (subject.Value == "urn:mozilla:extension:" + ACR.EM_ID))
+                {
+                    ACR.lastrun();
+                }
+            },
+            onUnassert: function (ds, subject, predicate, target) {},
+            onChange: function (ds, subject, predicate, oldtarget, newtarget) {},
+            onMove: function (ds, oldsubject, newsubject, predicate, target) {},
+            onBeginUpdateBatch: function() {},
+            onEndUpdateBatch: function() {}
+        };
+
+        var extService = Components.classes["@mozilla.org/extensions/manager;1"]
+            .getService(Components.interfaces.nsIExtensionManager);
+
+        if (extService && ("uninstallItem" in extService))
+        {
+            var observerService = Components.classes["@mozilla.org/observer-service;1"]
+                .getService(Components.interfaces.nsIObserverService);
+            observerService.addObserver(action, "em-action-requested", false);
             ACR._uninstallObserverRegistered = true;
         }
-        catch (e) { }
+        else
+        {
+            try
+            {
+                extService.datasource.AddObserver(observer);
+                ACR._uninstallObserverRegistered = true;
+            }
+            catch (e) { }
+        }
     }
-
 }
 
