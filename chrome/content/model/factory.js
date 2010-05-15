@@ -54,6 +54,15 @@ ACR.Factory.getAddon = function(guid, version)
     return addon;
 }
 
+ACR.Factory.getAddonByAddonManagerAddonObject = function(addon)
+{
+    var acrAddon = ACR.Factory.getAddon(addon.id, addon.version);
+    acrAddon.compatible = addon.isCompatible;
+    acrAddon.name = addon.name;
+
+    return acrAddon;
+}
+
 ACR.Factory.saveAddon = function(addon)
 {
     ACR.Logger.debug("ACL.Factory.saveAddon(): Saving addon guid = '" + addon.guid + "', version = '" + addon.version + "'");

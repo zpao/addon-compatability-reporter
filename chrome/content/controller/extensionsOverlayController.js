@@ -36,7 +36,6 @@
 
 ACR.Controller.ExtensionsOverlay = new function()
 {
-    this._compatibilityButton = document.createElement("acrCompatibilityButton");
     this._addon = null;
 }
 
@@ -46,17 +45,30 @@ ACR.Controller.ExtensionsOverlay.init = function()
 
     ACR.checkForApplicationUpgrade();
 
-    var list = document.getElementById("extensionsView");
-    if (list)
+    if (ACR.Controller.ExtensionsOverlay.isLegacyEM())
     {
-        // Firefox 3.6 and below
-        list.addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton, true);
+        this._compatibilityButton = document.createElement("acrCompatibilityButton");
+        document.getElementById("extensionsView").addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM, true);
     }
     else
     {
-        //Firefox 3.7+
-        document.getElementById("addon-list").addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton, true);
+        document.getElementById("addon-list").addEventListener("select", ACR.Controller.ExtensionsOverlay._setSelectedAddon, true);
+
+        ACR.Controller.ExtensionsOverlay._updateCommandsStack = gViewController.updateCommands;
+        gViewController.updateCommands = function()
+        {
+            ACR.Controller.ExtensionsOverlay._updateCommandsStack();
+            ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+        }
+
+        // TODO also stuff on details page?
     }
+}
+
+ACR.Controller.ExtensionsOverlay.isLegacyEM  = function()
+{
+    // Firefox 3.6 and below
+    return document.getElementById("extensionsView");
 }
 
 ACR.Controller.ExtensionsOverlay.doStillWorks = function()
@@ -79,20 +91,125 @@ ACR.Controller.ExtensionsOverlay.doNoLongerWorks = function()
 
 ACR.Controller.ExtensionsOverlay._openSubmitReportDialog = function(params)
 {
+    params.ACR = ACR;
+
     window.openDialog("chrome://acr/content/view/submitReport.xul", "",
             "chrome,titlebar,centerscreen,modal", params);
 
-    ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton();
+    if (ACR.Controller.ExtensionsOverlay.isLegacyEM())
+    {
+        ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM();
+    }
+    else
+    {
+        ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+    }
+}
+
+ACR.Controller.ExtensionsOverlay._getAddonFromListItem = function(richlistitem, callback)
+{
+    var guid = richlistitem.getAttribute("value");
+
+    var internalCallback = function(addon)
+    {
+        if (!addon)
+        {
+            ACR.Logger.warn("Not a valid add-on: " + guid);
+            return null;
+        }
+
+        //ACR.Logger.debug("type = " + addon.type);
+
+        if (addon.type == "plugin")
+            return null;
+
+        // TODO filter out personas here
+
+        var acrAddon = ACR.Factory.getAddonByAddonManagerAddonObject(addon);
+
+        callback(acrAddon);
+    }
+
+    AddonManager.getAddonByID(guid, internalCallback);
+}
+
+ACR.Controller.ExtensionsOverlay._setSelectedAddon = function()
+{
+    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay._setSelectedAddon()");
+
+    var elemExtension = document.getElementById("addon-list").selectedItem;
+
+    if (!elemExtension)
+        return;
+
+    ACR.Controller.ExtensionsOverlay._getAddonFromListItem(
+        elemExtension, 
+        function(acrAddon)
+        {
+            if (!acrAddon) return;
+
+            ACR.Logger.debug("Selected add-on: '" + acrAddon.guid + "/" + acrAddon.version + "' state: '" + acrAddon.state + "' compatibility: " + (acrAddon.compatible?"IS":"IS NOT") + " compatible with this version of the platform.");
+            ACR.Controller.ExtensionsOverlay._addon = acrAddon;
+        }
+        );
+}
+
+ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
+{
+    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons()");
+
+    var stuffer = function()
+    {
+        ACR.Logger.debug("in stuffer()");
+
+        for (var i=0; i<document.getElementById("addon-list").itemCount; i++)
+        {
+            var item = document.getElementById("addon-list").getItemAtIndex(i);
+            var controlContainer = document.getAnonymousElementByAttribute(item, 'anonid', 'control-container');
+
+            if (!controlContainer) ACR.Logger.warn("no control container");
+
+            var callback = let (cc = controlContainer) function(acrAddon)
+            {
+                if (!acrAddon) return;
+
+                var existings = cc.getElementsByTagName("acrCompatibilityButton");
+                var cb;
+
+                if (existings.length)
+                {
+                    cb = existings[0];
+                }
+                else
+                {
+                    cb = document.createElement("acrCompatibilityButton");
+                    cc.insertBefore(cb, cc.firstChild);
+                }
+
+                ACR.Logger.debug("Add-on: '" + acrAddon.guid + "/" + acrAddon.version + "' state: '" + acrAddon.state + "' compatibility: " + (acrAddon.compatible?"IS":"IS NOT") + " compatible with this version of the platform.");
+
+                cb.addon = acrAddon;
+                try { cb.invalidate(); } catch (e) {}
+
+                ACR.Logger.debug("invalidated/stuffed a button");
+            };
+
+            ACR.Controller.ExtensionsOverlay._getAddonFromListItem(item, callback);
+        }
+    }
+
+    if (ACR.Controller.ExtensionsOverlay._stuffTimeout) clearTimeout(stuffer);
+    ACR.Controller.ExtensionsOverlay._stuffTimeout = setTimeout(stuffer, 200);
 }
 
 /**
- * This function called when user selects any extension in the extension manager.
+ * This function called when user selects any extension in the legacy (<= FF 3.6) extension manager.
  *
  * Ensure the compatibilityButton binding is in the correct state, then add to the right place in the selected extension's ui.
  */
-ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
+ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM = function()
 {
-    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton()");
+    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM()");
 
     if (ACR.Controller.ExtensionsOverlay._compatibilityButton && ACR.Controller.ExtensionsOverlay._compatibilityButton.parentNode)
     {
@@ -136,7 +253,7 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButton = function()
     ACR.Controller.ExtensionsOverlay._addon.compatible = elemExtension.getAttribute("compatible") == "true";
 
     ACR.Logger.debug("Addon name is " + ACR.Controller.ExtensionsOverlay._addon.name);
-    ACR.Logger.debug("Addon " + (ACR.Controller.ExtensionsOverlay._addon.compatible?"IS":"IS NOT") + " compatible with this version of firefox");
+    ACR.Logger.debug("Addon " + (ACR.Controller.ExtensionsOverlay._addon.compatible?"IS":"IS NOT") + " compatible with this version of platform.");
     ACR.Logger.debug("Factory says addon '" + ACR.Controller.ExtensionsOverlay._addon.guid + "/" + selectedExtensionVersion + "' has state '" + ACR.Controller.ExtensionsOverlay._addon.state + "'");
 
     ACR.Controller.ExtensionsOverlay._compatibilityButton.addon = ACR.Controller.ExtensionsOverlay._addon;

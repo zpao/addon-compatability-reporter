@@ -47,7 +47,7 @@ ACR.Controller.SubmitReportController.init = function()
     ACR.Controller.SubmitReportController._addon = windowArgs.addon;
     ACR.Controller.SubmitReportController._stillWorks = windowArgs.stillWorks;
 
-    ACR.Logger.debug("Have addon = '" + ACR.Controller.SubmitReportController._addon.name);
+    ACR.Logger.debug("Have addon = '" + ACR.Controller.SubmitReportController._addon.name + "'");
 
     if (ACR.Controller.SubmitReportController._stillWorks)
     {

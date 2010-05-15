@@ -95,6 +95,8 @@
                 <parameter name="forceShowButton"/>
                 <body>
                 <![CDATA[
+                    if (!this.addon) return;
+
                     var compatibilityButton = document.getAnonymousElementByAttribute(this, "anonid", "compatibilityButton");
                     var worksProperly = document.getAnonymousElementByAttribute(this, "anonid", "worksproperly");
                     var compatibilityProblems = document.getAnonymousElementByAttribute(this, "anonid", "compatibilityproblems");
@@ -126,6 +128,7 @@
                         compatibilityProblems.collapsed = false;
                     }
 
+                    //ACR.Logger.debug("invalidating acrCompatiblilityButton for " + this.addon.guid + ", compatibilityButton.collapsed = " + compatibilityButton.collapsed);
                 ]]>
                 </body>
             </method>

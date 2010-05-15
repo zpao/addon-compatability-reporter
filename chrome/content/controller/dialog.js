@@ -48,3 +48,7 @@ var ACR = Components.classes["@mozilla.org/appshell/window-mediator;1"]
 
 var ACR = window.opener.ACR;
 
+if (!ACR)
+{
+    ACR = window.arguments[0].ACR;
+}

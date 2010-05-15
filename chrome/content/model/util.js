@@ -351,6 +351,8 @@ ACR.Util._initExtensionServices = function()
 
 ACR.Util.getInstalledExtensions = function()
 {
+    // TODO fix for new EM
+
     this._initExtensionServices();
 
     var items = this._extensionManager.getItemList(this.Ci.nsIUpdateItem.TYPE_ANY, { });

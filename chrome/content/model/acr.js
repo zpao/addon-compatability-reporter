@@ -96,6 +96,7 @@ ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, call
 
 ACR.disableAddon = function(addon)
 {
+    // TODO fix for new EM
     var em = Components.classes["@mozilla.org/extensions/manager;1"]
         .getService(Components.interfaces.nsIExtensionManager);
 

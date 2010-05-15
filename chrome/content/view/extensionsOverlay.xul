@@ -55,7 +55,7 @@
     <script src="chrome://acr/content/model/rpc/event.js"/>
     <script src="chrome://acr/content/model/rpc/net.js"/>
 
-    <script src="chrome://acr/content/controller/extensionsOverlayController.js"/>
+    <script src="chrome://acr/content/controller/extensionsOverlayController.js" type="application/javascript;version=1.7"/>
 
     <!--
     <stringbundleset id="extensionsSet">
