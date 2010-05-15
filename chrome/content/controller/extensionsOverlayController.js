@@ -38,6 +38,7 @@
 ACR.Controller.ExtensionsOverlay = new function()
 {
     this._addon = null;
+    this._compatibilityButton = null;
 }
 
 ACR.Controller.ExtensionsOverlay.init = function()
@@ -48,7 +49,7 @@ ACR.Controller.ExtensionsOverlay.init = function()
 
     if (ACR.Controller.ExtensionsOverlay.isLegacyEM())
     {
-        this._compatibilityButton = document.createElement("acrCompatibilityButton");
+        ACR.Controller.ExtensionsOverlay._compatibilityButton = document.createElement("acrCompatibilityButton");
         document.getElementById("extensionsView").addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM, true);
     }
     else
@@ -280,18 +281,18 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM = functi
     ACR.Logger.debug("Addon " + (ACR.Controller.ExtensionsOverlay._addon.compatible?"IS":"IS NOT") + " compatible with this version of platform.");
     ACR.Logger.debug("Factory says addon '" + ACR.Controller.ExtensionsOverlay._addon.guid + "/" + selectedExtensionVersion + "' has state '" + ACR.Controller.ExtensionsOverlay._addon.state + "'");
 
+    if (!ACR.Controller.ExtensionsOverlay._compatibilityButton)
+    {
+        ACR.Controller.ExtensionsOverlay._compatibilityButton = document.createElement("acrCompatibilityButton");
+    }
+
     ACR.Controller.ExtensionsOverlay._compatibilityButton.addon = ACR.Controller.ExtensionsOverlay._addon;
 
-    /*
     try 
     {
         ACR.Controller.ExtensionsOverlay._compatibilityButton.invalidate();
     }
-    catch (e)
-    {
-        ACR.Logger.warn(e);
-    }
-    */
+    catch (e) {}
 
     for (var i=0; i<elemSelectedButtons.childNodes.length; i++)
     {
@@ -300,6 +301,8 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM = functi
             && (elemSelectedButtons.childNodes[i].getAttribute("class").match(/enableButton/)
                 || elemSelectedButtons.childNodes[i].getAttribute("class").match(/addonInstallButton/)))
         {
+            ACR.Logger.debug("inserting compatibility button");
+
             elemSelectedButtons.insertBefore(ACR.Controller.ExtensionsOverlay._compatibilityButton,
                                              elemSelectedButtons.childNodes[i]);
             break;

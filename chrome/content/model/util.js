@@ -353,11 +353,13 @@ ACR.Util._initExtensionServices = function()
 
 ACR.Util.getInstalledExtensions = function(callback)
 {
-    if (AddonManager)
+    try
     {
+        Components.utils.import("resource://gre/modules/AddonManager.jsm");
+ 
         AddonManager.getAllAddons(callback);
     }
-    else
+    catch (e)
     {
         // legacy EM stuff
         this._initExtensionServices();
