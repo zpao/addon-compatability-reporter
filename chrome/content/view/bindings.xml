@@ -54,7 +54,7 @@
             <xul:button label="&compatibility.label;"
                         type="menu"
                         anonid="compatibilityButton"
-                        class="compatibilityButton"
+                        class="addon-control"
                         collapsed="true">
                 <xul:menupopup>
                     <xul:menuitem anonid="devcompatible"
