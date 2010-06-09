@@ -24,12 +24,26 @@ acrService.prototype = {
         this.version = "0.1";
         this.ConsoleService = Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService);
         this.prefsGlobal = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch(null);
+        /* Firefox */
         this.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
                                           "extensions.checkCompatibility.3.6b",
                                           "extensions.checkCompatibility.3.6",
                                           "extensions.checkCompatibility.3.6p",
                                           "extensions.checkCompatibility.3.6pre",
                                           "extensions.checkCompatibility.3.7a"]; // remember to also add to chrome/content/model/acr.js
+        var info = Components.classes["@mozilla.org/xre/app-info;1"].getService(Components.interfaces.nsIXULAppInfo);
+        this.debug("We are in: "+info.name);
+        if (info.name == "Thunderbird")
+        {
+            /* Thunderbird */
+            this.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
+                                             "extensions.checkCompatibility.3.0",
+                                             "extensions.checkCompatibility.3.1p",
+                                             "extensions.checkCompatibility.3.1pre",
+                                             "extensions.checkCompatibility.3.1a",
+                                             "extensions.checkCompatibility.3.1b",
+                                             "extensions.checkCompatibility.3.1"]; // remember to also add to components.acrService.js
+        }
     },
 
     // Observer Service

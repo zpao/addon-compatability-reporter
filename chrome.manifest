@@ -11,4 +11,5 @@ locale    acr   uk            jar:chrome/acr.jar!/locale/uk/
 locale    acr   vi            jar:chrome/acr.jar!/locale/vi/
 
 overlay   chrome://browser/content/browser.xul   chrome://acr/content/view/mainOverlay.xul
+overlay   chrome://messenger/content/messenger.xul   chrome://acr/content/view/mainOverlay.xul
 overlay   chrome://mozapps/content/extensions/extensions.xul chrome://acr/content/view/extensionsOverlay.xul

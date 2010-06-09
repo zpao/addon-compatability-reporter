@@ -43,12 +43,22 @@ ACR.RPC = new function() {}
 ACR.FIRSTRUN_LANDING_PAGE = "https://%%AMO_HOST%%/pages/compatibility_firstrun";
 ACR.EM_ID = "compatibility@addons.mozilla.org";
 
-ACR.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
+/* Firefox */
+ACR.CHECK_COMPATIBILITY_PREFS_FB = ["extensions.checkCompatibility",
                                  "extensions.checkCompatibility.3.6b",
                                  "extensions.checkCompatibility.3.6",
                                  "extensions.checkCompatibility.3.6p",
                                  "extensions.checkCompatibility.3.6pre",
                                  "extensions.checkCompatibility.3.7a"]; // remember to also add to components.acrService.js
+
+/* Thunderbird */
+ACR.CHECK_COMPATIBILITY_PREFS_TB = ["extensions.checkCompatibility",
+                                    "extensions.checkCompatibility.3.0",
+                                    "extensions.checkCompatibility.3.1p",
+                                    "extensions.checkCompatibility.3.1pre",
+                                    "extensions.checkCompatibility.3.1a",
+                                    "extensions.checkCompatibility.3.1b",
+                                    "extensions.checkCompatibility.3.1"]; // remember to also add to components.acrService.js
 
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
@@ -170,6 +180,7 @@ ACR.firstrun = function()
 ACR.disableCheckCompatibilityPrefs = function()
 {
     ACR.Logger.info("Disabling all checkCompatibility preferences.");
+    ACR.CHECK_COMPATIBILITY_PREFS = (ACR.Util.getAppName() == "Thunderbird") ? ACR.CHECK_COMPATIBILITY_PREFS_TB : ACR.CHECK_COMPATIBILITY_PREFS_FB;
 
     var prefSvc = Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService);
@@ -189,6 +200,7 @@ ACR.disableCheckCompatibilityPrefs = function()
 
 ACR.lastrun = function()
 {
+    ACR.CHECK_COMPATIBILITY_PREFS = (ACR.Util.getAppName() == "Thunderbird") ? ACR.CHECK_COMPATIBILITY_PREFS_TB : ACR.CHECK_COMPATIBILITY_PREFS_FB;
     var previousCheckCompatibility = ACR.Preferences.getPreference("previousCheckCompatibility");
 
     try

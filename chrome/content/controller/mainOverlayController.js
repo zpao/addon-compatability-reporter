@@ -49,10 +49,13 @@ ACR.Controller.MainOverlay._delayedInitACR = function()
 
     if (ACR.Preferences.getPreference("firstrun") == true)
     {
-        ACR.Logger.debug("This is firstrun");
-        ACR.Preferences.setPreference("firstrun", false);
-        ACR.firstrun();
-        ACR.Controller.MainOverlay.firstrun();
+        try {
+            ACR.Logger.debug("This is firstrun");
+            ACR.Preferences.setPreference("firstrun", false);
+            ACR.firstrun();
+            ACR.Controller.MainOverlay.firstrun();
+        }
+        catch (e) { ACR.Logger.debug("firstrun fail : "+e); }
     }
 
     ACR.registerUninstallObserver();
