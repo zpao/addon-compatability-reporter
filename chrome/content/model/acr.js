@@ -242,6 +242,7 @@ ACR.registerUninstallObserver = function()
 
         var listener = {
             onUninstalling: function(addon) { if (addon.id == ACR.EM_ID) ACR.lastrun(); },
+            onOperationCancelled: function(addon) { if (addon.id == ACR.EM_ID) ACR.firstrun(); },
             onUninstalled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is uninstalled"); },
             onDisabling: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabling"); },
             onDisabled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabled"); },
@@ -262,13 +263,14 @@ ACR.registerUninstallObserverLegacyEM = function()
     {
         observe: function (subject, topic, data)
         {
-            if ((data == "item-uninstalled")
-                &&
-                (subject instanceof Components.interfaces.nsIUpdateItem)
+            if ((subject instanceof Components.interfaces.nsIUpdateItem)
                 &&
                 (subject.id == ACR.EM_ID))
             {
-                ACR.lastrun();
+                if (data == "item-uninstalled")
+                    ACR.lastrun();
+                else if (data == "item-cancel-action")
+                    ACR.firstrun();
             }
         }
     };

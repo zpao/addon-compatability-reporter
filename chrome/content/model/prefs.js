@@ -214,13 +214,10 @@ ACR.Preferences.setBoolGlobalPreference = function(name, value)
     }
 }
 
-
 ACR.Preferences.clearGlobalPreference = function(name)
 {
     var prefSvc = ACR.Preferences.Cc["@mozilla.org/preferences-service;1"].
         getService(ACR.Preferences.Ci.nsIPrefService);
-
-        alert("clearing global pref '" + name + "'");
 
     try
     {
@@ -231,7 +228,6 @@ ACR.Preferences.clearGlobalPreference = function(name)
         ACR.Logger.error(e);
     }
 }
-
 
 ACR.Preferences.globalHasUserValue = function(name)
 {
