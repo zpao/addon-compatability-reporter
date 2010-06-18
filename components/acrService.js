@@ -83,7 +83,7 @@ acrService.prototype = {
       {
         for (var i=0; i<this.CHECK_COMPATIBILITY_PREFS.length; i++)
         {
-          this.debug("Setting "+this.CHECK_COMPATIBILITY_PREFS[i]);
+          this.debug("Setting compatibility pref '"+this.CHECK_COMPATIBILITY_PREFS[i]+"' to 'false'.");
           this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
         }
       }

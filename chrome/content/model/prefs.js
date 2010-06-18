@@ -173,8 +173,8 @@ ACR.Preferences.notifyObservers = function(data)
 
 ACR.Preferences.setGlobalPreference = function(name, value)
 {
-    var prefSvc = this.Cc["@mozilla.org/preferences-service;1"].
-        getService(this.Ci.nsIPrefService);
+    var prefSvc = ACR.Preferences.Cc["@mozilla.org/preferences-service;1"].
+        getService(ACR.Preferences.Ci.nsIPrefService);
 
     try
     {
@@ -199,10 +199,44 @@ ACR.Preferences.setGlobalPreference = function(name, value)
     }
 }
 
+ACR.Preferences.setBoolGlobalPreference = function(name, value)
+{
+    var prefSvc = ACR.Preferences.Cc["@mozilla.org/preferences-service;1"].
+        getService(ACR.Preferences.Ci.nsIPrefService);
+
+    try
+    {
+        prefSvc.setBoolPref(name, value);
+    }
+    catch (e)
+    {
+        ACR.Logger.error(e);
+    }
+}
+
+
+ACR.Preferences.clearGlobalPreference = function(name)
+{
+    var prefSvc = ACR.Preferences.Cc["@mozilla.org/preferences-service;1"].
+        getService(ACR.Preferences.Ci.nsIPrefService);
+
+        alert("clearing global pref '" + name + "'");
+
+    try
+    {
+        prefSvc.clearUserPref(name);
+    }
+    catch (e)
+    {
+        ACR.Logger.error(e);
+    }
+}
+
+
 ACR.Preferences.globalHasUserValue = function(name)
 {
-    var prefs = this.Cc["@mozilla.org/preferences-service;1"].
-        getService(this.Ci.nsIPrefService);
+    var prefs = ACR.Preferences.Cc["@mozilla.org/preferences-service;1"].
+        getService(ACR.Preferences.Ci.nsIPrefService);
 
     var branch = name.substring(0, name.lastIndexOf(".")+1);
 
@@ -217,8 +251,8 @@ ACR.Preferences.globalHasUserValue = function(name)
 
 ACR.Preferences.getGlobalPreference = function(name, failSilently)
 {
-    var prefSvc = this.Cc["@mozilla.org/preferences-service;1"].
-        getService(this.Ci.nsIPrefService);
+    var prefSvc = ACR.Preferences.Cc["@mozilla.org/preferences-service;1"].
+        getService(ACR.Preferences.Ci.nsIPrefService);
 
     var branch = name.substring(0, name.lastIndexOf(".")+1);
 

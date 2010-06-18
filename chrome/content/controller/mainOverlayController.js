@@ -51,7 +51,6 @@ ACR.Controller.MainOverlay._delayedInitACR = function()
     {
         try {
             ACR.Logger.debug("This is firstrun");
-            ACR.Preferences.setPreference("firstrun", false);
             ACR.firstrun();
             ACR.Controller.MainOverlay.firstrun();
         }
