@@ -147,17 +147,58 @@ ACR.getService = function()
 
 ACR.checkForApplicationUpgrade = function()
 {
+    var versionRE = /([\d\.]+)(([ab])\d.*)?/;
+
     var env = ACR.Util.getHostEnvironmentInfo()
-    var appString = env.appName + " " + env.appVersion;
+    var currAppVersion = env.appVersion;
+    var currAppVersionParts = currAppVersion.match(versionRE);
 
-    if (ACR.Preferences.getPreference("previousApplicationVersion") != appString)
+    var resetCompatibilityInformation = function()
     {
-        ACR.Logger.info("Detected an application upgrade (previous was '" + ACR.Preferences.getPreference("previousApplicationVersion") + "', current is '" + appString + "'), clearing addon states.");
-        ACR.Preferences.setPreference("previousApplicationVersion", appString);
+        ACR.Logger.info("Detected (non-beta) application upgrade; cleared previous compatibility information.");
+        ACR.Preferences.setPreference("previousApplicationVersion", currAppVersion);
         ACR.Preferences.setPreference("addons", "");
+        //ACR.disableCheckCompatibilityPrefs();
+    };
 
-        ACR.disableCheckCompatibilityPrefs();
+    if (currAppVersionParts)
+    {
+        ACR.Logger.debug("Current application version '" + currAppVersion + "' is version '" + currAppVersionParts[1] + "'. " + (currAppVersionParts[2]?"This version is " + (currAppVersionParts[3]=="b"?"BETA":"ALPHA") + ", labelled '" + currAppVersionParts[2] + "'.":""));
     }
+    else
+    {
+        ACR.Logger.error("Unrecognized current application version '" + currAppVersion  + "'.");
+        return;
+    }
+
+    var prevAppVersion = ACR.Preferences.getPreference("previousApplicationVersion");
+    var prevAppVersionParts = prevAppVersion.match(versionRE);
+
+    if (!prevAppVersionParts)
+    {
+        ACR.Logger.warn("Unrecognized previous application version '" + prevAppVersion  + "'.");
+        resetCompatibilityInformation();
+        return;
+    }
+    else
+    {
+        ACR.Logger.debug("Previous application version '" + prevAppVersion + "' was version '" + prevAppVersionParts[1] + "'. " + (prevAppVersionParts[2]?"That version was " + (prevAppVersionParts[3]=="b"?"BETA":"ALPHA") + ", labelled '" + prevAppVersionParts[2] + "'.":""));
+    }
+
+    if (currAppVersionParts[1] != prevAppVersionParts[1])
+    {
+        resetCompatibilityInformation();
+        return;
+    }
+
+    if (currAppVersionParts[3] == "a" || prevAppVersionParts[3] == "a")
+    {
+        resetCompatibilityInformation();
+        return;
+    }
+
+    // don't reset on betas: https://bugzilla.mozilla.org/show_bug.cgi?id=527249
+
 }
 
 ACR.firstrun = function()
@@ -171,7 +212,7 @@ ACR.firstrun = function()
 
 ACR.disableCheckCompatibilityPrefs = function()
 {
-    ACR.Logger.debug("ACR First Run -- Disabling all checkCompatibility preferences.");
+    ACR.Logger.debug("Disabling all checkCompatibility preferences.");
     var checkCompatibilityPrefs = (ACR.Util.getAppName() == "Thunderbird") ? ACR.CHECK_COMPATIBILITY_PREFS_TB : ACR.CHECK_COMPATIBILITY_PREFS_FB;
 
     try
