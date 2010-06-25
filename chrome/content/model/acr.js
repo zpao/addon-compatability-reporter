@@ -147,7 +147,7 @@ ACR.getService = function()
 
 ACR.checkForApplicationUpgrade = function()
 {
-    var versionRE = /([\d\.]+)(([ab])\d.*)?/;
+    var versionRE = /(\d\.\d)(\.\d)?(([ab])\d.*)?/;
 
     var env = ACR.Util.getHostEnvironmentInfo()
     var currAppVersion = env.appVersion;
@@ -155,7 +155,7 @@ ACR.checkForApplicationUpgrade = function()
 
     var resetCompatibilityInformation = function()
     {
-        ACR.Logger.info("Detected (non-beta) application upgrade; cleared previous compatibility information.");
+        ACR.Logger.info("Detected (non-beta) major application upgrade; cleared previous compatibility information.");
         ACR.Preferences.setPreference("previousApplicationVersion", currAppVersion);
         ACR.Preferences.setPreference("addons", "");
         //ACR.disableCheckCompatibilityPrefs();
@@ -163,7 +163,7 @@ ACR.checkForApplicationUpgrade = function()
 
     if (currAppVersionParts)
     {
-        ACR.Logger.debug("Current application version '" + currAppVersion + "' is version '" + currAppVersionParts[1] + "'. " + (currAppVersionParts[2]?"This version is " + (currAppVersionParts[3]=="b"?"BETA":"ALPHA") + ", labelled '" + currAppVersionParts[2] + "'.":""));
+        ACR.Logger.debug("Current application version '" + currAppVersion + "' is major version '" + currAppVersionParts[1] + "', minor version '" + currAppVersionParts[2] + "'. "  + (currAppVersionParts[3]?"This version is " + (currAppVersionParts[4]=="b"?"BETA":"ALPHA") + ", labelled '" + currAppVersionParts[3] + "'.":""));
     }
     else
     {
@@ -182,16 +182,18 @@ ACR.checkForApplicationUpgrade = function()
     }
     else
     {
-        ACR.Logger.debug("Previous application version '" + prevAppVersion + "' was version '" + prevAppVersionParts[1] + "'. " + (prevAppVersionParts[2]?"That version was " + (prevAppVersionParts[3]=="b"?"BETA":"ALPHA") + ", labelled '" + prevAppVersionParts[2] + "'.":""));
+        ACR.Logger.debug("Previous application version '" + prevAppVersion + "' was major version '" + prevAppVersionParts[1] + "', minor version '" + prevAppVersionParts[2] + "'. "  + (prevAppVersionParts[3]?"This version was " + (prevAppVersionParts[4]=="b"?"BETA":"ALPHA") + ", labelled '" + prevAppVersionParts[3] + "'.":""));
     }
 
+    // check for major version upgrade
     if (currAppVersionParts[1] != prevAppVersionParts[1])
     {
         resetCompatibilityInformation();
         return;
     }
 
-    if (currAppVersionParts[3] == "a" || prevAppVersionParts[3] == "a")
+    // check for upgrade from or to alpha
+    if (currAppVersionParts[4] == "a" || prevAppVersionParts[4] == "a")
     {
         resetCompatibilityInformation();
         return;
