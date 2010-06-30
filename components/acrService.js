@@ -30,7 +30,9 @@ acrService.prototype = {
                                           "extensions.checkCompatibility.3.6",
                                           "extensions.checkCompatibility.3.6p",
                                           "extensions.checkCompatibility.3.6pre",
-                                          "extensions.checkCompatibility.3.7a"]; // remember to also add to chrome/content/model/acr.js
+                                          "extensions.checkCompatibility.3.7a",
+                                          "extensions.checkCompatibility.4.0b",
+                                          "extensions.checkCompatibility.4.0pre"]; // remember to also add to chrome/content/model/acr.js
         var info = Components.classes["@mozilla.org/xre/app-info;1"].getService(Components.interfaces.nsIXULAppInfo);
         this.debug("We are in: "+info.name);
         if (info.name == "Thunderbird")
