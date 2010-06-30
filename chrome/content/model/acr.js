@@ -51,7 +51,8 @@ ACR.CHECK_COMPATIBILITY_PREFS_FB = ["extensions.checkCompatibility",
                                  "extensions.checkCompatibility.3.6pre",
                                  "extensions.checkCompatibility.3.7a",
                                  "extensions.checkCompatibility.4.0b",
-                                 "extensions.checkCompatibility.4.0pre"]; // remember to also add to components.acrService.js
+                                 "extensions.checkCompatibility.4.0pre",
+                                 "extensions.checkCompatibility.4.0p"]; // remember to also add to components.acrService.js
 
 /* Thunderbird */
 ACR.CHECK_COMPATIBILITY_PREFS_TB = ["extensions.checkCompatibility",
