@@ -35,7 +35,7 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Compatibiliteit">
-<!ENTITY devcompatible.label                "Marked as compatible by developer">
+<!ENTITY devcompatible.label                "Door de ontwikkelaar als compatibel gemarkeerd">
 <!ENTITY stillworks.label                   "Deze add-on werkt nog steeds">
 <!ENTITY nolongerworks.label                "Deze add-on werkt niet meer">
 <!ENTITY worksproperly.label                "Werkt goed">
