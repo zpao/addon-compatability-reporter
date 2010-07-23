@@ -291,7 +291,7 @@ ACR.registerUninstallObserver = function()
             onOperationCancelled: function(addon) { if (addon.id == ACR.EM_ID) ACR.firstrun(); },
             onUninstalled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is uninstalled"); },
             onDisabling: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabling"); },
-            onDisabled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabled"); },
+            onDisabled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabled"); }
         };
 
         AddonManager.addAddonListener(listener);
@@ -299,7 +299,7 @@ ACR.registerUninstallObserver = function()
     }
     catch (e)
     {
-        return ACR.registerUninstallObserverLegacyEM();
+        ACR.registerUninstallObserverLegacyEM();
     }
 }
 

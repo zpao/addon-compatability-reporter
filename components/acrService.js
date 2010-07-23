@@ -11,7 +11,7 @@ function acrService()
 
 acrService.prototype = {
     classDescription: "Add-on Compatibility Reporter Component",
-    classID: Components.ID("19699160-a04c-48a5-b8e4-500f913753fb"),
+    classID: Components.ID("{19699160-a04c-48a5-b8e4-500f913753fb}"),
     contractID: "@addons.mozilla.org/acrservice;1",
 
      _xpcom_categories: [{
@@ -62,6 +62,9 @@ acrService.prototype = {
     // nsIObserver
     observe: function acr_observe(subject, topic, data) {
       switch(topic) {
+        case "profile-after-change":
+          this._observerSvc.addObserver(this, "final-ui-startup", true);
+          break;
         case "app-startup":
           this._observerSvc.addObserver(this, "final-ui-startup", true);
           break;
@@ -112,7 +115,11 @@ acrService.prototype = {
 
 let components = [acrService];
 
-function NSGetModule(compMgr, fileSpec)
-{
-  return XPCOMUtils.generateModule(components);
-}
+/**
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+if (XPCOMUtils.generateNSGetFactory)
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory(components);
+else
+    var NSGetModule = XPCOMUtils.generateNSGetModule(components);
