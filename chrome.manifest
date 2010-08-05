@@ -2,6 +2,7 @@ content   acr                 jar:chrome/acr.jar!/content/
 skin      acr   classic/1.0   jar:chrome/acr.jar!/skin/
 locale    acr   en-US         jar:chrome/acr.jar!/locale/en-US/
 locale    acr   cs            jar:chrome/acr.jar!/locale/cs/
+locale    acr   it            jar:chrome/acr.jar!/locale/it/
 locale    acr   ja            jar:chrome/acr.jar!/locale/ja/
 locale    acr   nl            jar:chrome/acr.jar!/locale/nl/
 locale    acr   pl            jar:chrome/acr.jar!/locale/pl/
