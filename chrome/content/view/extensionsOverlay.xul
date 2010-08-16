@@ -57,10 +57,4 @@
 
     <script src="chrome://acr/content/controller/extensionsOverlayController.js" type="application/javascript;version=1.7"/>
 
-    <!--
-    <stringbundleset id="extensionsSet">
-        <stringbundle id="acr-strings" src="chrome://acr/locale/extensionOverlay.properties"/>
-    </stringbundleset>
-    -->
-
 </overlay>
