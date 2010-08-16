@@ -55,13 +55,10 @@ ACR.Controller.ExtensionsOverlay.init = function()
     else
     {
         document.getElementById("addon-list").addEventListener("select", ACR.Controller.ExtensionsOverlay._setSelectedAddon, true);
-
-        ACR.Controller.ExtensionsOverlay._updateCommandsStack = gViewController.updateCommands;
-        gViewController.updateCommands = function()
+        document.addEventListener("ViewChanged", function()
         {
-            ACR.Controller.ExtensionsOverlay._updateCommandsStack();
             ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
-        }
+        }, true);
     }
 }
 
