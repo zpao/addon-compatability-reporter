@@ -51,33 +51,35 @@
         </resources>
 
         <content>
-            <xul:button label="&compatibility.label;"
-                        type="menu"
-                        anonid="compatibilityButton"
-                        class="addon-control"
-                        collapsed="true">
-                <xul:menupopup>
-                    <xul:menuitem anonid="devcompatible"
-                                  label="&devcompatible.label;"
-                                  disabled="true"/>
-                    <xul:menuitem anonid="stillworks"
-                                  label="&stillworks.label;"
-                                  class="menuitem-iconic"
-                                  image="chrome://acr/skin/images/greentick.png"
-                                  oncommand="ACR.Controller.ExtensionsOverlay.doStillWorks();"/>
-                    <xul:menuitem label="&nolongerworks.label;"
-                                  class="menuitem-iconic"
-                                  image="chrome://acr/skin/images/exclamation.png"
-                                  oncommand="ACR.Controller.ExtensionsOverlay.doNoLongerWorks();"/>
-                 </xul:menupopup>
-            </xul:button>
-            <xul:hbox anonid="worksproperly" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()" align="center">
-                <xul:image src="chrome://acr/skin/images/greentick.png" width="16" height="16"/>
-                <xul:label value="&worksproperly.label;"/>
-            </xul:hbox>
-            <xul:hbox anonid="compatibilityproblems" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()" align="center">
-                <xul:image src="chrome://acr/skin/images/exclamation.png" width="16" height="16"/>
-                <xul:label value="&compatibilityproblems.label;"/>
+            <xul:hbox align="center">
+                <xul:button label="&compatibility.label;"
+                            type="menu"
+                            anonid="compatibilityButton"
+                            class="addon-control"
+                            collapsed="true">
+                    <xul:menupopup>
+                        <xul:menuitem anonid="devcompatible"
+                                      label="&devcompatible.label;"
+                                      disabled="true"/>
+                        <xul:menuitem anonid="stillworks"
+                                      label="&stillworks.label;"
+                                      class="menuitem-iconic"
+                                      image="chrome://acr/skin/images/greentick.png"
+                                      oncommand="ACR.Controller.ExtensionsOverlay.doStillWorks();"/>
+                        <xul:menuitem label="&nolongerworks.label;"
+                                      class="menuitem-iconic"
+                                      image="chrome://acr/skin/images/exclamation.png"
+                                      oncommand="ACR.Controller.ExtensionsOverlay.doNoLongerWorks();"/>
+                     </xul:menupopup>
+                </xul:button>
+                <xul:hbox anonid="worksproperly" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()" align="center">
+                    <xul:image src="chrome://acr/skin/images/greentick.png" width="16" height="16"/>
+                    <xul:label value="&worksproperly.label;"/>
+                </xul:hbox>
+                <xul:hbox anonid="compatibilityproblems" collapsed="true" onclick="document.getBindingParent(this).showButtonForResubmit()" align="center">
+                    <xul:image src="chrome://acr/skin/images/exclamation.png" width="16" height="16"/>
+                    <xul:label value="&compatibilityproblems.label;"/>
+                </xul:hbox>
             </xul:hbox>
         </content>
 
