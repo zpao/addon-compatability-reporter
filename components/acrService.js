@@ -85,18 +85,18 @@ acrService.prototype = {
 
     _disableCheckCompatibilityPrefs : function acr_disableCheckCompatibilityPrefs()
     {
-      try
-      {
         for (var i=0; i<this.CHECK_COMPATIBILITY_PREFS.length; i++)
         {
-          this.debug("Setting compatibility pref '"+this.CHECK_COMPATIBILITY_PREFS[i]+"' to 'false'.");
-          this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
+            try
+            {
+                this.debug("Setting compatibility pref '"+this.CHECK_COMPATIBILITY_PREFS[i]+"' to 'false'.");
+                this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
+            }
+            catch (e)
+            {
+                this.debug("Could not set a checkCompatibility pref: " + e);
+            }
         }
-      }
-      catch (e)
-      {
-        this.debug("Could not set a checkCompatibility pref: " + e);
-      }
     },
 
     // for debugging
