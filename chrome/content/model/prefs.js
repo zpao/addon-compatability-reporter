@@ -214,6 +214,14 @@ ACR.Preferences.setBoolGlobalPreference = function(name, value)
     }
 }
 
+ACR.Preferences.globalGetPrefType = function(name)
+{
+    var prefSvc = ACR.Preferences.Cc["@mozilla.org/preferences-service;1"].
+        getService(ACR.Preferences.Ci.nsIPrefService);
+
+    return prefSvc.getPrefType(name);
+}
+
 ACR.Preferences.clearGlobalPreference = function(name)
 {
     var prefSvc = ACR.Preferences.Cc["@mozilla.org/preferences-service;1"].

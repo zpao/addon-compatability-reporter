@@ -85,11 +85,21 @@ acrService.prototype = {
 
     _disableCheckCompatibilityPrefs : function acr_disableCheckCompatibilityPrefs()
     {
+        // disable compatibility checks every time EXCEPT first run (which takes place in acr.js)
+
         for (var i=0; i<this.CHECK_COMPATIBILITY_PREFS.length; i++)
         {
             try
             {
                 this.debug("Setting compatibility pref '"+this.CHECK_COMPATIBILITY_PREFS[i]+"' to 'false'.");
+
+                if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]) &&
+                    this.prefsGlobal.getPrefType(this.CHECK_COMPATIBILITY_PREFS[i]) != 128)
+                {
+                    this.debug("Clearing non-boolean compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "'");
+                    this.prefsGlobal.clearUserPref(this.CHECK_COMPATIBILITY_PREFS[i]);
+                }
+
                 this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
             }
             catch (e)

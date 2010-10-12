@@ -220,10 +220,17 @@ ACR.disableCheckCompatibilityPrefs = function()
     ACR.Logger.debug("Disabling all checkCompatibility preferences.");
     var checkCompatibilityPrefs = (ACR.Util.getAppName() == "Thunderbird") ? ACR.CHECK_COMPATIBILITY_PREFS_TB : ACR.CHECK_COMPATIBILITY_PREFS_FB;
 
-    try
+    for (var i=0; i<checkCompatibilityPrefs.length; i++)
     {
-        for (var i=0; i<checkCompatibilityPrefs.length; i++)
+        try
         {
+            if (ACR.Preferences.globalHasUserValue(checkCompatibilityPrefs[i]) &&
+                ACR.Preferences.globalGetPrefType(checkCompatibilityPrefs[i]) != 128)
+            {
+                ACR.Logger.debug("Clearing non-boolean compatibility pref '" + checkCompatibilityPrefs[i] + "'");
+                ACR.Preferences.clearGlobalPreference(checkCompatibilityPrefs[i]);
+            }
+
             if (ACR.Preferences.globalHasUserValue(checkCompatibilityPrefs[i]))
             {
                 var previous = ACR.Preferences.getGlobalPreference(checkCompatibilityPrefs[i]);
@@ -239,10 +246,10 @@ ACR.disableCheckCompatibilityPrefs = function()
             ACR.Logger.debug("Setting compatibility pref '" + checkCompatibilityPrefs[i] + "' to 'false'.");
             ACR.Preferences.setBoolGlobalPreference(checkCompatibilityPrefs[i], false);
         }
-    }
-    catch (e)
-    {
-        ACR.Logger.warn("Could not set a checkCompatibility pref: " + e);
+        catch (e)
+        {
+            ACR.Logger.warn("Could not set a checkCompatibility pref: " + e);
+        }
     }
 }
 
