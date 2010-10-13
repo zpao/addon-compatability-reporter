@@ -34,8 +34,13 @@ acrService.prototype = {
                                           "extensions.checkCompatibility.4.0b",
                                           "extensions.checkCompatibility.4.0pre",
                                           "extensions.checkCompatibility.4.0p"]; // remember to also add to chrome/content/model/acr.js
+
         var info = Components.classes["@mozilla.org/xre/app-info;1"].getService(Components.interfaces.nsIXULAppInfo);
-        this.debug("We are in: "+info.name);
+        this.debug("We are in: "+info.name+" version "+info.version);
+
+        var cversion = info.version.replace(/^([^\.]+\.[0-9]+[a-z]*).*/gi, "$1");
+        this.debug("This version uses compatibility pref 'extensions.checkCompatibility." + cversion + "'");
+
         if (info.name == "Thunderbird")
         {
             /* Thunderbird */
