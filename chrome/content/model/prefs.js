@@ -37,7 +37,6 @@
 ACR.Preferences = new function() {}
 
 ACR.Preferences._prefServiceRoot = "extensions.acr.";
-ACR.Preferences._prefServiceListDelimiter = "|";
 ACR.Preferences._prefServiceCache = null;
 ACR.Preferences.Cc = Components.classes;
 ACR.Preferences.Ci = Components.interfaces;
@@ -104,9 +103,15 @@ ACR.Preferences.getPreference = function(name)
 
 ACR.Preferences.setPreferenceList = function(name, list)
 {
-    // TODO ensure there's no this._prefServiceListDelimiter in the list
+    for (var i=0; i<list.length; i++)
+    {
+        if (!list[i])
+            continue;
 
-    var joinedList = list.join(this._prefServiceListDelimiter);
+        list[i] = list[i].replace(/\|/g, "\\|");
+    }
+
+    var joinedList = list.join("|");
 
     this.setPreference(name, joinedList);
 }
@@ -117,7 +122,15 @@ ACR.Preferences.getPreferenceList = function(name)
 
     if (!pref) return new Array();
 
-    return pref.split(this._prefServiceListDelimiter);
+    pref = pref.replace(/\\\|/g, "FORWARDSLASHFORWARDSLASHFORWARDSLASHPIPE");
+    var splitList = pref.split(/\|/);
+
+    for (var i=0; i<splitList.length; i++)
+    {
+        splitList[i] = splitList[i].replace(/FORWARDSLASHFORWARDSLASHFORWARDSLASHPIPE/g, "|");
+    }
+
+    return splitList;
 }
 
 ACR.Preferences.setPreferenceMap = function(name, map)
@@ -126,7 +139,13 @@ ACR.Preferences.setPreferenceMap = function(name, map)
 
     for (var id in map)
     {
-        list.push(id + "=" + map[id]);
+        if (!map[id])
+            continue;
+
+        var blah = map[id].toString();
+        var escaped = blah.replace(/=/g, "\\=");
+
+        list.push(id + "=" + escaped);
     }
 
     return this.setPreferenceList(name, list);
@@ -139,12 +158,14 @@ ACR.Preferences.getPreferenceMap = function(name)
 
     for (var i=0; i<list.length; i++)
     {
-        var bits = list[i].split("=");
+        var bits = list[i].split(/([^\\])=/);
 
-        if (bits.length != 2)
+        if (bits.length != 3)
             continue;
 
-        map[bits[0]] = bits[1];
+        bits[2] = bits[2].replace(/\\=/g, "=");
+
+        map[bits[0]+bits[1]] = bits[2];
     }
 
     return map;

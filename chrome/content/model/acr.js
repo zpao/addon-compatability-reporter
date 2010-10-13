@@ -94,7 +94,7 @@ ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, call
             if (!event.isError())
             {
                 addon.state = (stillWorks ? 1 : 2);
-                ACR.Factory.saveAddon(addon);
+                ACR.Factory.saveAddon(addon, details);
             }
 
             callback(event);
@@ -170,6 +170,7 @@ ACR.checkForApplicationUpgrade = function()
         ACR.Logger.info("Detected (non-beta) major application upgrade; cleared previous compatibility information.");
         ACR.Preferences.setPreference("previousApplicationVersion", currAppVersion);
         ACR.Preferences.setPreference("addons", "");
+        ACR.Preferences.setPreference("addons_reports", "");
         //ACR.disableCheckCompatibilityPrefs();
     };
 

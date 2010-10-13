@@ -63,6 +63,9 @@ ACR.Controller.SubmitReportController.init = function()
     document.getElementById("application").value = ACR.Util.getFullApplicationString();
     document.getElementById("operatingSystem").value = ACR.Util.getFullOSString();
 
+    if (ACR.Controller.SubmitReportController._addon.report)
+        document.getElementById("details").value = ACR.Controller.SubmitReportController._addon.report;
+
     ACR.Logger.debug("Finished ACR.Controller.SubmitReportController.init()");
 }
 

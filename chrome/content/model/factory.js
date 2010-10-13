@@ -42,13 +42,20 @@ ACR.Factory.getAddon = function(guid, version)
 
     var addon = {guid: guid, name: "", version: version, state: 0};
 
-    var map = ACR.Preferences.getPreferenceMap("addons");
-
     var id = guid + "/" + version;
+
+    var map = ACR.Preferences.getPreferenceMap("addons");
 
     if (map[id])
     {
         addon.state = map[id];
+    }
+
+    var mapr = ACR.Preferences.getPreferenceMap("addons_reports");
+
+    if (mapr[id])
+    {
+        addon.report = mapr[id];
     }
 
     return addon;
@@ -63,16 +70,18 @@ ACR.Factory.getAddonByAddonManagerAddonObject = function(addon)
     return acrAddon;
 }
 
-ACR.Factory.saveAddon = function(addon)
+ACR.Factory.saveAddon = function(addon, report)
 {
-    ACR.Logger.debug("ACL.Factory.saveAddon(): Saving addon guid = '" + addon.guid + "', version = '" + addon.version + "'");
-
-    var map = ACR.Preferences.getPreferenceMap("addons");
+    ACR.Logger.debug("ACL.Factory.saveAddon(): Saving addon guid = '" + addon.guid + "', version = '" + addon.version + "', report = '" + report + "'");
 
     var id = addon.guid + "/" + addon.version;
 
+    var map = ACR.Preferences.getPreferenceMap("addons");
     map[id] = addon.state;
-
     ACR.Preferences.setPreferenceMap("addons", map);
+
+    var mapr = ACR.Preferences.getPreferenceMap("addons_reports");
+    mapr[id] = report;
+    ACR.Preferences.setPreferenceMap("addons_reports", mapr);
 }
 
