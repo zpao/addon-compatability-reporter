@@ -47,6 +47,17 @@ acrService.prototype = {
                                              "extensions.checkCompatibility.3.1b",
                                              "extensions.checkCompatibility.3.1"]; // remember to also add to components.acrService.js
         }
+        else if (info.name == "SeaMonkey")
+        {
+            /* SeaMonkey */
+            this.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
+                                              "extensions.checkCompatibility.2.0",
+                                              "extensions.checkCompatibility.2.1p",
+                                              "extensions.checkCompatibility.2.1pre",
+                                              "extensions.checkCompatibility.2.1a",
+                                              "extensions.checkCompatibility.2.1b",
+                                              "extensions.checkCompatibility.2.1"];
+        }
     },
 
     // Observer Service

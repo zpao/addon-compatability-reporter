@@ -63,6 +63,15 @@ ACR.CHECK_COMPATIBILITY_PREFS_TB = ["extensions.checkCompatibility",
                                     "extensions.checkCompatibility.3.1b",
                                     "extensions.checkCompatibility.3.1"]; // remember to also add to components.acrService.js
 
+/* SeaMonkey */
+ACR.CHECK_COMPATIBILITY_PREFS_SM = ["extensions.checkCompatibility",
+                                    "extensions.checkCompatibility.2.0",
+                                    "extensions.checkCompatibility.2.1p",
+                                    "extensions.checkCompatibility.2.1pre",
+                                    "extensions.checkCompatibility.2.1a",
+                                    "extensions.checkCompatibility.2.1b",
+                                    "extensions.checkCompatibility.2.1"]; // remember to also add to components.acrService.js                                    
+
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
     ACR.Logger.debug("In ACR.submitReport()");
@@ -218,7 +227,18 @@ ACR.firstrun = function()
 ACR.disableCheckCompatibilityPrefs = function()
 {
     ACR.Logger.debug("Disabling all checkCompatibility preferences.");
-    var checkCompatibilityPrefs = (ACR.Util.getAppName() == "Thunderbird") ? ACR.CHECK_COMPATIBILITY_PREFS_TB : ACR.CHECK_COMPATIBILITY_PREFS_FB;
+    var checkCompatibilityPrefs;
+    switch (ACR.Util.getAppName())
+	{
+         case "Thunderbird":
+             checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_TB;
+             break;
+         case "SeaMonkey":
+             checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_SM;
+             break;
+         default: // Firefox
+             checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_FB;
+    }
 
     for (var i=0; i<checkCompatibilityPrefs.length; i++)
     {
@@ -255,7 +275,18 @@ ACR.disableCheckCompatibilityPrefs = function()
 
 ACR.lastrun = function()
 {
-    var checkCompatibilityPrefs = (ACR.Util.getAppName() == "Thunderbird") ? ACR.CHECK_COMPATIBILITY_PREFS_TB : ACR.CHECK_COMPATIBILITY_PREFS_FB;
+    var checkCompatibilityPrefs;
+    switch (ACR.Util.getAppName())
+    {
+        case "Thunderbird":
+            checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_TB;
+            break;
+        case "SeaMonkey":
+            checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_SM;
+            break;
+        default: // Firefox
+            checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_FB;
+    }
 
     try
     {

@@ -135,8 +135,9 @@ ACR.Util.getHostEnvironmentInfo = function()
 
 ACR.Util.getAppName = function()
 {
+    // Returns "Firefox", "Thunderbird" or "SeaMonkey"
     var envinfo = ACR.Util.getHostEnvironmentInfo();
-    return envinfo.appName; // Returns "Firefox" for Firefox, "Thunderbird" for TB
+    return envinfo.appName;
 }
 
 ACR.Util.getFullApplicationString = function()
