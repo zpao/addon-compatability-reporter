@@ -49,7 +49,7 @@ ACR.Controller.ExtensionsOverlay.init = function()
 
     if (ACR.Controller.ExtensionsOverlay.isLegacyEM())
     {
-        ACR.Controller.ExtensionsOverlay._compatibilityButton = document.createElement("acrCompatibilityButton");
+        ACR.Controller.ExtensionsOverlay._compatibilityButton = ACR.Controller.ExtensionsOverlay._createWidget();
         document.getElementById("extensionsView").addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM, true);
     }
     else
@@ -60,6 +60,18 @@ ACR.Controller.ExtensionsOverlay.init = function()
             ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
         }, true);
     }
+}
+
+ACR.Controller.ExtensionsOverlay._createWidget = function()
+{
+    var widget = document.createElement("acrCompatibilityButton");
+
+    var runtime = Components.classes['@mozilla.org/xre/app-info;1']
+        .getService(Components.interfaces.nsIXULRuntime);
+
+    widget.setAttribute('OS', runtime.OS);
+
+    return widget;
 }
 
 ACR.Controller.ExtensionsOverlay.isLegacyEM  = function()
@@ -181,7 +193,7 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
                     }
                     else
                     {
-                        cb = document.createElement("acrCompatibilityButton");
+                        cb = ACR.Controller.ExtensionsOverlay._createWidget();
                         cc.insertBefore(cb, cc.firstChild);
                     }
 
@@ -210,7 +222,7 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
             }
             else
             {
-                cb = document.createElement("acrCompatibilityButton");
+                cb = ACR.Controller.ExtensionsOverlay._createWidget();
                 document.getElementById("detail-uninstall").parentNode.insertBefore(cb, document.getElementById("detail-uninstall"));
             }
 
@@ -280,7 +292,7 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM = functi
 
     if (!ACR.Controller.ExtensionsOverlay._compatibilityButton)
     {
-        ACR.Controller.ExtensionsOverlay._compatibilityButton = document.createElement("acrCompatibilityButton");
+        ACR.Controller.ExtensionsOverlay._compatibilityButton = ACR.Controller.ExtensionsOverlay._createWidget();
     }
 
     ACR.Controller.ExtensionsOverlay._compatibilityButton.addon = ACR.Controller.ExtensionsOverlay._addon;
