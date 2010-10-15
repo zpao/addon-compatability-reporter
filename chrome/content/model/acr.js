@@ -41,6 +41,7 @@ ACR.Controller = new function() {}
 ACR.RPC = new function() {}
 
 ACR.FIRSTRUN_LANDING_PAGE = "https://%%AMO_HOST%%/pages/compatibility_firstrun";
+ACR.FIRSTRUN_LANDING_PAGE_TB = "https://%%AMO_HOST%%/thunderbird/pages/compatibility_firstrun";
 ACR.EM_ID = "compatibility@addons.mozilla.org";
 
 /* Firefox */

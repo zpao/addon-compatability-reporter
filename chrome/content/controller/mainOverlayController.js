@@ -71,16 +71,30 @@ ACR.Controller.MainOverlay.firstrun = function()
 
     var url = ACR.FIRSTRUN_LANDING_PAGE.replace("%%AMO_HOST%%", ACR.Preferences.getPreference("amo_host"));
 
-    if (ACR.Util.getHostEnvironmentInfo().appName == "Firefox")
+    switch (ACR.Util.getHostEnvironmentInfo().appName)
     {
-        window.setTimeout(function()
-        {
-            var tab = window.getBrowser().addTab(url);
-            window.getBrowser().selectedTab = tab;
-        },
-        1000);
+        case "Firefox":
+        case "SeaMonkey":
+            window.setTimeout(function()
+            {
+                var tab = window.getBrowser().addTab(url);
+                window.getBrowser().selectedTab = tab;
+            },
+            1000);
+            break;
+        case "Thunderbird":
+            url = ACR.FIRSTRUN_LANDING_PAGE_TB.replace("%%AMO_HOST%%", ACR.Preferences.getPreference("amo_host"));
+            window.setTimeout(function()
+            {
+                var tabmail = document.getElementById("tabmail");
+                var newTab = tabmail.openTab("contentTab",
+                         {contentPage: url});
+                if (!newTab)
+                  ACR.Logger.info("Expected new tab info to be returned from openTab");
+            },
+            1000);
+            break;
     }
-    // XX TODO A Thunderbird firstrun story
 }
 
 window.addEventListener("load", ACR.Controller.MainOverlay.initACR, true);
