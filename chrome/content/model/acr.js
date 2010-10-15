@@ -160,7 +160,9 @@ ACR.getService = function()
 
 ACR.checkForApplicationUpgrade = function()
 {
-    var versionRE = /(\d\.\d)(\.\d)?(([ab])\d.*)?/;
+    // see bug 527249 for an explanation of this method
+
+    var versionRE = /(\d\.\d)(\.\d+)?(([ab])\d.*)?/;
 
     var env = ACR.Util.getHostEnvironmentInfo()
     var currAppVersion = env.appVersion;
@@ -168,8 +170,8 @@ ACR.checkForApplicationUpgrade = function()
 
     var resetCompatibilityInformation = function()
     {
-        ACR.Logger.info("Detected (non-beta) major application upgrade; cleared previous compatibility information.");
-        ACR.Preferences.setPreference("previousApplicationVersion", currAppVersion);
+        ACR.Logger.info("Detected application upgrade (to/from alpha/beta or major upgrade); cleared previous compatibility information.");
+        ACR.Preferences.setPreference("previousApplicationVersion", currAppVersion); // saves the current version as the previous application upgrade
         ACR.Preferences.setPreference("addons", "");
         ACR.Preferences.setPreference("addons_reports", "");
         //ACR.disableCheckCompatibilityPrefs();
@@ -177,7 +179,7 @@ ACR.checkForApplicationUpgrade = function()
 
     if (currAppVersionParts)
     {
-        ACR.Logger.debug("Current application version '" + currAppVersion + "' is major version '" + currAppVersionParts[1] + "', minor version '" + currAppVersionParts[2] + "'. "  + (currAppVersionParts[3]?"This version is " + (currAppVersionParts[4]=="b"?"BETA":"ALPHA") + ", labelled '" + currAppVersionParts[3] + "'.":""));
+        ACR.Logger.debug("Current application version ('" + currAppVersion + "') is major version '" + currAppVersionParts[1] + "', minor version '" + currAppVersionParts[2] + "'. "  + (currAppVersionParts[3]?"This version is " + (currAppVersionParts[4]=="b"?"BETA":"ALPHA") + ", labelled '" + currAppVersionParts[3] + "'.":""));
     }
     else
     {
@@ -196,7 +198,7 @@ ACR.checkForApplicationUpgrade = function()
     }
     else
     {
-        ACR.Logger.debug("Previous application version '" + prevAppVersion + "' was major version '" + prevAppVersionParts[1] + "', minor version '" + prevAppVersionParts[2] + "'. "  + (prevAppVersionParts[3]?"This version was " + (prevAppVersionParts[4]=="b"?"BETA":"ALPHA") + ", labelled '" + prevAppVersionParts[3] + "'.":""));
+        ACR.Logger.debug("Previous application upgrade ('" + prevAppVersion + "') was major version '" + prevAppVersionParts[1] + "', minor version '" + prevAppVersionParts[2] + "'. "  + (prevAppVersionParts[3]?"This version was " + (prevAppVersionParts[4]=="b"?"BETA":"ALPHA") + ", labelled '" + prevAppVersionParts[3] + "'.":""));
     }
 
     // check for major version upgrade
@@ -206,15 +208,13 @@ ACR.checkForApplicationUpgrade = function()
         return;
     }
 
-    // check for upgrade from or to alpha
-    if (currAppVersionParts[4] == "a" || prevAppVersionParts[4] == "a")
+    // check for upgrade from or to alpha or beta
+    if (currAppVersionParts[4] == "a" || prevAppVersionParts[4] == "a" ||
+        currAppVersionParts[4] == "b" || prevAppVersionParts[4] == "b")
     {
         resetCompatibilityInformation();
         return;
     }
-
-    // don't reset on betas: https://bugzilla.mozilla.org/show_bug.cgi?id=527249
-
 }
 
 ACR.firstrun = function()
