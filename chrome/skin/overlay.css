@@ -43,12 +43,16 @@
 
 /* FF4 EM only */
 
-#addon-list acrCompatibilityButton[OS=Darwin]
+#addon-list acrCompatibilityButton[OS=Darwin],
+#detail-controls > acrCompatibilityButton[OS=Darwin]
 {
     margin-top: 2px;
 }
+
 #addon-list acrCompatibilityButton[OS=Linux],
-#addon-list acrCompatibilityButton[OS=WINNT]
+#addon-list acrCompatibilityButton[OS=WINNT],
+#detail-controls > acrCompatibilityButton[OS=Linux],
+#detail-controls > acrCompatibilityButton[OS=WINNT]
 {
     margin-top: -1px;
 }

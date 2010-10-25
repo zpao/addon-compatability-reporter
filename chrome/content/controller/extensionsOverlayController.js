@@ -55,11 +55,18 @@ ACR.Controller.ExtensionsOverlay.init = function()
     else
     {
         document.getElementById("addon-list").addEventListener("select", ACR.Controller.ExtensionsOverlay._setSelectedAddon, true);
-        document.addEventListener("ViewChanged", function()
-        {
-            ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
-        }, true);
+        document.addEventListener("ViewChanged", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons, true);
     }
+
+    // catch case where EM opens in detail view
+    setTimeout(function()
+    {
+        if (gDetailView._addon)
+        {
+            ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddonByAddonManagerAddonObject(gDetailView._addon);
+            ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+        }
+    }, 1000);
 }
 
 ACR.Controller.ExtensionsOverlay._createWidget = function()
@@ -220,14 +227,19 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
             {
                 cb = existings[0];
             }
-            else
+            else if (document.getElementById("detail-uninstall"))
             {
                 cb = ACR.Controller.ExtensionsOverlay._createWidget();
                 document.getElementById("detail-uninstall").parentNode.insertBefore(cb, document.getElementById("detail-uninstall"));
             }
+            else if (document.getElementById("detail-uninstall-btn"))
+            {
+                cb = ACR.Controller.ExtensionsOverlay._createWidget();
+                document.getElementById("detail-uninstall-btn").parentNode.insertBefore(cb, document.getElementById("detail-uninstall-btn"));
+            }
 
             cb.addon = ACR.Controller.ExtensionsOverlay._addon;
-            try { cb.invalidate(); } catch (e) {}
+            try { cb.invalidate(); } catch (e) { ACR.Logger.error(e); }
         }
     }
 

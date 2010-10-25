@@ -201,6 +201,9 @@ ACR.checkForApplicationUpgrade = function()
         ACR.Logger.debug("Previous application upgrade ('" + prevAppVersion + "') was major version '" + prevAppVersionParts[1] + "', minor version '" + prevAppVersionParts[2] + "'. "  + (prevAppVersionParts[3]?"This version was " + (prevAppVersionParts[4]=="b"?"BETA":"ALPHA") + ", labelled '" + prevAppVersionParts[3] + "'.":""));
     }
 
+    if (prevAppVersion == currAppVersion)
+        return;
+
     // check for major version upgrade
     if (currAppVersionParts[1] != prevAppVersionParts[1])
     {
