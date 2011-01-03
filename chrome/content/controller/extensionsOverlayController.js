@@ -232,10 +232,10 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
                 cb = ACR.Controller.ExtensionsOverlay._createWidget();
                 document.getElementById("detail-uninstall").parentNode.insertBefore(cb, document.getElementById("detail-uninstall"));
             }
-            else if (document.getElementById("detail-uninstall-btn"))
+            else if (document.getElementById("detail-enable-btn"))
             {
                 cb = ACR.Controller.ExtensionsOverlay._createWidget();
-                document.getElementById("detail-uninstall-btn").parentNode.insertBefore(cb, document.getElementById("detail-uninstall-btn"));
+                document.getElementById("detail-enable-btn").parentNode.insertBefore(cb, document.getElementById("detail-enable-btn"));
             }
 
             cb.addon = ACR.Controller.ExtensionsOverlay._addon;
