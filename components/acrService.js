@@ -50,7 +50,12 @@ acrService.prototype = {
                                              "extensions.checkCompatibility.3.1pre",
                                              "extensions.checkCompatibility.3.1a",
                                              "extensions.checkCompatibility.3.1b",
-                                             "extensions.checkCompatibility.3.1"]; // remember to also add to components.acrService.js
+                                             "extensions.checkCompatibility.3.1", 
+                                             "extensions.checkCompatibility.3.3p",
+                                             "extensions.checkCompatibility.3.3pre",
+                                             "extensions.checkCompatibility.3.3a",
+                                             "extensions.checkCompatibility.3.3b",
+                                             "extensions.checkCompatibility.3.3"]; // remember to also add to chrome/content/model/acr.js
         }
         else if (info.name == "SeaMonkey")
         {
@@ -61,7 +66,7 @@ acrService.prototype = {
                                               "extensions.checkCompatibility.2.1pre",
                                               "extensions.checkCompatibility.2.1a",
                                               "extensions.checkCompatibility.2.1b",
-                                              "extensions.checkCompatibility.2.1"];
+                                              "extensions.checkCompatibility.2.1"]; // remember to also add to chrome/content/model/acr.js
         }
     },
 

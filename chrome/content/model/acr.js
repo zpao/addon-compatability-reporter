@@ -62,7 +62,12 @@ ACR.CHECK_COMPATIBILITY_PREFS_TB = ["extensions.checkCompatibility",
                                     "extensions.checkCompatibility.3.1pre",
                                     "extensions.checkCompatibility.3.1a",
                                     "extensions.checkCompatibility.3.1b",
-                                    "extensions.checkCompatibility.3.1"]; // remember to also add to components.acrService.js
+                                    "extensions.checkCompatibility.3.1", 
+                                    "extensions.checkCompatibility.3.3p",
+                                    "extensions.checkCompatibility.3.3pre",
+                                    "extensions.checkCompatibility.3.3a",
+                                    "extensions.checkCompatibility.3.3b",
+                                    "extensions.checkCompatibility.3.3"]; // remember to also add to components.acrService.js
 
 /* SeaMonkey */
 ACR.CHECK_COMPATIBILITY_PREFS_SM = ["extensions.checkCompatibility",
@@ -71,7 +76,7 @@ ACR.CHECK_COMPATIBILITY_PREFS_SM = ["extensions.checkCompatibility",
                                     "extensions.checkCompatibility.2.1pre",
                                     "extensions.checkCompatibility.2.1a",
                                     "extensions.checkCompatibility.2.1b",
-                                    "extensions.checkCompatibility.2.1"]; // remember to also add to components.acrService.js                                    
+                                    "extensions.checkCompatibility.2.1"]; // remember to also add to components.acrService.js
 
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
