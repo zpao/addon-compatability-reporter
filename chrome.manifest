@@ -1,15 +1,15 @@
-content   acr                 jar:chrome/acr.jar!/content/
-skin      acr   classic/1.0   jar:chrome/acr.jar!/skin/
-locale    acr   en-US         jar:chrome/acr.jar!/locale/en-US/
-locale    acr   cs            jar:chrome/acr.jar!/locale/cs/
-locale    acr   it            jar:chrome/acr.jar!/locale/it/
-locale    acr   ja            jar:chrome/acr.jar!/locale/ja/
-locale    acr   nl            jar:chrome/acr.jar!/locale/nl/
-locale    acr   pl            jar:chrome/acr.jar!/locale/pl/
-locale    acr   sk            jar:chrome/acr.jar!/locale/sk/
-locale    acr   sl            jar:chrome/acr.jar!/locale/sl/
-locale    acr   uk            jar:chrome/acr.jar!/locale/uk/
-locale    acr   vi            jar:chrome/acr.jar!/locale/vi/
+content   acr                 chrome/content/
+skin      acr   classic/1.0   chrome/skin/
+locale    acr   en-US         chrome/locale/en-US/
+locale    acr   cs            chrome/locale/cs/
+locale    acr   it            chrome/locale/it/
+locale    acr   ja            chrome/locale/ja/
+locale    acr   nl            chrome/locale/nl/
+locale    acr   pl            chrome/locale/pl/
+locale    acr   sk            chrome/locale/sk/
+locale    acr   sl            chrome/locale/sl/
+locale    acr   uk            chrome/locale/uk/
+locale    acr   vi            chrome/locale/vi/
 
 overlay   chrome://browser/content/browser.xul   chrome://acr/content/view/mainOverlay.xul
 overlay   chrome://messenger/content/messenger.xul   chrome://acr/content/view/mainOverlay.xul
