@@ -34,7 +34,11 @@ acrService.prototype = {
                                           "extensions.checkCompatibility.4.0b",
                                           "extensions.checkCompatibility.4.0pre",
                                           "extensions.checkCompatibility.4.0p",
-                                          "extensions.checkCompatibility.4.0"]; // remember to also add to chrome/content/model/acr.js
+                                          "extensions.checkCompatibility.4.0",
+                                          "extensions.checkCompatibility.5.0a",
+                                          "extensions.checkCompatibility.5.0b",
+                                          "extensions.checkCompatibility.5.0pre",
+                                          "extensions.checkCompatibility.5.0p"]; // remember to also add to chrome/content/model/acr.js
 
         var info = Components.classes["@mozilla.org/xre/app-info;1"].getService(Components.interfaces.nsIXULAppInfo);
         this.debug("We are in: "+info.name+" version "+info.version);
