@@ -24,21 +24,11 @@ acrService.prototype = {
         this.version = "0.1";
         this.ConsoleService = Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService);
         this.prefsGlobal = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch(null);
+        
+        Components.utils.import("resource://acr/modules/constants.jsm");
+
         /* Firefox */
-        this.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
-                                          "extensions.checkCompatibility.3.6b",
-                                          "extensions.checkCompatibility.3.6",
-                                          "extensions.checkCompatibility.3.6p",
-                                          "extensions.checkCompatibility.3.6pre",
-                                          "extensions.checkCompatibility.3.7a",
-                                          "extensions.checkCompatibility.4.0b",
-                                          "extensions.checkCompatibility.4.0pre",
-                                          "extensions.checkCompatibility.4.0p",
-                                          "extensions.checkCompatibility.4.0",
-                                          "extensions.checkCompatibility.5.0a",
-                                          "extensions.checkCompatibility.5.0b",
-                                          "extensions.checkCompatibility.5.0pre",
-                                          "extensions.checkCompatibility.5.0p"]; // remember to also add to chrome/content/model/acr.js
+        this.CHECK_COMPATIBILITY_PREFS = COMPATIBILITY_PREFS_FX;
 
         var info = Components.classes["@mozilla.org/xre/app-info;1"].getService(Components.interfaces.nsIXULAppInfo);
         this.debug("We are in: "+info.name+" version "+info.version);
@@ -49,29 +39,12 @@ acrService.prototype = {
         if (info.name == "Thunderbird")
         {
             /* Thunderbird */
-            this.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
-                                             "extensions.checkCompatibility.3.0",
-                                             "extensions.checkCompatibility.3.1p",
-                                             "extensions.checkCompatibility.3.1pre",
-                                             "extensions.checkCompatibility.3.1a",
-                                             "extensions.checkCompatibility.3.1b",
-                                             "extensions.checkCompatibility.3.1", 
-                                             "extensions.checkCompatibility.3.3p",
-                                             "extensions.checkCompatibility.3.3pre",
-                                             "extensions.checkCompatibility.3.3a",
-                                             "extensions.checkCompatibility.3.3b",
-                                             "extensions.checkCompatibility.3.3"]; // remember to also add to chrome/content/model/acr.js
+            this.CHECK_COMPATIBILITY_PREFS = COMPATIBILITY_PREFS_TB;
         }
         else if (info.name == "SeaMonkey")
         {
             /* SeaMonkey */
-            this.CHECK_COMPATIBILITY_PREFS = ["extensions.checkCompatibility",
-                                              "extensions.checkCompatibility.2.0",
-                                              "extensions.checkCompatibility.2.1p",
-                                              "extensions.checkCompatibility.2.1pre",
-                                              "extensions.checkCompatibility.2.1a",
-                                              "extensions.checkCompatibility.2.1b",
-                                              "extensions.checkCompatibility.2.1"]; // remember to also add to chrome/content/model/acr.js
+            this.CHECK_COMPATIBILITY_PREFS = COMPATIBILITY_PREFS_SM;
         }
     },
 

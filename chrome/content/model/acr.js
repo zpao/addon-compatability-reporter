@@ -35,6 +35,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+Components.utils.import("resource://acr/modules/constants.jsm");
+
 ACR = new function() {}
 
 ACR.Controller = new function() {}
@@ -45,43 +47,13 @@ ACR.FIRSTRUN_LANDING_PAGE_TB = "https://%%AMO_HOST%%/thunderbird/pages/compatibi
 ACR.EM_ID = "compatibility@addons.mozilla.org";
 
 /* Firefox */
-ACR.CHECK_COMPATIBILITY_PREFS_FB = ["extensions.checkCompatibility",
-                                 "extensions.checkCompatibility.3.6b",
-                                 "extensions.checkCompatibility.3.6",
-                                 "extensions.checkCompatibility.3.6p",
-                                 "extensions.checkCompatibility.3.6pre",
-                                 "extensions.checkCompatibility.3.7a",
-                                 "extensions.checkCompatibility.4.0b",
-                                 "extensions.checkCompatibility.4.0pre",
-                                 "extensions.checkCompatibility.4.0p",
-                                 "extensions.checkCompatibility.4.0",
-                                 "extensions.checkCompatibility.5.0a",
-                                 "extensions.checkCompatibility.5.0b",
-                                 "extensions.checkCompatibility.5.0pre",
-                                 "extensions.checkCompatibility.5.0p"]; // remember to also add to components.acrService.js
+ACR.CHECK_COMPATIBILITY_PREFS_FB = COMPATIBILITY_PREFS_FX;
 
 /* Thunderbird */
-ACR.CHECK_COMPATIBILITY_PREFS_TB = ["extensions.checkCompatibility",
-                                    "extensions.checkCompatibility.3.0",
-                                    "extensions.checkCompatibility.3.1p",
-                                    "extensions.checkCompatibility.3.1pre",
-                                    "extensions.checkCompatibility.3.1a",
-                                    "extensions.checkCompatibility.3.1b",
-                                    "extensions.checkCompatibility.3.1", 
-                                    "extensions.checkCompatibility.3.3p",
-                                    "extensions.checkCompatibility.3.3pre",
-                                    "extensions.checkCompatibility.3.3a",
-                                    "extensions.checkCompatibility.3.3b",
-                                    "extensions.checkCompatibility.3.3"]; // remember to also add to components.acrService.js
+ACR.CHECK_COMPATIBILITY_PREFS_TB = COMPATIBILITY_PREFS_TB;
 
 /* SeaMonkey */
-ACR.CHECK_COMPATIBILITY_PREFS_SM = ["extensions.checkCompatibility",
-                                    "extensions.checkCompatibility.2.0",
-                                    "extensions.checkCompatibility.2.1p",
-                                    "extensions.checkCompatibility.2.1pre",
-                                    "extensions.checkCompatibility.2.1a",
-                                    "extensions.checkCompatibility.2.1b",
-                                    "extensions.checkCompatibility.2.1"]; // remember to also add to components.acrService.js
+ACR.CHECK_COMPATIBILITY_PREFS_SM = COMPATIBILITY_PREFS_SM;
 
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {

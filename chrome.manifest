@@ -20,3 +20,5 @@ overlay   about:addons chrome://acr/content/view/extensionsOverlay.xul
 component {19699160-a04c-48a5-b8e4-500f913753fb} components/acrService.js
 contract @addons.mozilla.org/acrservice;1 {19699160-a04c-48a5-b8e4-500f913753fb}
 category profile-after-change acrService @addons.mozilla.org/acrservice;1
+
+resource acr chrome/content/
