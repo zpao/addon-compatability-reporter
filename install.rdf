@@ -7,7 +7,7 @@
     <em:id>compatibility@addons.mozilla.org</em:id>
     <em:type>2</em:type>
     <em:name>Add-on Compatibility Reporter</em:name>
-    <em:version>0.8.3</em:version>
+    <em:version>0.8.4</em:version>
     <em:creator>Mozilla Corporation</em:creator>
     <em:contributor>Briks Software (http://briks.si)</em:contributor>
     <em:contributor>Henrik Skupin</em:contributor>
@@ -20,7 +20,7 @@
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>3.5</em:minVersion>
-        <em:maxVersion>6.0a1</em:maxVersion>
+        <em:maxVersion>7.0a1</em:maxVersion>
       </Description>
     </em:targetApplication>
 

@@ -61,7 +61,8 @@ var COMPATIBILITY_PREFS_FX = ["extensions.checkCompatibility",
                               "extensions.checkCompatibility.7.0",
                               "extensions.checkCompatibility.7.0a",
                               "extensions.checkCompatibility.8.0",
-                              "extensions.checkCompatibility.8.0a"];
+                              "extensions.checkCompatibility.8.0a",
+                              "extensions.checkCompatibility.nightly"];
 
 var COMPATIBILITY_PREFS_TB = ["extensions.checkCompatibility",
                               "extensions.checkCompatibility.3.0",
@@ -74,7 +75,8 @@ var COMPATIBILITY_PREFS_TB = ["extensions.checkCompatibility",
                               "extensions.checkCompatibility.3.3pre",
                               "extensions.checkCompatibility.3.3a",
                               "extensions.checkCompatibility.3.3b",
-                              "extensions.checkCompatibility.3.3"];
+                              "extensions.checkCompatibility.3.3",
+                              "extensions.checkCompatibility.nightly"];
 
 var COMPATIBILITY_PREFS_SM = ["extensions.checkCompatibility",
                               "extensions.checkCompatibility.2.0",
@@ -87,4 +89,5 @@ var COMPATIBILITY_PREFS_SM = ["extensions.checkCompatibility",
                               "extensions.checkCompatibility.2.2pre",
                               "extensions.checkCompatibility.2.2a",
                               "extensions.checkCompatibility.2.2b",
-                              "extensions.checkCompatibility.2.2"];
+                              "extensions.checkCompatibility.2.2",
+                              "extensions.checkCompatibility.nightly"];
