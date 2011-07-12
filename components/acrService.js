@@ -76,21 +76,32 @@ acrService.prototype = {
 
     _onAppStartup : function acr_onAppStartup()
     {
-      if (this.prefsGlobal.getBoolPref("extensions.acr.firstrun") == false)
+      this.debug("STARTUP");
+
+      this._disableCheckCompatibilityPrefs();
+
+      if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") == true)
       {
-          this._disableCheckCompatibilityPrefs();
+          this.debug("'postinstall' = true, so restarting the application");
+
+          this.prefsGlobal.setBoolPref("extensions.acr.postinstall", false);
+
+          var boot = Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup);
+          boot.quit(Components.interfaces.nsIAppStartup.eForceQuit|Components.interfaces.nsIAppStartup.eRestart);
       }
+
     },
 
     _disableCheckCompatibilityPrefs : function acr_disableCheckCompatibilityPrefs()
     {
-        // disable compatibility checks every time EXCEPT first run (which takes place in acr.js)
+        // disable all compatibility checks 
+        // if this is firstrun, saves any previous compatibility info for future restore
 
         for (var i=0; i<this.CHECK_COMPATIBILITY_PREFS.length; i++)
         {
             try
             {
-                this.debug("Setting compatibility pref '"+this.CHECK_COMPATIBILITY_PREFS[i]+"' to 'false'.");
+                // fix up any mis-configured compat. prefs
 
                 if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]) &&
                     this.prefsGlobal.getPrefType(this.CHECK_COMPATIBILITY_PREFS[i]) != 128)
@@ -99,6 +110,26 @@ acrService.prototype = {
                     this.prefsGlobal.clearUserPref(this.CHECK_COMPATIBILITY_PREFS[i]);
                 }
 
+                // save previous compat. prefs
+
+                if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") == true)
+                {
+                    if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]))
+                    {
+                        var previous = this.prefsGlobal.getBoolPref(this.CHECK_COMPATIBILITY_PREFS[i]);
+                        this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i] + ".previous", previous);
+
+                        this.debug("Compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "' was previously set as '" + previous + "'. Saving this pref in '" + this.CHECK_COMPATIBILITY_PREFS[i] + ".previous'");
+                    }
+                    else
+                    {
+                        this.debug("Compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "' was not previously set");
+                    }
+                }
+
+                // turn off this compatilibilty pref
+
+                this.debug("Setting compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "' to 'false'");
                 this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
             }
             catch (e)

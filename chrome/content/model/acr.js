@@ -207,56 +207,6 @@ ACR.firstrun = function()
     if (ACR.Preferences.getPreference("firstrun") == true)
     {
         ACR.Preferences.setPreference("firstrun", false);
-        ACR.disableCheckCompatibilityPrefs();
-    }
-}
-
-ACR.disableCheckCompatibilityPrefs = function()
-{
-    ACR.Logger.debug("Disabling all checkCompatibility preferences.");
-    var checkCompatibilityPrefs;
-    switch (ACR.Util.getAppName())
-    {
-         case "Thunderbird":
-             checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_TB;
-             break;
-         case "SeaMonkey":
-             checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_SM;
-             break;
-         default: // Firefox
-             checkCompatibilityPrefs = ACR.CHECK_COMPATIBILITY_PREFS_FB;
-    }
-
-    for (var i=0; i<checkCompatibilityPrefs.length; i++)
-    {
-        try
-        {
-            if (ACR.Preferences.globalHasUserValue(checkCompatibilityPrefs[i]) &&
-                ACR.Preferences.globalGetPrefType(checkCompatibilityPrefs[i]) != 128)
-            {
-                ACR.Logger.debug("Clearing non-boolean compatibility pref '" + checkCompatibilityPrefs[i] + "'");
-                ACR.Preferences.clearGlobalPreference(checkCompatibilityPrefs[i]);
-            }
-
-            if (ACR.Preferences.globalHasUserValue(checkCompatibilityPrefs[i]))
-            {
-                var previous = ACR.Preferences.getGlobalPreference(checkCompatibilityPrefs[i]);
-                ACR.Preferences.setBoolGlobalPreference(checkCompatibilityPrefs[i] + ".previous", previous);
-
-                ACR.Logger.debug("Compatibility pref '" + checkCompatibilityPrefs[i] + "' was previously set as '" + previous + "'. Saving this pref in '" + checkCompatibilityPrefs[i] + ".previous'");
-            }
-            else
-            {
-                ACR.Logger.debug("Compatibility pref '" + checkCompatibilityPrefs[i] + "' was not previously set.");
-            }
-
-            ACR.Logger.debug("Setting compatibility pref '" + checkCompatibilityPrefs[i] + "' to 'false'.");
-            ACR.Preferences.setBoolGlobalPreference(checkCompatibilityPrefs[i], false);
-        }
-        catch (e)
-        {
-            ACR.Logger.warn("Could not set a checkCompatibility pref: " + e);
-        }
     }
 }
 
@@ -301,6 +251,7 @@ ACR.lastrun = function()
     }
 
     ACR.Preferences.setPreference("firstrun", true);
+    ACR.Preferences.clearGlobalPreference("extensions.acr.postinstall");
 }
 
 ACR.registerUninstallObserver = function()
