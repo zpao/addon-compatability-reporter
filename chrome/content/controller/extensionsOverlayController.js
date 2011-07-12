@@ -56,6 +56,8 @@ ACR.Controller.ExtensionsOverlay.init = function()
     {
         document.getElementById("addon-list").addEventListener("select", ACR.Controller.ExtensionsOverlay._setSelectedAddon, true);
         document.addEventListener("ViewChanged", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons, true);
+
+        ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
     }
 
     // catch case where EM opens in detail view
