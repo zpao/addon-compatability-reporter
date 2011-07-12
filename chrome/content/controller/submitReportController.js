@@ -139,6 +139,7 @@ ACR.Controller.SubmitReportController.finished = function(event)
 
         document.getElementById("acr-submit-report").getButton("accept").collapsed = true;
         document.getElementById("acr-submit-report").getButton("cancel").label = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.close");
+        document.getElementById("acr-submit-report").getButton("cancel").focus();
 
     }
 }
