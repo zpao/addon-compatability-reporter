@@ -39,12 +39,12 @@
 <!ENTITY addon.label                   "Componente aggiuntivo:">
 <!ENTITY application.label             "Applicazione:">
 <!ENTITY operatingSystem.label         "Sistema operativo:">
-<!ENTITY cancel.label                  "Cancella">
+<!ENTITY cancel.label                  "Chiudi">
 <!ENTITY submitReport.label            "Invia rapporto">
-<!ENTITY thisAddonStillWorks.label     "Questo componente aggiuntivo funziona esattamente come nelle versioni precedenti.">
-<!ENTITY thisAddonNoLongerWorks.label  "Questo componente aggiuntivo non funziona più allo stesso modo che nelle versioni precedenti.">
-<!ENTITY pleaseProvideDetails.label    "Fornisci i dettagli del problema riscontrato inclusi tutti i passaggi per riprodurlo:">
-<!ENTITY includeAddonList.label        "Includi una lista dei componenti aggiuntivi installati in modo da poter identificare eventuali conflitti.">
-<!ENTITY informationIsPublic.label     "Le informazioni contenute in questo rapporto saranno accessibili al pubblico.">
-<!ENTITY disableThisAddon.label        "Disabilita questo componente aggiuntivo.">
+<!ENTITY thisAddonStillWorks.label     "Questo componente aggiuntivo funziona ancora correttamente.">
+<!ENTITY thisAddonNoLongerWorks.label  "Questo componente aggiuntivo non funziona più correttamente.">
+<!ENTITY pleaseProvideDetails.label    "Fornire i dettagli dei problemi riscontrati, inclusi tutti i passaggi necessari per riprodurli:">
+<!ENTITY includeAddonList.label        "Includere una lista dei componenti aggiuntivi installati al fine di permettere l'identificazione di eventuali conflitti">
+<!ENTITY informationIsPublic.label     "Le informazioni comprese in questo rapporto saranno accessibili al pubblico.">
+<!ENTITY disableThisAddon.label        "Disabilitare questo componente aggiuntivo">
 

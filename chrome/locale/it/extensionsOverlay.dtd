@@ -35,8 +35,8 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Compatibilità">
-<!ENTITY devcompatible.label                "Segnalato come compatibile dallo sviluppatore">
-<!ENTITY stillworks.label                   "Questo componente aggiuntivo è ancora funzionante ">
-<!ENTITY nolongerworks.label                "Questo componente aggiuntivo non è più funzionante">
+<!ENTITY devcompatible.label                "Contrassegnato come compatibile dallo sviluppatore">
+<!ENTITY stillworks.label                   "Questo componente aggiuntivo funziona ancora correttamente">
+<!ENTITY nolongerworks.label                "Questo componente aggiuntivo non funziona più correttamente">
 <!ENTITY worksproperly.label                "Funziona correttamente">
 <!ENTITY compatibilityproblems.label        "Problemi di compatibilità">
