@@ -80,6 +80,8 @@ acrService.prototype = {
 
       this._disableCheckCompatibilityPrefs();
 
+      return; // for now -- see bug 572322
+
       if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") == true)
       {
           this.debug("'postinstall' = true, so restarting the application");
@@ -112,7 +114,9 @@ acrService.prototype = {
 
                 // save previous compat. prefs
 
-                if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") == true)
+                // using different pref, for now -- see bug 572322
+                //if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") == true)
+                if (this.prefsGlobal.getBoolPref("extensions.acr.firstrun") == true)
                 {
                     if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]))
                     {

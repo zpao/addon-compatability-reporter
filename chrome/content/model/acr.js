@@ -251,7 +251,8 @@ ACR.lastrun = function()
     }
 
     ACR.Preferences.setPreference("firstrun", true);
-    ACR.Preferences.clearGlobalPreference("extensions.acr.postinstall");
+    // Disabling for now, see bug 572322
+    //ACR.Preferences.clearGlobalPreference("extensions.acr.postinstall");
 }
 
 ACR.registerUninstallObserver = function()
