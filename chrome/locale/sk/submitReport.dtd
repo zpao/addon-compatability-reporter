@@ -41,8 +41,8 @@
 <!ENTITY operatingSystem.label         "Operačný systém:">
 <!ENTITY cancel.label                  "Zrušiť">
 <!ENTITY submitReport.label            "Odoslať správu">
-<!ENTITY thisAddonStillWorks.label     "Tento doplnok funguje presne tak ako v predchádzajúceich verziách.">
-<!ENTITY thisAddonNoLongerWorks.label  "Tento doplnok už nefunguje tak ako v predchádzajúceich verziách.">
+<!ENTITY thisAddonStillWorks.label     "Tento doplnok funguje presne tak ako v predchádzajúcich verziách.">
+<!ENTITY thisAddonNoLongerWorks.label  "Tento doplnok už nefunguje tak ako v predchádzajúcich verziách.">
 <!ENTITY pleaseProvideDetails.label    "Podrobnejšie popíšte problémy, na ktoré ste narazili a to vrátane krokov na zopakovanie problému:">
 <!ENTITY includeAddonList.label        "Kvôli identifikácii konfliktov zahrnúť zoznam nainštalovaných doplnkov">
 <!ENTITY informationIsPublic.label     "Informácie obsiahnuté v tejto správe budú verejne dostupné.">
