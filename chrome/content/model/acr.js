@@ -55,6 +55,9 @@ ACR.CHECK_COMPATIBILITY_PREFS_TB = COMPATIBILITY_PREFS_TB;
 /* SeaMonkey */
 ACR.CHECK_COMPATIBILITY_PREFS_SM = COMPATIBILITY_PREFS_SM;
 
+ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_HOST = "addons.mozilla.org";
+ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_NAME = "ShowIncompatibleAddons";
+
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
     ACR.Logger.debug("In ACR.submitReport()");
@@ -253,6 +256,21 @@ ACR.lastrun = function()
     ACR.Preferences.setPreference("firstrun", true);
     // Disabling for now, see bug 572322
     //ACR.Preferences.clearGlobalPreference("extensions.acr.postinstall");
+
+    // bug 675762
+
+    var cookieMgr = Components.classes["@mozilla.org/cookiemanager;1"].getService(Components.interfaces.nsICookieManager);
+
+    for (var e = cookieMgr.enumerator; e.hasMoreElements();)
+    {
+        var cookie = e.getNext().QueryInterface(Components.interfaces.nsICookie);
+
+        if (cookie.host == ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_HOST && cookie.name == ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_NAME)
+        {
+            cookieMgr.remove(cookie.host, cookie.name, cookie.path, false);
+        }
+    }
+
 }
 
 ACR.registerUninstallObserver = function()

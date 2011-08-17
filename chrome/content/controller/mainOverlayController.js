@@ -58,6 +58,14 @@ ACR.Controller.MainOverlay._delayedInitACR = function()
     }
 
     ACR.registerUninstallObserver();
+
+    // bug 675762
+
+    var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+    var cookieUri = ios.newURI("http://" + ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_HOST + "/", null, null);
+    var cookieSvc = Components.classes["@mozilla.org/cookieService;1"].getService(Components.interfaces.nsICookieService);
+
+    cookieSvc.setCookieString(cookieUri, null, ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_NAME + "=1;expires=Wed, 13 Jan 2021 22:23:01 GMT", null);
 }
 
 ACR.Controller.MainOverlay._removeLoadListener = function()
