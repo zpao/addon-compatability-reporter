@@ -264,12 +264,47 @@ ACR.registerUninstallObserver = function()
         Components.utils.import("resource://gre/modules/AddonManager.jsm");
 
         var listener = {
-            onUninstalling: function(addon) { if (addon.id == ACR.EM_ID) ACR.lastrun(); },
-            onOperationCancelled: function(addon) { if (addon.id == ACR.EM_ID) ACR.firstrun(); },
-            onUninstalled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is uninstalled"); },
-            onDisabling: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabling"); },
-            onDisabled: function(addon) { ACR.Logger.debug("addon '" + addon.id + "' is disabled"); }
-        };
+            onUninstalling: function(addon)
+            {
+                try
+                {
+                    if (addon.id == ACR.EM_ID) ACR.lastrun();
+                }
+                catch (e) {}
+            },
+            onOperationCancelled: function(addon)
+            {
+                try
+                {
+                    if (addon.id == ACR.EM_ID) ACR.firstrun();
+                }
+                catch (e) {}
+            },
+            onUninstalled: function(addon)
+            {
+                try
+                {
+                    ACR.Logger.debug("addon '" + addon.id + "' is uninstalled");
+                }
+                catch (e) {}
+            },
+            onDisabling: function(addon)
+            {
+                try
+                {
+                    ACR.Logger.debug("addon '" + addon.id + "' is disabling");
+                }
+                catch (e) {}
+            },
+            onDisabled: function(addon)
+            {
+                try
+                {
+                    ACR.Logger.debug("addon '" + addon.id + "' is disabled");
+                }
+                catch (e) {}
+            }
+        }
 
         AddonManager.addAddonListener(listener);
         ACR._uninstallObserverRegistered = true;
