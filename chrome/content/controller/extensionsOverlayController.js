@@ -334,3 +334,8 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM = functi
 }
 
 addEventListener("load", ACR.Controller.ExtensionsOverlay.init, false);
+
+// import our branch of the AddonRepository to ensure the Addon Manager uses that instead, per bug 678787
+
+Components.utils.import("resource://acr/modules/AddonRepository.jsm");
+
