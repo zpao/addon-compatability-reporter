@@ -55,8 +55,8 @@ ACR.CHECK_COMPATIBILITY_PREFS_TB = COMPATIBILITY_PREFS_TB;
 /* SeaMonkey */
 ACR.CHECK_COMPATIBILITY_PREFS_SM = COMPATIBILITY_PREFS_SM;
 
-ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_HOST = "addons.mozilla.org";
-ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_NAME = "ShowIncompatibleAddons";
+ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN = "http://addons.mozilla.org";
+ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME = "ShowIncompatibleAddons";
 
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
 {
@@ -257,8 +257,35 @@ ACR.lastrun = function()
     // Disabling for now, see bug 572322
     //ACR.Preferences.clearGlobalPreference("extensions.acr.postinstall");
 
-    // bug 675762
+    ACR.removeAMOShowIncompatibleAddons();
+}
 
+ACR.isDisabled = function()
+{
+    ACR.removeAMOShowIncompatibleAddons();
+}
+
+ACR.setAMOShowIncompatibleAddons = function()
+{
+    // see bug 675762
+
+    ACR.Util.getLocalStorageForOrigin(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).setItem(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME, true);
+
+    /*
+    var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+    var cookieUri = ios.newURI("http://" + ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_HOST + "/", null, null);
+    var cookieSvc = Components.classes["@mozilla.org/cookieService;1"].getService(Components.interfaces.nsICookieService);
+    cookieSvc.setCookieString(cookieUri, null, ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_NAME + "=1;expires=Wed, 13 Jan 2021 22:23:01 GMT", null);
+    */
+}
+
+ACR.removeAMOShowIncompatibleAddons = function()
+{
+    // see bug 675762
+
+    ACR.Util.getLocalStorageForOrigin(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).removeItem(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME);
+
+    /*
     var cookieMgr = Components.classes["@mozilla.org/cookiemanager;1"].getService(Components.interfaces.nsICookieManager);
 
     for (var e = cookieMgr.enumerator; e.hasMoreElements();)
@@ -270,7 +297,7 @@ ACR.lastrun = function()
             cookieMgr.remove(cookie.host, cookie.name, cookie.path, false);
         }
     }
-
+    */
 }
 
 ACR.registerUninstallObserver = function()
@@ -311,6 +338,8 @@ ACR.registerUninstallObserver = function()
                 try
                 {
                     ACR.Logger.debug("addon '" + addon.id + "' is disabling");
+
+                    if (addon.id == ACR.EM_ID) ACR.isDisabled();
                 }
                 catch (e) {}
             },

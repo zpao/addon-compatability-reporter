@@ -506,3 +506,27 @@ ACR.Util.getUserFacingOSName = function(str)
     }
 }
 
+ACR.Util.getLocalStorageForOrigin = function(origin)
+{
+    // e.g. origin = "http://example.com"
+
+    try
+    {
+        var ios = Components.classes["@mozilla.org/network/io-service;1"]
+                  .getService(Components.interfaces.nsIIOService);
+        var ssm = Components.classes["@mozilla.org/scriptsecuritymanager;1"]
+                  .getService(Components.interfaces.nsIScriptSecurityManager);
+        var dsm = Components.classes["@mozilla.org/dom/storagemanager;1"]
+                  .getService(Components.interfaces.nsIDOMStorageManager);
+
+        var uri = ios.newURI(origin, "", null);
+        var principal = ssm.getCodebasePrincipal(uri);
+        var storage = dsm.getLocalStorageForPrincipal(principal, "");
+
+        //storage.setItem("chromekey", "chromevalue");
+
+        return storage;
+    }
+    catch (e) { ACR.Logger.warn(e); return null; }
+
+}
