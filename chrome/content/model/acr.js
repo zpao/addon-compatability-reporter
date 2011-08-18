@@ -309,35 +309,42 @@ ACR.setAMOShowIncompatibleAddons = function()
 {
     // see bug 675762
 
-    ACR.Util.getLocalStorageForOrigin(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).setItem(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME, true);
+    try
+    {
+        ACR.Util.getLocalStorageForOrigin(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).setItem(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME, true);
+    }
+    catch (e)
+    {
+        ACR.Logger.warn("ShowIncompatibleAddons: Local storage disabled ('" + e + "') falling back to cookies.");
 
-    /*
-    var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
-    var cookieUri = ios.newURI("http://" + ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_HOST + "/", null, null);
-    var cookieSvc = Components.classes["@mozilla.org/cookieService;1"].getService(Components.interfaces.nsICookieService);
-    cookieSvc.setCookieString(cookieUri, null, ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_NAME + "=1;expires=Wed, 13 Jan 2021 22:23:01 GMT", null);
-    */
+        var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+        var cookieUri = ios.newURI(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN, null, null);
+        var cookieSvc = Components.classes["@mozilla.org/cookieService;1"].getService(Components.interfaces.nsICookieService);
+        cookieSvc.setCookieString(cookieUri, null, ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME + "=1;expires=Wed, 13 Jan 2021 22:23:01 GMT", null);
+    }
 }
 
 ACR.removeAMOShowIncompatibleAddons = function()
 {
     // see bug 675762
 
-    ACR.Util.getLocalStorageForOrigin(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).removeItem(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME);
+    try
+    {
+        ACR.Util.getLocalStorageForOrigin(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).removeItem(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME);
+    } 
+    catch (e) {}
 
-    /*
     var cookieMgr = Components.classes["@mozilla.org/cookiemanager;1"].getService(Components.interfaces.nsICookieManager);
 
     for (var e = cookieMgr.enumerator; e.hasMoreElements();)
     {
         var cookie = e.getNext().QueryInterface(Components.interfaces.nsICookie);
 
-        if (cookie.host == ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_HOST && cookie.name == ACR.SHOW_INCOMPATIBLE_ADDONS_COOKIE_NAME)
+        if ("http://" + cookie.host == ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN && cookie.name == ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME)
         {
             cookieMgr.remove(cookie.host, cookie.name, cookie.path, false);
         }
     }
-    */
 }
 
 ACR.registerUninstallObserver = function()
