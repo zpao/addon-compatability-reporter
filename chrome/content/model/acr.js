@@ -143,7 +143,56 @@ ACR.getService = function()
     return this._service;
 }
 
-ACR.checkForApplicationUpgrade = function()
+ACR.checkForLangPackDisable = function()
+{
+    var disableLangPacks = function()
+    {
+        ACR.Logger.info("Detected application upgrade (to/from alpha/beta or major upgrade); disabling langpacks.");
+
+        var callback = function(installedExtensions)
+        {
+            var uninstalledC = 0;
+
+            for (var i=0; i<installedExtensions.length; i++)
+            {
+                if (installedExtensions[i].type == "locale")
+                {
+                    ACR.Logger.info("Uninstalling locale '" + installedExtensions[i].id + "'");
+
+                    //installedExtensions[i].userDisabled = true;
+                    installedExtensions[i].uninstall();
+                    uninstalledC++;
+                }
+            }
+
+            if (uninstalledC > 0)
+            {
+                var boot = Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup);
+                boot.quit(Components.interfaces.nsIAppStartup.eForceQuit|Components.interfaces.nsIAppStartup.eRestart);
+            }
+        };
+
+        ACR.Util.getInstalledExtensions(callback);
+    };
+
+    ACR.checkForApplicationUpgrade(disableLangPacks);
+}
+
+ACR.checkForCompatibilityReset = function()
+{
+    var resetCompatibilityInformation = function(currAppVersion)
+    {
+        ACR.Logger.info("Detected application upgrade (to/from alpha/beta or major upgrade); cleared previous compatibility information.");
+        ACR.Preferences.setPreference("previousApplicationVersion", currAppVersion); // saves the current version as the previous application upgrade
+        ACR.Preferences.setPreference("addons", "");
+        ACR.Preferences.setPreference("addons_reports", "");
+        //ACR.disableCheckCompatibilityPrefs();
+    };
+
+    ACR.checkForApplicationUpgrade(resetCompatibilityInformation);
+}
+
+ACR.checkForApplicationUpgrade = function(callback)
 {
     // see bug 527249 for an explanation of this method
 
@@ -152,15 +201,6 @@ ACR.checkForApplicationUpgrade = function()
     var env = ACR.Util.getHostEnvironmentInfo()
     var currAppVersion = env.appVersion;
     var currAppVersionParts = currAppVersion.match(versionRE);
-
-    var resetCompatibilityInformation = function()
-    {
-        ACR.Logger.info("Detected application upgrade (to/from alpha/beta or major upgrade); cleared previous compatibility information.");
-        ACR.Preferences.setPreference("previousApplicationVersion", currAppVersion); // saves the current version as the previous application upgrade
-        ACR.Preferences.setPreference("addons", "");
-        ACR.Preferences.setPreference("addons_reports", "");
-        //ACR.disableCheckCompatibilityPrefs();
-    };
 
     if (currAppVersionParts)
     {
@@ -178,7 +218,7 @@ ACR.checkForApplicationUpgrade = function()
     if (!prevAppVersionParts)
     {
         ACR.Logger.warn("Unrecognized previous application version '" + prevAppVersion  + "'.");
-        resetCompatibilityInformation();
+        callback(currAppVersion);
         return;
     }
     else
@@ -192,7 +232,7 @@ ACR.checkForApplicationUpgrade = function()
     // check for major version upgrade
     if (currAppVersionParts[1] != prevAppVersionParts[1])
     {
-        resetCompatibilityInformation();
+        callback(currAppVersion);
         return;
     }
 
@@ -200,7 +240,7 @@ ACR.checkForApplicationUpgrade = function()
     if (currAppVersionParts[4] == "a" || prevAppVersionParts[4] == "a" ||
         currAppVersionParts[4] == "b" || prevAppVersionParts[4] == "b")
     {
-        resetCompatibilityInformation();
+        callback(currAppVersion);
         return;
     }
 }

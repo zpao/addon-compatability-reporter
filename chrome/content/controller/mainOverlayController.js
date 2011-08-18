@@ -57,6 +57,7 @@ ACR.Controller.MainOverlay._delayedInitACR = function()
         catch (e) { ACR.Logger.debug("firstrun fail : "+e); }
     }
 
+    ACR.checkForLangPackDisable();
     ACR.registerUninstallObserver();
     ACR.setAMOShowIncompatibleAddons();
 }

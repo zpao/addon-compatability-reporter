@@ -45,7 +45,7 @@ ACR.Controller.ExtensionsOverlay.init = function()
 {
     ACR.Logger.debug("In ExtensionsOverlay.init()");
 
-    ACR.checkForApplicationUpgrade();
+    ACR.checkForCompatibilityReset();
 
     if (ACR.Controller.ExtensionsOverlay.isLegacyEM())
     {
