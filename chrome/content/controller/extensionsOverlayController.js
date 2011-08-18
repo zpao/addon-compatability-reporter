@@ -337,9 +337,121 @@ addEventListener("load", ACR.Controller.ExtensionsOverlay.init, false);
 
 if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
 {
-    // import our branch of the AddonRepository to ensure the Addon Manager uses that instead, per bug 678787
-    ACR.Logger.debug("Loading custom AddonRepository.jsm");
-    Components.utils.import("resource://acr/modules/AddonRepository.jsm");
+    // override this method for bug 678787
+
+    gSearchView.show = function(aQuery, aRequest)
+    {
+        ACR.Logger.debug("Loading custom AddonRepository.jsm");
+        Components.utils.import("resource://acr/modules/AddonRepository.jsm");
+
+        gEventManager.registerInstallListener(this);
+
+        this.showEmptyNotice(false);
+        this.showAllResultsLink(0);
+        this.showLoading(true);
+        this._sorters.showprice = false;
+
+        gHeader.searchQuery = aQuery;
+        aQuery = aQuery.trim().toLocaleLowerCase();
+        if (this._lastQuery == aQuery) {
+          this.updateView();
+          gViewController.notifyViewChanged();
+          return;
+        }
+        this._lastQuery = aQuery;
+
+        if (AddonRepository.isSearching)
+          AddonRepository.cancelSearch();
+
+        while (this._listBox.firstChild.localName == "richlistitem")
+          this._listBox.removeChild(this._listBox.firstChild);
+
+        var self = this;
+        gCachedAddons = {};
+        this._pendingSearches = 2;
+        this._sorters.setSort("relevancescore", false);
+
+        var elements = [];
+
+        function createSearchResults(aObjsList, aIsInstall, aIsRemote) {
+          aObjsList.forEach(function(aObj) {
+            let score = 0;
+            if (aQuery.length > 0) {
+              score = self.getMatchScore(aObj, aQuery);
+              if (score == 0 && !aIsRemote)
+                return;
+            }
+
+            let item = createItem(aObj, aIsInstall, aIsRemote);
+            item.setAttribute("relevancescore", score);
+            if (aIsRemote) {
+              gCachedAddons[aObj.id] = aObj;
+              if (aObj.purchaseURL)
+                self._sorters.showprice = true;
+            }
+
+            elements.push(item);
+          });
+        }
+
+        function finishSearch(createdCount) {
+          if (elements.length > 0) {
+            sortElements(elements, [self._sorters.sortBy], self._sorters.ascending);
+            elements.forEach(function(aElement) {
+              self._listBox.insertBefore(aElement, self._listBox.lastChild);
+            });
+            self.updateListAttributes();
+          }
+
+          self._pendingSearches--;
+          self.updateView();
+
+          if (!self.isSearching)
+            gViewController.notifyViewChanged();
+        }
+
+        getAddonsAndInstalls(null, function(aAddons, aInstalls) {
+          if (gViewController && aRequest != gViewController.currentViewRequest)
+            return;
+
+          createSearchResults(aAddons, false, false);
+          createSearchResults(aInstalls, true, false);
+          finishSearch();
+        });
+
+        var maxRemoteResults = 0;
+        try {
+          maxRemoteResults = Services.prefs.getIntPref(PREF_MAXRESULTS);
+        } catch(e) {}
+
+        if (maxRemoteResults <= 0) {
+          finishSearch(0);
+          return;
+        }
+
+        AddonRepository.searchAddons(aQuery, maxRemoteResults, {
+          searchFailed: function() {
+            if (gViewController && aRequest != gViewController.currentViewRequest)
+              return;
+
+            self._lastRemoteTotal = 0;
+
+            // XXXunf Better handling of AMO search failure. See bug 579502
+            finishSearch(0); // Silently fail
+          },
+
+          searchSucceeded: function(aAddonsList, aAddonCount, aTotalResults) {
+            if (gViewController && aRequest != gViewController.currentViewRequest)
+              return;
+
+            if (aTotalResults > maxRemoteResults)
+              self._lastRemoteTotal = aTotalResults;
+            else
+              self._lastRemoteTotal = 0;
+
+            var createdCount = createSearchResults(aAddonsList, false, true);
+            finishSearch(createdCount);
+          }
+        });
+    };
 }
-
-
