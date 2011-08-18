@@ -311,7 +311,7 @@ ACR.setAMOShowIncompatibleAddons = function()
 
     try
     {
-        ACR.Util.getLocalStorageForOrigin(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).setItem(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME, true);
+        ACR.Util.getLocalStorageForOrigin(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).setItem(ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME, 1);
     }
     catch (e)
     {
