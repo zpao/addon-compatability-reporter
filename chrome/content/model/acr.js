@@ -55,7 +55,7 @@ ACR.CHECK_COMPATIBILITY_PREFS_TB = COMPATIBILITY_PREFS_TB;
 /* SeaMonkey */
 ACR.CHECK_COMPATIBILITY_PREFS_SM = COMPATIBILITY_PREFS_SM;
 
-ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN = "http://addons.mozilla.org";
+ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN = "https://addons.mozilla.org";
 ACR.SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME = "ShowIncompatibleAddons";
 
 ACR.submitReport = function(addon, stillWorks, details, includeOtherAddons, callback)
