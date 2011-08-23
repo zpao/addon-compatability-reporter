@@ -57,7 +57,9 @@ ACR.Controller.MainOverlay._delayedInitACR = function()
         catch (e) { ACR.Logger.debug("firstrun fail : "+e); }
     }
 
-    ACR.checkForLangPackDisable();
+    // disabling this for now (https://bugzilla.mozilla.org/show_bug.cgi?id=644933)
+    // ACR.checkForLangPackDisable();
+
     ACR.registerUninstallObserver();
     ACR.setAMOShowIncompatibleAddons();
 }
