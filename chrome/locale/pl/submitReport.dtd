@@ -34,7 +34,7 @@
   - 
   - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY window.title                  "Raport kompatybilności">
+<!ENTITY window.title                  "Zgłoszenie kompatybilności">
 
 <!ENTITY addon.label                   "Dodatek:">
 <!ENTITY application.label             "Program:">
@@ -45,6 +45,6 @@
 <!ENTITY thisAddonNoLongerWorks.label  "Ten dodatek już nie działa tak samo, jak w poprzednich wersjach.">
 <!ENTITY pleaseProvideDetails.label    "Podaj informacje o napotkanych problemach zawierające kroki, jakie trzeba wykonać, by reprodukować te problemy:">
 <!ENTITY includeAddonList.label        "Dołączam listę moich zainstalowanych dodatków, by łatwiej zidentyfikować konflikty">
-<!ENTITY informationIsPublic.label     "Informacje zawarte w tym raporcie będą dostępne publicznie.">
+<!ENTITY informationIsPublic.label     "Informacje zawarte w tym zgłoszeniu będą dostępne publicznie.">
 <!ENTITY disableThisAddon.label        "Wyłącz ten dodatek">
 
