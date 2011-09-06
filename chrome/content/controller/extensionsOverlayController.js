@@ -377,8 +377,8 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
                 var a2 = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
                 ACR.Factory.deleteAddon(a2);
 
-                ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
                 ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
+                ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
                 gViewController.updateCommands();
             }
         }
