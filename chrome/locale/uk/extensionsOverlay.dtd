@@ -40,3 +40,4 @@
 <!ENTITY nolongerworks.label                "Цей додаток більше не працює">
 <!ENTITY worksproperly.label                "Працює як слід">
 <!ENTITY compatibilityproblems.label        "Проблеми з сумісноcтю">
+<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">

@@ -40,3 +40,4 @@
 <!ENTITY nolongerworks.label                "Deze add-on werkt niet meer">
 <!ENTITY worksproperly.label                "Werkt goed">
 <!ENTITY compatibilityproblems.label        "Compatibiliteitsproblemen">
+<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">

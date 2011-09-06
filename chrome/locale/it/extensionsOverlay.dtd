@@ -40,3 +40,4 @@
 <!ENTITY nolongerworks.label                "Questo componente aggiuntivo non funziona più correttamente">
 <!ENTITY worksproperly.label                "Funziona correttamente">
 <!ENTITY compatibilityproblems.label        "Problemi di compatibilità">
+<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">

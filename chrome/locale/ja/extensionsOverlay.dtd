@@ -40,3 +40,4 @@
 <!ENTITY nolongerworks.label                "このアドオンは使えなくなりました">
 <!ENTITY worksproperly.label                "正常に動作します">
 <!ENTITY compatibilityproblems.label        "互換性の問題">
+<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">

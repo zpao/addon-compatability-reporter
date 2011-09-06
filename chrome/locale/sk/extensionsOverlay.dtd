@@ -40,3 +40,4 @@
 <!ENTITY nolongerworks.label                "Tento doplnok už viac nefunguje">
 <!ENTITY worksproperly.label                "Funguje správne">
 <!ENTITY compatibilityproblems.label        "Problémy s kompatibilitou">
+<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">

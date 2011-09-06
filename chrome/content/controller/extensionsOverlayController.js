@@ -39,6 +39,7 @@ ACR.Controller.ExtensionsOverlay = new function()
 {
     this._addon = null;
     this._compatibilityButton = null;
+    this._COMPATIBILITY_REPORT_URL_BASE = "https://addons.mozilla.org/en-US/firefox/compatibility/reporter/";
 }
 
 ACR.Controller.ExtensionsOverlay.init = function()
@@ -241,6 +242,13 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
             }
 
             cb.addon = ACR.Controller.ExtensionsOverlay._addon;
+
+            if (cb.addon && cb.addon.type == "plugin")
+            {
+                cb.parentNode.removeChild(cb);
+                return;
+            }
+
             try { cb.invalidate(); } catch (e) { ACR.Logger.error(e); }
         }
     }
@@ -337,6 +345,19 @@ addEventListener("load", ACR.Controller.ExtensionsOverlay.init, false);
 
 if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
 {
+    // add any acr commands
+
+    gViewController.commands["cmd_showCompatibilityResults"] = {
+        isEnabled: function(aAddon) {
+            if (!aAddon || aAddon.type == "plugin")
+                return false;
+            return true;
+        },
+        doCommand: function(aAddon) {
+            openURL(ACR.Controller.ExtensionsOverlay._COMPATIBILITY_REPORT_URL_BASE + encodeURIComponent(aAddon.id));
+        }
+    };
+
     // override this method for bug 678787
 
     gSearchView.show = function(aQuery, aRequest)
