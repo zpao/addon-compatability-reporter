@@ -41,3 +41,4 @@
 <!ENTITY worksproperly.label                "Works properly">
 <!ENTITY compatibilityproblems.label        "Compatibility Problems">
 <!ENTITY showCompatibilityResults.label     "Show Compatibility Results">
+<!ENTITY clearCompatibilityReport.label     "Clear Compatibility Report">

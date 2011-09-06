@@ -41,3 +41,4 @@
 <!ENTITY worksproperly.label                "Hoạt động bình thường">
 <!ENTITY compatibilityproblems.label        "Vấn đề về Tính tương thích">
 <!ENTITY showCompatibilityResults.label     "Show Compatibility Results">
+<!ENTITY clearCompatibilityReport.label     "Clear Compatibility Report">

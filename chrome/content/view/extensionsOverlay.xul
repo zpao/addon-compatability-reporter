@@ -60,10 +60,13 @@
     <menupopup id="addonitem-popup">
         <menuitem id="menuitem_showCompatibilityResults" command="cmd_showCompatibilityResults"
             label="&showCompatibilityResults.label;"/>
+        <menuitem id="menuitem_clearCompatibilityReport" command="cmd_clearCompatibilityReport"
+            label="&clearCompatibilityReport.label;"/>
     </menupopup>
 
     <commandset id="viewCommandSet">
         <command id="cmd_showCompatibilityResults"/>
+        <command id="cmd_clearCompatibilityReport"/>
     </commandset>
 
 </overlay>

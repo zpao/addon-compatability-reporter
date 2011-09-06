@@ -122,6 +122,7 @@ ACR.Controller.ExtensionsOverlay._openSubmitReportDialog = function(params)
     else
     {
         ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+        gViewController.updateCommands();
     }
 }
 
@@ -357,6 +358,32 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
             openURL(ACR.Controller.ExtensionsOverlay._COMPATIBILITY_REPORT_URL_BASE + encodeURIComponent(aAddon.id));
         }
     };
+
+    gViewController.commands["cmd_clearCompatibilityReport"] = {
+        isEnabled: function(aAddon) {
+            if (!aAddon || aAddon.type == "plugin")
+                return false;
+
+            var a2 = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
+            
+            if (!a2 || a2.state == 0)
+                return false;
+
+            return true;
+        },
+        doCommand: function(aAddon) {
+            if (aAddon)
+            {
+                var a2 = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
+                ACR.Factory.deleteAddon(a2);
+
+                ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+                ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
+                gViewController.updateCommands();
+            }
+        }
+    };
+
 
     // override this method for bug 678787
 

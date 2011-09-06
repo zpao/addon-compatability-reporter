@@ -85,3 +85,18 @@ ACR.Factory.saveAddon = function(addon, report)
     ACR.Preferences.setPreferenceMap("addons_reports", mapr);
 }
 
+ACR.Factory.deleteAddon = function(addon)
+{
+    ACR.Logger.debug("ACL.Factory.deleteAddon(): Deleting addon guid = '" + addon.guid + "', version = '" + addon.version);
+
+    var id = addon.guid + "/" + addon.version;
+
+    var map = ACR.Preferences.getPreferenceMap("addons");
+    delete map[id];
+    ACR.Preferences.setPreferenceMap("addons", map);
+
+    var mapr = ACR.Preferences.getPreferenceMap("addons_reports");
+    delete mapr[id];
+    ACR.Preferences.setPreferenceMap("addons_reports", mapr);
+}
+

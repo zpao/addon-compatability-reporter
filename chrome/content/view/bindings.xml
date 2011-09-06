@@ -138,7 +138,8 @@
             <method name="showButtonForResubmit">
                 <body>
                 <![CDATA[
-                    this.invalidate(true);
+                    // bug 671257
+                    //this.invalidate(true);
                 ]]>
                 </body>
             </method>
