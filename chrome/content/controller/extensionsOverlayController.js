@@ -122,7 +122,6 @@ ACR.Controller.ExtensionsOverlay._openSubmitReportDialog = function(params)
     else
     {
         ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
-        gViewController.updateCommands();
     }
 }
 
@@ -252,6 +251,8 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
 
             try { cb.invalidate(); } catch (e) { ACR.Logger.error(e); }
         }
+
+        gViewController.updateCommands();
     }
 
     //if (ACR.Controller.ExtensionsOverlay._stuffTimeout) clearTimeout(stuffer);
@@ -379,7 +380,6 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
 
                 ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
                 ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
-                gViewController.updateCommands();
             }
         }
     };

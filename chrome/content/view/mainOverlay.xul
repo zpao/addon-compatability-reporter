@@ -43,6 +43,7 @@
 
     <script src="chrome://acr/content/model/acr.js"/>
     <script src="chrome://acr/content/model/logger.js"/>
+    <script src="chrome://acr/content/model/factory.js"/>
     <script src="chrome://acr/content/model/prefs.js"/>
     <script src="chrome://acr/content/model/util.js"/>
     <script src="chrome://acr/content/controller/mainOverlayController.js"/>

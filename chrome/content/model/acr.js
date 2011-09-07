@@ -347,9 +347,9 @@ ACR.removeAMOShowIncompatibleAddons = function()
     }
 }
 
-ACR.registerUninstallObserver = function()
+ACR.registerAddonListener = function()
 {
-    if (ACR._uninstallObserverRegistered) return;
+    if (ACR._addonListenerRegistered) return;
 
     try
     {
@@ -397,11 +397,53 @@ ACR.registerUninstallObserver = function()
                     ACR.Logger.debug("addon '" + addon.id + "' is disabled");
                 }
                 catch (e) {}
+            },
+            onInstalled: function(addon)
+            {
+                try
+                {
+                    if (addon.isCompatible)
+                    {
+                        ACR.Logger.debug("compatible addon '" + addon.id + "' has been installed - clearing compatibility report");
+
+                        var a2 = ACR.Factory.getAddonByAddonManagerAddonObject(addon);
+
+                        if (a2)
+                        {
+                            ACR.Factory.deleteAddon(a2);
+
+                            // update addons windows
+                            var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]  
+                                .getService(Components.interfaces.nsIWindowMediator);
+
+                            var browserEnumerator = wm.getEnumerator("navigator:browser"); 
+
+                            while (browserEnumerator.hasMoreElements())
+                            {  
+                                var browserWin = browserEnumerator.getNext();
+                                var tabbrowser = browserWin.gBrowser; 
+
+                                var numTabs = tabbrowser.browsers.length;  
+                                for (var index = 0; index < numTabs; index++)
+                                {  
+                                    var currentBrowser = tabbrowser.getBrowserAtIndex(index);  
+
+                                    if ("about:addons" == currentBrowser.currentURI.spec)
+                                    {
+                                        currentBrowser.contentWindow.ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddonByAddonManagerAddonObject(addon);
+                                        currentBrowser.contentWindow.ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                } catch (e) { ACR.Logger.error(e); dump(e+"\n"); }
             }
         }
 
         AddonManager.addAddonListener(listener);
-        ACR._uninstallObserverRegistered = true;
+        ACR._addonListenerRegistered = true;
     }
     catch (e)
     {
@@ -457,14 +499,14 @@ ACR.registerUninstallObserverLegacyEM = function()
         var observerService = Components.classes["@mozilla.org/observer-service;1"]
             .getService(Components.interfaces.nsIObserverService);
         observerService.addObserver(action, "em-action-requested", false);
-        ACR._uninstallObserverRegistered = true;
+        ACR._addonListenerRegistered = true;
     }
     else
     {
         try
         {
             extService.datasource.AddObserver(observer);
-            ACR._uninstallObserverRegistered = true;
+            ACR._addonListenerRegistered = true;
         }
         catch (e) { }
     }
