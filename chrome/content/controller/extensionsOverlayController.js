@@ -35,44 +35,48 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ACR.Controller.ExtensionsOverlay = new function()
+var ACR = {};
+Components.utils.import("resource://acr/modules/ACR.jsm", ACR);
+
+var ACRController = new function()
 {
-    this._addon = null;
+    this._addonReport = null;
     this._compatibilityButton = null;
     this._COMPATIBILITY_REPORT_URL_BASE = "https://addons.mozilla.org/en-US/firefox/compatibility/reporter/";
 }
 
-ACR.Controller.ExtensionsOverlay.init = function()
+ACRController.init = function()
 {
     ACR.Logger.debug("In ExtensionsOverlay.init()");
 
-    ACR.checkForCompatibilityReset();
-
-    if (ACR.Controller.ExtensionsOverlay.isLegacyEM())
+    if (ACRController.isLegacyEM())
     {
-        ACR.Controller.ExtensionsOverlay._compatibilityButton = ACR.Controller.ExtensionsOverlay._createWidget();
-        document.getElementById("extensionsView").addEventListener("select", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM, true);
+        ACRController._compatibilityButton = ACRController._createWidget();
+        document.getElementById("extensionsView").addEventListener("select", ACRController._invalidateCompatibilityButtonLegacyEM, true);
     }
     else
     {
-        document.getElementById("addon-list").addEventListener("select", ACR.Controller.ExtensionsOverlay._setSelectedAddon, true);
-        document.addEventListener("ViewChanged", ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons, true);
+        document.getElementById("addon-list").addEventListener("select", ACRController._setSelectedAddon, true);
+        document.addEventListener("ViewChanged", ACRController._invalidateCompatibilityButtons, true);
 
-        ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+        ACRController._invalidateCompatibilityButtons();
     }
 
     // catch case where EM opens in detail view
-    setTimeout(function()
+    if (!ACRController.isLegacyEM())
     {
-        if (gDetailView._addon)
+        setTimeout(function()
         {
-            ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddonByAddonManagerAddonObject(gDetailView._addon);
-            ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
-        }
-    }, 1000);
+            if (gDetailView._addon)
+            {
+                ACRController._addonReport = ACR.AddonReportStorage.getAddonReportByAddon(gDetailView._addon);
+                ACRController._invalidateCompatibilityButtons();
+            }
+        }, 1000);
+    }
 }
 
-ACR.Controller.ExtensionsOverlay._createWidget = function()
+ACRController._createWidget = function()
 {
     var widget = document.createElement("acrCompatibilityButton");
 
@@ -84,48 +88,48 @@ ACR.Controller.ExtensionsOverlay._createWidget = function()
     return widget;
 }
 
-ACR.Controller.ExtensionsOverlay.isLegacyEM  = function()
+ACRController.isLegacyEM  = function()
 {
     // Firefox 3.6 and below
     return document.getElementById("extensionsView");
 }
 
-ACR.Controller.ExtensionsOverlay.doStillWorks = function()
+ACRController.doStillWorks = function()
 {
-    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay.doStillWorks()");
+    ACR.Logger.debug("In ACRController.doStillWorks()");
 
-    var params = {addon: this._addon, stillWorks: true};
+    var params = {addonReport: this._addonReport, stillWorks: true};
 
-    ACR.Controller.ExtensionsOverlay._openSubmitReportDialog(params);
+    ACRController._openSubmitReportDialog(params);
 }
 
-ACR.Controller.ExtensionsOverlay.doNoLongerWorks = function()
+ACRController.doNoLongerWorks = function()
 {
-    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay.doNoLongerWorks()");
+    ACR.Logger.debug("In ACRController.doNoLongerWorks()");
 
-    var params = {addon: this._addon, stillWorks: false};
+    var params = {addonReport: this._addonReport, stillWorks: false};
 
-    ACR.Controller.ExtensionsOverlay._openSubmitReportDialog(params);
+    ACRController._openSubmitReportDialog(params);
 }
 
-ACR.Controller.ExtensionsOverlay._openSubmitReportDialog = function(params)
+ACRController._openSubmitReportDialog = function(params)
 {
     params.ACR = ACR;
 
     window.openDialog("chrome://acr/content/view/submitReport.xul", "",
             "chrome,titlebar,centerscreen,modal", params);
 
-    if (ACR.Controller.ExtensionsOverlay.isLegacyEM())
+    if (ACRController.isLegacyEM())
     {
-        ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM();
+        ACRController._invalidateCompatibilityButtonLegacyEM();
     }
     else
     {
-        ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+        ACRController._invalidateCompatibilityButtons();
     }
 }
 
-ACR.Controller.ExtensionsOverlay._getAddonFromListItem = function(richlistitem, callback)
+ACRController._getAddonFromListItem = function(richlistitem, callback)
 {
     var guid = richlistitem.getAttribute("value");
 
@@ -144,38 +148,40 @@ ACR.Controller.ExtensionsOverlay._getAddonFromListItem = function(richlistitem, 
 
         // TODO filter out personas here
 
-        var acrAddon = ACR.Factory.getAddonByAddonManagerAddonObject(addon);
+        var addonReport = ACR.AddonReportStorage.getAddonReportByAddon(addon);
 
-        callback(acrAddon);
+        callback(addonReport);
     }
 
     AddonManager.getAddonByID(guid, internalCallback);
 }
 
-ACR.Controller.ExtensionsOverlay._setSelectedAddon = function()
+ACRController._setSelectedAddon = function()
 {
-    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay._setSelectedAddon()");
+    ACR.Logger.debug("In ACRController._setSelectedAddon()");
 
     var elemExtension = document.getElementById("addon-list").selectedItem;
 
     if (!elemExtension)
         return;
 
-    ACR.Controller.ExtensionsOverlay._getAddonFromListItem(
+    ACRController._getAddonFromListItem(
         elemExtension, 
-        function(acrAddon)
+        function(addonReport)
         {
-            if (!acrAddon) return;
+            if (!addonReport) return;
 
-            ACR.Logger.debug("Selected add-on: '" + acrAddon.guid + "/" + acrAddon.version + "' state: '" + acrAddon.state + "' compatibility: " + (acrAddon.compatible?"IS":"IS NOT") + " compatible with this version of the platform.");
-            ACR.Controller.ExtensionsOverlay._addon = acrAddon;
+            ACR.Logger.debug("Selected add-on: '" + addonReport.guid + "/" + addonReport.version + "' state: '"
+                + addonReport.state + "' compatibility: " + (addonReport.compatible?"IS":"IS NOT")
+                + " compatible with this version of the platform.");
+            ACRController._addonReport = addonReport;
         }
         );
 }
 
-ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
+ACRController._invalidateCompatibilityButtons = function()
 {
-    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons()");
+    ACR.Logger.debug("In ACRController._invalidateCompatibilityButtons()");
 
     var stuffer = function()
     {
@@ -190,9 +196,9 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
 
                 if (!controlContainer) ACR.Logger.warn("no control container");
 
-                var callback = let (cc = controlContainer) function(acrAddon)
+                var callback = let (cc = controlContainer) function(addonReport)
                 {
-                    if (!acrAddon) return;
+                    if (!addonReport) return;
 
                     var existings = cc.getElementsByTagName("acrCompatibilityButton");
                     var cb;
@@ -203,24 +209,26 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
                     }
                     else
                     {
-                        cb = ACR.Controller.ExtensionsOverlay._createWidget();
+                        cb = ACRController._createWidget();
                         cc.insertBefore(cb, cc.firstChild);
                     }
 
-                    ACR.Logger.debug("Add-on: '" + acrAddon.guid + "/" + acrAddon.version + "' state: '" + acrAddon.state + "' compatibility: " + (acrAddon.compatible?"IS":"IS NOT") + " compatible with this version of the platform.");
+                    ACR.Logger.debug("Add-on: '" + addonReport.guid + "/" + addonReport.version + "' state: '"
+                        + addonReport.state + "' compatibility: " + (addonReport.compatible?"IS":"IS NOT")
+                        + " compatible with this version of the platform.");
 
-                    cb.addon = acrAddon;
+                    cb.addonReport = addonReport;
                     try { cb.invalidate(); } catch (e) {}
 
-                    ACR.Logger.debug("invalidated/stuffed a button");
+                    ACR.Logger.debug("Invalidated a button");
                 };
 
-                ACR.Controller.ExtensionsOverlay._getAddonFromListItem(item, callback);
+                ACRController._getAddonFromListItem(item, callback);
             }
         }
         else if (document.getElementById("view-port").selectedPanel.id == "detail-view")
         {
-            if (!ACR.Controller.ExtensionsOverlay._addon)
+            if (!ACRController._addonReport)
                 return;
 
             var existings = document.getElementById("detail-view").getElementsByTagName("acrCompatibilityButton");
@@ -232,31 +240,31 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
             }
             else if (document.getElementById("detail-uninstall"))
             {
-                cb = ACR.Controller.ExtensionsOverlay._createWidget();
+                cb = ACRController._createWidget();
                 document.getElementById("detail-uninstall").parentNode.insertBefore(cb, document.getElementById("detail-uninstall"));
             }
             else if (document.getElementById("detail-enable-btn"))
             {
-                cb = ACR.Controller.ExtensionsOverlay._createWidget();
+                cb = ACRController._createWidget();
                 document.getElementById("detail-enable-btn").parentNode.insertBefore(cb, document.getElementById("detail-enable-btn"));
             }
 
-            cb.addon = ACR.Controller.ExtensionsOverlay._addon;
+            cb.addonReport = ACRController._addonReport;
 
-            if (cb.addon && cb.addon.type == "plugin")
+            if (cb.addonReport && cb.addonReport.type == "plugin")
             {
                 cb.parentNode.removeChild(cb);
                 return;
             }
 
-            try { cb.invalidate(); } catch (e) { ACR.Logger.error(e); }
+            try { cb.invalidate(); } catch (e) { ACR.Logger.warn(e); }
         }
 
         gViewController.updateCommands();
     }
 
-    //if (ACR.Controller.ExtensionsOverlay._stuffTimeout) clearTimeout(stuffer);
-    //ACR.Controller.ExtensionsOverlay._stuffTimeout = setTimeout(stuffer, 200);
+    //if (ACRController._stuffTimeout) clearTimeout(stuffer);
+    //ACRController._stuffTimeout = setTimeout(stuffer, 200);
     stuffer();
 }
 
@@ -265,13 +273,13 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons = function()
  *
  * Ensure the compatibilityButton binding is in the correct state, then add to the right place in the selected extension's ui.
  */
-ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM = function()
+ACRController._invalidateCompatibilityButtonLegacyEM = function()
 {
-    ACR.Logger.debug("In ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM()");
+    ACR.Logger.debug("In ACRController._invalidateCompatibilityButtonLegacyEM()");
 
-    if (ACR.Controller.ExtensionsOverlay._compatibilityButton && ACR.Controller.ExtensionsOverlay._compatibilityButton.parentNode)
+    if (ACRController._compatibilityButton && ACRController._compatibilityButton.parentNode)
     {
-        ACR.Controller.ExtensionsOverlay._compatibilityButton.parentNode.removeChild(ACR.Controller.ExtensionsOverlay._compatibilityButton);
+        ACRController._compatibilityButton.parentNode.removeChild(ACRController._compatibilityButton);
     }
 
     if (ACR.Preferences.getGlobalPreference("extensions.checkCompatibility", true) == true)
@@ -306,24 +314,24 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM = functi
     if (!selectedExtensionGUID)
         return;
 
-    ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddon(selectedExtensionGUID, selectedExtensionVersion);
-    ACR.Controller.ExtensionsOverlay._addon.name = elemExtension.getAttribute("name");
-    ACR.Controller.ExtensionsOverlay._addon.compatible = elemExtension.getAttribute("compatible") == "true";
+    ACRController._addonReport = ACR.AddonReportStorage.getAddonReport(selectedExtensionGUID, selectedExtensionVersion);
+    ACRController._addonReport.name = elemExtension.getAttribute("name");
+    ACRController._addonReport.compatible = elemExtension.getAttribute("compatible") == "true";
 
-    ACR.Logger.debug("Addon name is " + ACR.Controller.ExtensionsOverlay._addon.name);
-    ACR.Logger.debug("Addon " + (ACR.Controller.ExtensionsOverlay._addon.compatible?"IS":"IS NOT") + " compatible with this version of platform.");
-    ACR.Logger.debug("Factory says addon '" + ACR.Controller.ExtensionsOverlay._addon.guid + "/" + selectedExtensionVersion + "' has state '" + ACR.Controller.ExtensionsOverlay._addon.state + "'");
+    ACR.Logger.debug("Addon name is " + ACRController._addonReport.name);
+    ACR.Logger.debug("Addon " + (ACRController._addonReport.compatible?"IS":"IS NOT") + " compatible with this version of platform.");
+    ACR.Logger.debug("Factory says addon '" + ACRController._addonReport.guid + "/" + selectedExtensionVersion + "' has state '" + ACRController._addonReport.state + "'");
 
-    if (!ACR.Controller.ExtensionsOverlay._compatibilityButton)
+    if (!ACRController._compatibilityButton)
     {
-        ACR.Controller.ExtensionsOverlay._compatibilityButton = ACR.Controller.ExtensionsOverlay._createWidget();
+        ACRController._compatibilityButton = ACRController._createWidget();
     }
 
-    ACR.Controller.ExtensionsOverlay._compatibilityButton.addon = ACR.Controller.ExtensionsOverlay._addon;
+    ACRController._compatibilityButton.addonReport = ACRController._addonReport;
 
     try 
     {
-        ACR.Controller.ExtensionsOverlay._compatibilityButton.invalidate();
+        ACRController._compatibilityButton.invalidate();
     }
     catch (e) {}
 
@@ -336,16 +344,16 @@ ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtonLegacyEM = functi
         {
             ACR.Logger.debug("inserting compatibility button");
 
-            elemSelectedButtons.insertBefore(ACR.Controller.ExtensionsOverlay._compatibilityButton,
+            elemSelectedButtons.insertBefore(ACRController._compatibilityButton,
                                              elemSelectedButtons.childNodes[i]);
             break;
         }
     }
 }
 
-addEventListener("load", ACR.Controller.ExtensionsOverlay.init, false);
+addEventListener("load", ACRController.init, false);
 
-if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
+if (!ACRController.isLegacyEM())
 {
     // add any acr commands
 
@@ -356,7 +364,7 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
             return true;
         },
         doCommand: function(aAddon) {
-            openURL(ACR.Controller.ExtensionsOverlay._COMPATIBILITY_REPORT_URL_BASE + encodeURIComponent(aAddon.id));
+            openURL(ACRController._COMPATIBILITY_REPORT_URL_BASE + encodeURIComponent(aAddon.id));
         }
     };
 
@@ -365,9 +373,9 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
             if (!aAddon || aAddon.type == "plugin")
                 return false;
 
-            var a2 = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
+            var addonReport = ACR.AddonReportStorage.getAddonReportByAddon(aAddon);
             
-            if (!a2 || a2.state == 0)
+            if (!addonReport || addonReport.state == 0)
                 return false;
 
             return true;
@@ -375,11 +383,11 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
         doCommand: function(aAddon) {
             if (aAddon)
             {
-                var a2 = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
-                ACR.Factory.deleteAddon(a2);
+                var addonReport = ACR.AddonReportStorage.getAddonReportByAddon(aAddon);
+                ACR.AddonReportStorage.deleteAddonReport(addonReport);
 
-                ACR.Controller.ExtensionsOverlay._addon = ACR.Factory.getAddonByAddonManagerAddonObject(aAddon);
-                ACR.Controller.ExtensionsOverlay._invalidateCompatibilityButtons();
+                ACRController._addonReport = ACR.AddonReportStorage.getAddonReportByAddon(aAddon);
+                ACRController._invalidateCompatibilityButtons();
             }
         }
     };
@@ -389,8 +397,8 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
 
     gSearchView.show = function(aQuery, aRequest)
     {
-        ACR.Logger.debug("Loading custom AddonRepository.jsm");
-        Components.utils.import("resource://acr/modules/AddonRepository.jsm");
+        Components.utils.import("resource://acr/modules/CustomAddonRepository.jsm");
+        ACR.Logger.debug("[CustomAddonRepository.jsm] Loaded");
 
         gEventManager.registerInstallListener(this);
 
@@ -479,6 +487,8 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
 
         AddonRepository.searchAddons(aQuery, maxRemoteResults, {
           searchFailed: function() {
+            ACR.Logger.debug("[CustomAddonRepository.jsm] searchFailed");
+
             if (gViewController && aRequest != gViewController.currentViewRequest)
               return;
 
@@ -489,6 +499,8 @@ if (!ACR.Controller.ExtensionsOverlay.isLegacyEM())
           },
 
           searchSucceeded: function(aAddonsList, aAddonCount, aTotalResults) {
+            ACR.Logger.debug("[CustomAddonRepository.jsm] searchSucceeded, " + aTotalResults + " results");
+
             if (gViewController && aRequest != gViewController.currentViewRequest)
               return;
 

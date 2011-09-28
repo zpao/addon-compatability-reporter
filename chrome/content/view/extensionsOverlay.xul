@@ -44,17 +44,6 @@
 <overlay id="acr-extensions-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <script src="chrome://acr/content/model/acr.js"/>
-    <script src="chrome://acr/content/model/factory.js"/>
-    <script src="chrome://acr/content/model/logger.js"/>
-    <script src="chrome://acr/content/model/prefs.js"/>
-    <script src="chrome://acr/content/model/util.js"/>
-    <script src="chrome://acr/content/model/rpc/service.js"/>
-    <script src="chrome://acr/content/model/rpc/constants.js"/>
-    <script src="chrome://acr/content/model/rpc/error.js"/>
-    <script src="chrome://acr/content/model/rpc/event.js"/>
-    <script src="chrome://acr/content/model/rpc/net.js"/>
-
     <script src="chrome://acr/content/controller/extensionsOverlayController.js" type="application/javascript;version=1.7"/>
 
     <menupopup id="addonitem-popup">

@@ -809,7 +809,7 @@ var AddonRepository = {
    */
   searchAddons: function(aSearchTerms, aMaxResults, aCallback) {
 
-    LOG("[ACR] in method 'searchAddons' of custom AddonRepository.jsm");
+    LOG("[CustomAddonRepository.jsm] in method 'searchAddons'");
 
     let url = this._formatURLPref(PREF_GETADDONS_GETSEARCHRESULTS, {
       API_VERSION : API_VERSION,

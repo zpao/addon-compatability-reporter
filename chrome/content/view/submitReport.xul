@@ -48,10 +48,9 @@
         style="width: 35em;"
         buttonlabelcancel="&cancel.label;"
         buttonlabelaccept="&submitReport.label;"
-        ondialogaccept="return ACR.Controller.SubmitReportController.doAccept();"
-        ondialogcancel="return ACR.Controller.SubmitReportController.doCancel();">
+        ondialogaccept="return Controller.doAccept();"
+        ondialogcancel="return Controller.doCancel();">
 
-    <script src="chrome://acr/content/controller/dialog.js"/>
     <script src="chrome://acr/content/controller/submitReportController.js"/>
 
     <stringbundle id="acr-strings" src="chrome://acr/locale/submitReport.properties"/>

@@ -34,25 +34,28 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ACR.Controller.MainOverlay = new function() {}
+var ACRMainOverlayController = new function() {}
 
-ACR.Controller.MainOverlay.initACR = function()
+ACRMainOverlayController.initACR = function()
 {
+    try
+    {
+        ACRMainOverlayController.ACR = {};
+        Components.utils.import("resource://acr/modules/ACR.jsm", ACRMainOverlayController.ACR);
+
+        if (ACRMainOverlayController.ACR.flags.initialized) return;
+    }
+    catch (e) { dump("Could not initialize ACR: " + e + "\n");return; }
+
+    var ACR = ACRMainOverlayController.ACR;
     ACR.Logger.info("Initializing ACR");
-
-    ACR.Controller.MainOverlay._delayedInitACR();
-}
-
-ACR.Controller.MainOverlay._delayedInitACR = function()
-{
-    //ACR.Controller.MainOverlay._removeLoadListener();
 
     if (ACR.Preferences.getPreference("firstrun") == true)
     {
         try {
             ACR.Logger.debug("This is firstrun");
             ACR.firstrun();
-            ACR.Controller.MainOverlay.firstrun();
+            ACRMainOverlayController.firstrun();
         }
         catch (e) { ACR.Logger.debug("firstrun fail : "+e); }
     }
@@ -62,18 +65,21 @@ ACR.Controller.MainOverlay._delayedInitACR = function()
 
     ACR.registerAddonListener();
     ACR.setAMOShowIncompatibleAddons();
-}
+    ACR.checkForCompatibilityReset();
 
-ACR.Controller.MainOverlay._removeLoadListener = function()
-{
-    window.removeEventListener("load", ACR.init, true);
-}
+    ACR.flags.initialized = true;
+};
 
-ACR.Controller.MainOverlay.firstrun = function()
+/*ACRMainOverlayController.shutdownACR = function()
 {
+    window.removeEventListener("load", ACRMainOverlayController.initACR, true);
+};*/
+
+ACRMainOverlayController.firstrun = function()
+{
+    var ACR = ACRMainOverlayController.ACR;
+
     ACR.Logger.info("This is ACR's firstrun. Welcome!");
-
-    var url = ACR.FIRSTRUN_LANDING_PAGE.replace("%%AMO_HOST%%", ACR.Preferences.getPreference("amo_host"));
 
     switch (ACR.Util.getHostEnvironmentInfo().appName)
     {
@@ -81,24 +87,25 @@ ACR.Controller.MainOverlay.firstrun = function()
         case "SeaMonkey":
             window.setTimeout(function()
             {
-                var tab = window.getBrowser().addTab(url);
+                var tab = window.getBrowser().addTab(ACR.FIRSTRUN_LANDING_PAGE);
                 window.getBrowser().selectedTab = tab;
             },
             1000);
             break;
         case "Thunderbird":
-            url = ACR.FIRSTRUN_LANDING_PAGE_TB.replace("%%AMO_HOST%%", ACR.Preferences.getPreference("amo_host"));
             window.setTimeout(function()
             {
                 var tabmail = document.getElementById("tabmail");
                 var newTab = tabmail.openTab("contentTab",
-                         {contentPage: url});
+                         {contentPage: ACR.FIRSTRUN_LANDING_PAGE_TB});
                 if (!newTab)
                   ACR.Logger.info("Expected new tab info to be returned from openTab");
             },
             1000);
             break;
     }
-}
+};
 
-window.addEventListener("load", ACR.Controller.MainOverlay.initACR, true);
+window.addEventListener("load", ACRMainOverlayController.initACR, true);
+//window.addEventListener("unload", ACRMainOverlayController.shutdownACR, true);
+

@@ -25,7 +25,7 @@ acrService.prototype = {
         this.ConsoleService = Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService);
         this.prefsGlobal = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch(null);
         
-        Components.utils.import("resource://acr/modules/constants.jsm");
+        Components.utils.import("resource://acr/modules/Constants.jsm");
 
         /* Firefox */
         this.CHECK_COMPATIBILITY_PREFS = COMPATIBILITY_PREFS_FX;
@@ -148,8 +148,8 @@ acrService.prototype = {
     {
       var debugOn = (this.prefsGlobal.getBoolPref("extensions.acr.debug") == true)
       if (debugOn) {
-        dump("ACR: " + str + "\n");
-        this.ConsoleService.logStringMessage("ACR: " + str);
+        dump("ACR (Component): " + str + "\n");
+        this.ConsoleService.logStringMessage("ACR (Component): " + str);
       }
     },
 

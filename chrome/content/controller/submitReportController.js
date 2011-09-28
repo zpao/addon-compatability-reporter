@@ -34,22 +34,31 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ACR.Controller.SubmitReportController = new function() {}
+var ACR = window.opener.ACR;
 
-ACR.Controller.SubmitReportController.init = function()
+if (!ACR)
 {
-    ACR.Logger.debug("In ACR.Controller.SubmitReportController.init()");
+    ACR = window.arguments[0].ACR;
+}
 
-    ACR.Controller.SubmitReportController.stringBundle = document.getElementById("acr-strings");
+var Controller = new function() {}
+
+Controller.flags = {finished: false};
+
+Controller.init = function()
+{
+    ACR.Logger.debug("In Controller.init()");
+
+    Controller.stringBundle = document.getElementById("acr-strings");
 
     var windowArgs = window.arguments[0];
 
-    ACR.Controller.SubmitReportController._addon = windowArgs.addon;
-    ACR.Controller.SubmitReportController._stillWorks = windowArgs.stillWorks;
+    Controller._addonReport = windowArgs.addonReport;
+    Controller._stillWorks = windowArgs.stillWorks;
 
-    ACR.Logger.debug("Have addon = '" + ACR.Controller.SubmitReportController._addon.name + "'");
+    ACR.Logger.debug("Have addonReport = '" + Controller._addonReport.name + "'");
 
-    if (ACR.Controller.SubmitReportController._stillWorks)
+    if (Controller._stillWorks)
     {
         document.getElementById("stillWorks").collapsed = false;
     }
@@ -59,46 +68,49 @@ ACR.Controller.SubmitReportController.init = function()
         document.getElementById("disableThisAddon").collapsed = false;
     }
 
-    document.getElementById("addon").value = ACR.Controller.SubmitReportController._addon.name + " " + ACR.Controller.SubmitReportController._addon.version;
+    document.getElementById("addon").value = Controller._addonReport.name + " " + Controller._addonReport.version;
     document.getElementById("application").value = ACR.Util.getFullApplicationString();
     document.getElementById("operatingSystem").value = ACR.Util.getFullOSString();
 
-    if (ACR.Controller.SubmitReportController._addon.report)
-        document.getElementById("details").value = ACR.Controller.SubmitReportController._addon.report;
+    if (Controller._addonReport.report)
+        document.getElementById("details").value = Controller._addonReport.report;
 
-    ACR.Logger.debug("Finished ACR.Controller.SubmitReportController.init()");
+    ACR.Logger.debug("Finished Controller.init()");
 }
 
-ACR.Controller.SubmitReportController.doCancel = function()
+Controller.doCancel = function()
 {
     return true;
 }
 
-ACR.Controller.SubmitReportController.doAccept = function()
+Controller.doAccept = function()
 {
-    ACR.Logger.debug("In ACR.Controller.SubmitReportController.doAccept()");
+    if (Controller.flags.finished)
+        return true;
 
-    ACR.Controller.SubmitReportController.disableFormAndShowSpinner();
+    ACR.Logger.debug("In Controller.doAccept()");
 
-    ACR.submitReport(ACR.Controller.SubmitReportController._addon,
-        ACR.Controller.SubmitReportController._stillWorks,
+    Controller.disableFormAndShowSpinner();
+
+    ACR.submitReport(Controller._addonReport,
+        Controller._stillWorks,
         document.getElementById("details").value,
         document.getElementById("includeAddonList").checked,
-        ACR.Controller.SubmitReportController.finished);
+        Controller.finished);
 
     return false;
 }
 
-ACR.Controller.SubmitReportController.enableFormAndHideSpinner = function()
+Controller.enableFormAndHideSpinner = function()
 {
     document.getElementById("details").disabled = false;
     document.getElementById("includeAddonList").disabled = false;
     document.getElementById("disableThisAddon").disabled = false;
 
-    ACR.Controller.SubmitReportController.hideSpinner();
+    Controller.hideSpinner();
 }
 
-ACR.Controller.SubmitReportController.disableFormAndShowSpinner = function()
+Controller.disableFormAndShowSpinner = function()
 {
     document.getElementById("details").disabled = true;
     document.getElementById("includeAddonList").disabled = true;
@@ -107,41 +119,43 @@ ACR.Controller.SubmitReportController.disableFormAndShowSpinner = function()
     document.getElementById("spinner").collapsed = false;
 }
 
-ACR.Controller.SubmitReportController.hideSpinner = function()
+Controller.hideSpinner = function()
 {
     document.getElementById("spinner").collapsed = true;
 }
 
-ACR.Controller.SubmitReportController.finished = function(event)
+Controller.finished = function(event)
 {
     if (event.isError())
     {
         ACR.Logger.debug(event.getError().toString());
 
-        document.getElementById("result").value = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.error");
+        document.getElementById("result").value = Controller.stringBundle.getString("acr.submitreport.error");
         document.getElementById("result").setAttribute("class", "error");
         document.getElementById("result").collapsed = false;
 
-        ACR.Controller.SubmitReportController.enableFormAndHideSpinner();
+        Controller.enableFormAndHideSpinner();
     }
     else
     {
-        ACR.Controller.SubmitReportController.hideSpinner();
+        Controller.flags.finished = true;
+
+        Controller.hideSpinner();
 
         if (document.getElementById("disableThisAddon").checked)
         {
-            ACR.disableAddon(ACR.Controller.SubmitReportController._addon);
+            ACR.disableAddon(Controller._addonReport);
         }
 
-        document.getElementById("result").value = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.success");
+        document.getElementById("result").value = Controller.stringBundle.getString("acr.submitreport.success");
         document.getElementById("result").setAttribute("class", "success");
         document.getElementById("result").collapsed = false;
 
         document.getElementById("acr-submit-report").getButton("accept").collapsed = true;
-        document.getElementById("acr-submit-report").getButton("cancel").label = ACR.Controller.SubmitReportController.stringBundle.getString("acr.submitreport.close");
+        document.getElementById("acr-submit-report").getButton("cancel").label = Controller.stringBundle.getString("acr.submitreport.close");
         document.getElementById("acr-submit-report").getButton("cancel").focus();
 
     }
 }
 
-window.addEventListener("load", ACR.Controller.SubmitReportController.init, true);
+window.addEventListener("load", Controller.init, true);
