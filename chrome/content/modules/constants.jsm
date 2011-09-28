@@ -62,6 +62,8 @@ var COMPATIBILITY_PREFS_FX = ["extensions.checkCompatibility",
                               "extensions.checkCompatibility.7.0a",
                               "extensions.checkCompatibility.8.0",
                               "extensions.checkCompatibility.8.0a",
+                              "extensions.checkCompatibility.9.0",
+                              "extensions.checkCompatibility.9.0a",
                               "extensions.checkCompatibility.nightly"];
 
 var COMPATIBILITY_PREFS_TB = ["extensions.checkCompatibility",
