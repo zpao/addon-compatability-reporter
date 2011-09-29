@@ -39,6 +39,7 @@ var EXPORTED_SYMBOLS = ["flags", "Logger", "Preferences", "Util", "AddonReportSt
     "submitReport", "disableAddon", "checkForLangPackDisable", "checkForCompatibilityReset",
     "checkForApplicationUpgrade", "firstrun", "lastrun", "setAMOShowIncompatibleAddons",
     "removeAMOShowIncompatibleAddons", "registerAddonListener",
+    "addAddonReportUpdateListener", "removeAddonReportUpdateListener",
     "FIRSTRUN_LANDING_PAGE", "FIRSTRUN_LANDING_PAGE_FB"];
 
 var Logger = {};
@@ -443,31 +444,9 @@ function registerAddonListener()
                         {
                             AddonReportStorage.deleteAddonReport(addonReport);
 
-                            // update addons windows
-                            var wm = Cc["@mozilla.org/appshell/window-mediator;1"]  
-                                .getService(Ci.nsIWindowMediator);
-
-                            var browserEnumerator = wm.getEnumerator("navigator:browser"); 
-
-                            while (browserEnumerator.hasMoreElements())
-                            {  
-                                var browserWin = browserEnumerator.getNext();
-                                var tabbrowser = browserWin.gBrowser; 
-
-                                var numTabs = tabbrowser.browsers.length;  
-                                for (var index = 0; index < numTabs; index++)
-                                {  
-                                    var currentBrowser = tabbrowser.getBrowserAtIndex(index);  
-
-                                    if ("about:addons" == currentBrowser.currentURI.spec)
-                                    {
-                                        currentBrowser.contentWindow.ACRController._addonReport = AddonReportStorage.getAddonReportByAddon(addon);
-                                        currentBrowser.contentWindow.ACRController._invalidateCompatibilityButtons();
-                                    }
-                                }
-                            }
+                            addonReport = AddonReportStorage.getAddonReportByAddon(addon);
+                            notifyAddonReportUpdateListeners(addonReport);
                         }
-
                     }
                 } catch (e) { Logger.error(e); dump(e+"\n"); }
             }
@@ -541,5 +520,30 @@ function _registerUninstallObserverLegacyEM()
             flags.addonListenerRegistered = true;
         }
         catch (e) { }
+    }
+}
+
+var addonReportUpdateListeners = [];
+
+function addAddonReportUpdateListener(listener)
+{
+    addonReportUpdateListeners.push(listener);
+}
+
+function removeAddonReportUpdateListener(listener)
+{
+    for (var i=0; i<addonReportUpdateListeners.length; i++)
+    {
+        if (addonReportUpdateListeners[i] == listener)
+            delete addonReportUpdateListeners[i];
+    }
+}
+
+function notifyAddonReportUpdateListeners(addonReport)
+{
+    for (var i=0; i<addonReportUpdateListeners.length; i++)
+    {
+        Logger.debug("notifying an addonupdatelistener");
+        addonReportUpdateListeners[i](addonReport);
     }
 }

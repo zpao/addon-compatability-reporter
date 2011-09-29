@@ -74,7 +74,22 @@ ACRController.init = function()
             }
         }, 1000);
     }
+
+    ACR.addAddonReportUpdateListener(ACRController.addonReportUpdateListener);
 }
+
+ACRController.shutdown = function()
+{
+    ACR.removeAddonReportUpdateListener(ACRController.addonReportUpdateListener);
+};
+
+ACRController.addonReportUpdateListener = function(addonReport)
+{
+    if (ACRController._addonReport && addonReport.guid == ACRController._addonReport.guid)
+        ACRController._addonReport = addonReport;
+
+    ACRController._invalidateCompatibilityButtons();
+};
 
 ACRController._createWidget = function()
 {
@@ -351,8 +366,6 @@ ACRController._invalidateCompatibilityButtonLegacyEM = function()
     }
 }
 
-addEventListener("load", ACRController.init, false);
-
 if (!ACRController.isLegacyEM())
 {
     // add any acr commands
@@ -515,3 +528,7 @@ if (!ACRController.isLegacyEM())
         });
     };
 }
+
+addEventListener("load", ACRController.init, false);
+addEventListener("unload", ACRController.shutdown, false);
+
