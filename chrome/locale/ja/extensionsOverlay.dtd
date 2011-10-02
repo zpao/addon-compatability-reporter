@@ -35,10 +35,10 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "互換性">
-<!ENTITY devcompatible.label                "Marked as compatible by developer">
+<!ENTITY devcompatible.label                "開発者によって互換性が確認されています">
 <!ENTITY stillworks.label                   "このアドオンはまだ使えます">
 <!ENTITY nolongerworks.label                "このアドオンは使えなくなりました">
 <!ENTITY worksproperly.label                "正常に動作します">
 <!ENTITY compatibilityproblems.label        "互換性の問題">
-<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">
-<!ENTITY clearCompatibilityReport.label     "Clear Compatibility Report">
+<!ENTITY showCompatibilityResults.label     "互換性報告の集計結果を表示">
+<!ENTITY clearCompatibilityReport.label     "互換性報告を消去">

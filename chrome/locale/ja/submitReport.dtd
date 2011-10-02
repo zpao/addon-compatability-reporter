@@ -34,7 +34,7 @@
   - 
   - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY window.title                  "互換性の報告">
+<!ENTITY window.title                  "互換性報告">
 
 <!ENTITY addon.label                   "アドオン:">
 <!ENTITY application.label             "アプリケーション:">
