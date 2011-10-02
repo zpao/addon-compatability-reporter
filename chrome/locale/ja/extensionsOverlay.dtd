@@ -35,7 +35,7 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "互換性">
-<!ENTITY devcompatible.label                "開発者によって互換性が確認されています">
+<!ENTITY devcompatible.label                "作者によって互換性が確認されています">
 <!ENTITY stillworks.label                   "このアドオンはまだ使えます">
 <!ENTITY nolongerworks.label                "このアドオンは使えなくなりました">
 <!ENTITY worksproperly.label                "正常に動作します">
