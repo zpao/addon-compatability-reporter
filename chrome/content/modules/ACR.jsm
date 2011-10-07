@@ -317,6 +317,7 @@ function lastrun()
 
 function isDisabled()
 {
+    Logger.debug("ACR is disabled");
     removeAMOShowIncompatibleAddons();
 }
 
@@ -328,7 +329,6 @@ function isEnabled()
 function setAMOShowIncompatibleAddons()
 {
     // see bug 675762
-
     try
     {
         Util.getLocalStorageForOrigin(SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN).setItem(SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME, 1);
@@ -340,7 +340,7 @@ function setAMOShowIncompatibleAddons()
         var ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
         var cookieUri = ios.newURI(SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN, null, null);
         var cookieSvc = Cc["@mozilla.org/cookieService;1"].getService(Ci.nsICookieService);
-        cookieSvc.setCookieString(cookieUri, null, SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME + "=1;expires=Wed, 13 Jan 2021 22:23:01 GMT", null);
+        cookieSvc.setCookieString(cookieUri, null, SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME + "=1", null);
     }
 }
 
@@ -360,7 +360,7 @@ function removeAMOShowIncompatibleAddons()
     {
         var cookie = e.getNext().QueryInterface(Ci.nsICookie);
 
-        if ("http://" + cookie.host == SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN && cookie.name == SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME)
+        if ("https://" + cookie.host == SHOW_INCOMPATIBLE_ADDONS_STORAGE_ORIGIN && cookie.name == SHOW_INCOMPATIBLE_ADDONS_STORAGE_NAME)
         {
             cookieMgr.remove(cookie.host, cookie.name, cookie.path, false);
         }
