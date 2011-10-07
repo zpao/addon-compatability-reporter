@@ -164,13 +164,16 @@ function checkForLangPackDisable()
             {
                 if (installedExtensions[i].type == "locale")
                 {
-                    Logger.info("Uninstalling locale '" + installedExtensions[i].id + "'");
+                    Logger.info("Disabling locale '" + installedExtensions[i].id + "'");
 
-                    //installedExtensions[i].userDisabled = true;
-                    installedExtensions[i].uninstall();
+                    installedExtensions[i].userDisabled = true;
+                    //installedExtensions[i].uninstall();
                     uninstalledC++;
                 }
             }
+
+            Preferences.clearGlobalPreference("general.useragent.locale");
+            Preferences.clearGlobalPreference("intl.locale.matchOS");
 
             if (uninstalledC > 0)
             {

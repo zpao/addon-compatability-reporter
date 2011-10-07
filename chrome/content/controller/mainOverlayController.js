@@ -60,11 +60,11 @@ ACRMainOverlayController.initACR = function()
         catch (e) { ACR.Logger.debug("firstrun fail : "+e); }
     }
 
-    // disabling this for now (https://bugzilla.mozilla.org/show_bug.cgi?id=644933)
-    // ACR.checkForLangPackDisable();
 
     ACR.registerAddonListener();
     ACR.setAMOShowIncompatibleAddons();
+
+    ACR.checkForLangPackDisable();
     ACR.checkForCompatibilityReset();
 
     ACR.flags.initialized = true;
