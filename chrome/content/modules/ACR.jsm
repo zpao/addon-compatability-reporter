@@ -313,7 +313,7 @@ function lastrun()
 
     Preferences.setPreference("firstrun", true);
     // Disabling for now, see bug 572322
-    //ACR.Preferences.clearGlobalPreference("extensions.acr.postinstall");
+    ACR.Preferences.clearGlobalPreference("extensions.acr.postinstall");
 
     removeAMOShowIncompatibleAddons();
 }

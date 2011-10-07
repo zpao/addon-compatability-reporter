@@ -58,7 +58,13 @@ var _realLog = function(msg, level)
 
 var _dumpLog = function(msg, level)
 {
-    dump("ACR (" + _getNiceLevel(level) + "): " + msg + "\n");
+    if (ENABLE_TIMESTAMPS)
+    {
+        var date = new Date();
+        datestr = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+    }
+
+    dump("ACR (" + _getNiceLevel(level) + ")" + datestr + ": " + msg + "\n");
 };
 
 var _consoleLog = function(msg, level)

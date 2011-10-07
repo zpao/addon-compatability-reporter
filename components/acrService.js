@@ -80,16 +80,32 @@ acrService.prototype = {
 
       this._disableCheckCompatibilityPrefs();
 
-      return; // for now -- see bug 572322
+      //return; // for now -- see bug 572322
 
-      if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") == true)
+      if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") === true)
       {
-          this.debug("'postinstall' = true, so restarting the application");
+          me = this;
+          me.debug("In postinstall - will shutdown addonRepository and restart the application");
 
-          this.prefsGlobal.setBoolPref("extensions.acr.postinstall", false);
+          Components.utils.import("resource://gre/modules/AddonRepository.jsm");
+          Components.utils.import("resource://gre/modules/Services.jsm");
 
-          var boot = Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup);
-          boot.quit(Components.interfaces.nsIAppStartup.eForceQuit|Components.interfaces.nsIAppStartup.eRestart);
+          var observer = {
+              observe: function (aSubject, aTopic, aData) {
+                  if (aTopic == "addon-repository-shutdown") {
+                      me.debug("In postinstall - received addon-repository-shutdown notification");
+
+                      Services.obs.removeObserver(this, "addon-repository-shutdown");
+
+                      me.prefsGlobal.setBoolPref("extensions.acr.postinstall", false);
+                      var boot = Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup);
+                      boot.quit(Components.interfaces.nsIAppStartup.eForceQuit|Components.interfaces.nsIAppStartup.eRestart);
+                  }
+              },
+          };
+
+          Services.obs.addObserver(observer, "addon-repository-shutdown", false);
+          AddonRepository.shutdown();
       }
 
     },
@@ -148,8 +164,12 @@ acrService.prototype = {
     {
       var debugOn = (this.prefsGlobal.getBoolPref("extensions.acr.debug") == true)
       if (debugOn) {
-        dump("ACR (Component): " + str + "\n");
-        this.ConsoleService.logStringMessage("ACR (Component): " + str);
+
+        var date = new Date();
+        datestr = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+
+        dump("ACR (Component)"+datestr+": " + str + "\n");
+        this.ConsoleService.logStringMessage("ACR (Component)"+datestr+": " + str);
       }
     },
 
