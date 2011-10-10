@@ -58,6 +58,8 @@ var _realLog = function(msg, level)
 
 var _dumpLog = function(msg, level)
 {
+    var datestr = "";
+
     if (ENABLE_TIMESTAMPS)
     {
         var date = new Date();
