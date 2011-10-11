@@ -34,11 +34,11 @@
   - 
   - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY compatibility.label                "Compatibility">
-<!ENTITY devcompatible.label                "Marked as compatible by developer">
-<!ENTITY stillworks.label                   "This add-on still works">
-<!ENTITY nolongerworks.label                "This add-on no longer works">
-<!ENTITY worksproperly.label                "Works properly">
-<!ENTITY compatibilityproblems.label        "Compatibility Problems">
-<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">
-<!ENTITY clearCompatibilityReport.label     "Clear Compatibility Report">
+<!ENTITY compatibility.label                "相容性">
+<!ENTITY devcompatible.label                "被開發者標示為相容">
+<!ENTITY stillworks.label                   "還能使用這個附加元件">
+<!ENTITY nolongerworks.label                "無法使用這個附加元件">
+<!ENTITY worksproperly.label                "可正常使用">
+<!ENTITY compatibilityproblems.label        "相容性問題">
+<!ENTITY showCompatibilityResults.label     "顯示相容性報告清單">
+<!ENTITY clearCompatibilityReport.label     "清除相容性報告">

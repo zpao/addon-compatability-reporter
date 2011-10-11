@@ -34,17 +34,17 @@
   - 
   - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY window.title                  "Compatibility Report">
+<!ENTITY window.title                  "相容性報告">
 
-<!ENTITY addon.label                   "Add-on:">
-<!ENTITY application.label             "Application:">
-<!ENTITY operatingSystem.label         "Operating System:">
-<!ENTITY cancel.label                  "Cancel">
-<!ENTITY submitReport.label            "Submit Report">
-<!ENTITY thisAddonStillWorks.label     "This add-on still works the way it did in previous versions.">
-<!ENTITY thisAddonNoLongerWorks.label  "This add-on no longer works the way it did in previous versions.">
-<!ENTITY pleaseProvideDetails.label    "Please provide details of the problems you encountered, including any steps to reproduce:">
-<!ENTITY includeAddonList.label        "Include a list of my installed add-ons to identify conflicts">
-<!ENTITY informationIsPublic.label     "The information in this report will be publicly accessible.">
-<!ENTITY disableThisAddon.label        "Disable this add-on">
+<!ENTITY addon.label                   "附加元件:">
+<!ENTITY application.label             "應用程式:">
+<!ENTITY operatingSystem.label         "作業系統:">
+<!ENTITY cancel.label                  "取消">
+<!ENTITY submitReport.label            "傳送回報">
+<!ENTITY thisAddonStillWorks.label     "這個附加元件仍然能與先前版本一樣正常執行。">
+<!ENTITY thisAddonNoLongerWorks.label  "這個附加元件無法與先前版本一樣正常執行。">
+<!ENTITY pleaseProvideDetails.label    "請提供您所遇到的問題的詳細資訊，包含任何可以重新遇到該問題的方式:">
+<!ENTITY includeAddonList.label        "列入我所安裝的附加元件的清單，以便檢查是否有衝突的套件">
+<!ENTITY informationIsPublic.label     "此報告內的所有資訊將會是公開的。">
+<!ENTITY disableThisAddon.label        "停用這個附加元件">
 
