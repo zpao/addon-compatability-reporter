@@ -40,7 +40,7 @@
 <!ENTITY application.label             "Program:">
 <!ENTITY operatingSystem.label         "System operacyjny:">
 <!ENTITY cancel.label                  "Anuluj">
-<!ENTITY submitReport.label            "Wyślij raport">
+<!ENTITY submitReport.label            "Wyślij zgłoszenie">
 <!ENTITY thisAddonStillWorks.label     "Ten dodatek działa tak samo, jak w poprzednich wersjach.">
 <!ENTITY thisAddonNoLongerWorks.label  "Ten dodatek już nie działa tak samo, jak w poprzednich wersjach.">
 <!ENTITY pleaseProvideDetails.label    "Podaj informacje o napotkanych problemach zawierające kroki, jakie trzeba wykonać, by reprodukować te problemy:">

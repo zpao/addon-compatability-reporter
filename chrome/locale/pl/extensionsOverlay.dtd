@@ -40,5 +40,5 @@
 <!ENTITY nolongerworks.label                "Ten dodatek już nie działa">
 <!ENTITY worksproperly.label                "Działa prawidłowo">
 <!ENTITY compatibilityproblems.label        "Problem kompatybilności">
-<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">
-<!ENTITY clearCompatibilityReport.label     "Clear Compatibility Report">
+<!ENTITY showCompatibilityResults.label     "Wyświetl wyniki kompatybilności">
+<!ENTITY clearCompatibilityReport.label     "Wyczyść zgłoszenia kompatybilności">
