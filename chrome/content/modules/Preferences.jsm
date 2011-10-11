@@ -307,6 +307,9 @@ function clearGlobalPreference(name)
         getService(Ci.nsIPrefService).
         getBranch("");
 
+    if (!prefSvc.prefHasUserValue(name))
+        return;
+
     try
     {
         prefSvc.clearUserPref(name);
