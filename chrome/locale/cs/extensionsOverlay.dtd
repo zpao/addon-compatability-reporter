@@ -40,5 +40,5 @@
 <!ENTITY nolongerworks.label                "Doplněk již nefunguje">
 <!ENTITY worksproperly.label                "Funguje korektně">
 <!ENTITY compatibilityproblems.label        "Problémy s kompatibilitou">
-<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">
-<!ENTITY clearCompatibilityReport.label     "Clear Compatibility Report">
+<!ENTITY showCompatibilityResults.label     "Zobrazit hlášení o kompatibilitě">
+<!ENTITY clearCompatibilityReport.label     "Vymazat hlášení o kompatibilitě">
