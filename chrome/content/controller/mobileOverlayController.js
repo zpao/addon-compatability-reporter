@@ -40,9 +40,10 @@ ACRController.flags = {};
 
 ACRController.init = function()
 {
+    var date = new Date();
+    datestr = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
     var ConsoleService = Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService);
-    ConsoleService.logStringMessage("Initializing ACR");
-    dump("Initializing ACR\n");
+    ConsoleService.logStringMessage("ACR" + datestr + ": starting up");
 
     var ACR = {};
 
@@ -55,6 +56,8 @@ ACRController.init = function()
         ConsoleService.logStringMessage("Could not initialize ACR: " + e);
     }
 
+    ACR.Logger.debug("starting init1");
+        
     if (ACR.Preferences.getPreference("firstrun") === true)
     {
         try {
@@ -64,17 +67,6 @@ ACRController.init = function()
         }
         catch (e) { ACR.Logger.debug("firstrun fail : "+e); }
     }
-
-    setTimeout(function()
-    {
-        ACR.Logger.debug("delayed init");
-
-        ACR.registerAddonListener();
-        ACR.setAMOShowIncompatibleAddons();
-
-        ACR.checkForLangPackDisable();
-        ACR.checkForCompatibilityReset();
-    }, 5000);
 
     document.getElementById("addons-list").addEventListener("DOMNodeInserted", function(event)
     {
@@ -286,6 +278,21 @@ ACRController.init = function()
         }
 
     }, true);
+
+    setTimeout(function()
+    {
+        ACR.Logger.debug("starting init2");
+
+        ACR.registerAddonListener();
+        ACR.setAMOShowIncompatibleAddons();
+
+        ACR.checkForLangPackDisable();
+        ACR.checkForCompatibilityReset();
+
+        ACR.Logger.debug("finished init2");
+    }, 5000);
+
+    ACR.Logger.debug("finished init1");
 };
 
 window.addEventListener("UIReady", ACRController.init, false);

@@ -38,7 +38,7 @@ var EXPORTED_SYMBOLS = ["debug", "warn", "log", "error", "fatal", "info"];
 
 var ENABLE_CONSOLE_LOG = true;
 var ENABLE_DUMP_LOG = true;
-var ENABLE_TIMESTAMPS = false;
+var ENABLE_TIMESTAMPS = true;
 
 var consoleService = null;
 var _debug = null;

@@ -21,6 +21,8 @@ acrService.prototype = {
 
     init: function acr_init()
     {
+        this.debug("component init");
+
         this.version = "0.1";
         this.ConsoleService = Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService);
         this.prefsGlobal = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch(null);
@@ -76,7 +78,7 @@ acrService.prototype = {
 
     _onAppStartup : function acr_onAppStartup()
     {
-      this.debug("STARTUP");
+      this.debug("final-ui-startup");
 
       this._disableCheckCompatibilityPrefs();
 
