@@ -34,17 +34,17 @@
   - 
   - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY window.title                  "Compatibility Report">
+<!ENTITY window.title                  "Kompatibilitätsbericht">
 
 <!ENTITY addon.label                   "Add-on:">
-<!ENTITY application.label             "Application:">
-<!ENTITY operatingSystem.label         "Operating System:">
-<!ENTITY cancel.label                  "Cancel">
-<!ENTITY submitReport.label            "Submit Report">
-<!ENTITY thisAddonStillWorks.label     "This add-on still works the way it did in previous versions.">
-<!ENTITY thisAddonNoLongerWorks.label  "This add-on no longer works the way it did in previous versions.">
-<!ENTITY pleaseProvideDetails.label    "Please provide details of the problems you encountered, including any steps to reproduce:">
-<!ENTITY includeAddonList.label        "Include a list of my installed add-ons to identify conflicts">
-<!ENTITY informationIsPublic.label     "The information in this report will be publicly accessible.">
-<!ENTITY disableThisAddon.label        "Disable this add-on">
+<!ENTITY application.label             "Anwendung:">
+<!ENTITY operatingSystem.label         "Betriebssystem:">
+<!ENTITY cancel.label                  "Abbrechen">
+<!ENTITY submitReport.label            "Bericht abschicken">
+<!ENTITY thisAddonStillWorks.label     "Diese Add-on funktioniert immer noch so wie in früheren Versionen.">
+<!ENTITY thisAddonNoLongerWorks.label  "Dieses Add-on funktioniert nicht mehr so wie in früheren Versionen.">
+<!ENTITY pleaseProvideDetails.label    "Bitte geben Sie Details zu den Problemen an, auf die Sie gestoßen sind, einschließlich Schritten um das Problem nachzuvollziehen:">
+<!ENTITY includeAddonList.label        "Eine Liste meiner installierten Add-ons anhängen, um Konflikte zu identifizieren">
+<!ENTITY informationIsPublic.label     "Die Daten in diesem Bericht werden öffentlich zugänglich sein.">
+<!ENTITY disableThisAddon.label        "Dieses Add-on deaktivieren">
 

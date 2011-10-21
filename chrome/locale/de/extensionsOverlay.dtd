@@ -34,11 +34,11 @@
   - 
   - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY compatibility.label                "Compatibility">
-<!ENTITY devcompatible.label                "Marked as compatible by developer">
-<!ENTITY stillworks.label                   "This add-on still works">
-<!ENTITY nolongerworks.label                "This add-on no longer works">
-<!ENTITY worksproperly.label                "Works properly">
-<!ENTITY compatibilityproblems.label        "Compatibility Problems">
-<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">
-<!ENTITY clearCompatibilityReport.label     "Clear Compatibility Report">
+<!ENTITY compatibility.label                "Kompatibilität">
+<!ENTITY devcompatible.label                "Vom Entwickler als kompatibel gekennzeichnet">
+<!ENTITY stillworks.label                   "Dieses Add-on funktioniert immer noch">
+<!ENTITY nolongerworks.label                "Dieses Add-on funktioniert nicht mehr">
+<!ENTITY worksproperly.label                "Funktioniert richtig">
+<!ENTITY compatibilityproblems.label        "Kompatibilitätsprobleme">
+<!ENTITY showCompatibilityResults.label     "Kompatibilitätsergebnisse anzeigen">
+<!ENTITY clearCompatibilityReport.label     "Kompatibilitätsbericht löschen">
