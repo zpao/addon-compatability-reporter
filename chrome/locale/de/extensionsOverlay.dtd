@@ -38,7 +38,7 @@
 <!ENTITY devcompatible.label                "Vom Entwickler als kompatibel gekennzeichnet">
 <!ENTITY stillworks.label                   "Dieses Add-on funktioniert immer noch">
 <!ENTITY nolongerworks.label                "Dieses Add-on funktioniert nicht mehr">
-<!ENTITY worksproperly.label                "Funktioniert richtig">
+<!ENTITY worksproperly.label                "Funktioniert ordnungsgemäß">
 <!ENTITY compatibilityproblems.label        "Kompatibilitätsprobleme">
 <!ENTITY showCompatibilityResults.label     "Kompatibilitätsergebnisse anzeigen">
 <!ENTITY clearCompatibilityReport.label     "Kompatibilitätsbericht löschen">

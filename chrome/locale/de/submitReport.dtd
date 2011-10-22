@@ -40,11 +40,11 @@
 <!ENTITY application.label             "Anwendung:">
 <!ENTITY operatingSystem.label         "Betriebssystem:">
 <!ENTITY cancel.label                  "Abbrechen">
-<!ENTITY submitReport.label            "Bericht abschicken">
-<!ENTITY thisAddonStillWorks.label     "Diese Add-on funktioniert immer noch so wie in früheren Versionen.">
+<!ENTITY submitReport.label            "Bericht senden">
+<!ENTITY thisAddonStillWorks.label     "Diese Add-on funktioniert noch immer so wie in früheren Versionen.">
 <!ENTITY thisAddonNoLongerWorks.label  "Dieses Add-on funktioniert nicht mehr so wie in früheren Versionen.">
-<!ENTITY pleaseProvideDetails.label    "Bitte geben Sie Details zu den Problemen an, auf die Sie gestoßen sind, einschließlich Schritten um das Problem nachzuvollziehen:">
-<!ENTITY includeAddonList.label        "Eine Liste meiner installierten Add-ons anhängen, um Konflikte zu identifizieren">
+<!ENTITY pleaseProvideDetails.label    "Bitte Einzelheiten über die festgestellten Problem angeben, einschließlich aller Schritte zur Reproduktion.">
+<!ENTITY includeAddonList.label        "Eine Liste meiner installierten Add-ons anhängen, um Konflikte zu erkennen">
 <!ENTITY informationIsPublic.label     "Die Daten in diesem Bericht werden öffentlich zugänglich sein.">
 <!ENTITY disableThisAddon.label        "Dieses Add-on deaktivieren">
 
