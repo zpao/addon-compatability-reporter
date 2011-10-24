@@ -414,7 +414,8 @@ if (!ACRController.isLegacyEM())
     var versionComparator = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
         .getService(Components.interfaces.nsIVersionComparator);
 
-    if (envInfo.appName == "Firefox" && versionComparator.compare(envInfo.appVersion, "9.0a2") >= 0)
+    if ((envInfo.appName == "Firefox"||envInfo.appName == "Thunderbird")
+        && versionComparator.compare(envInfo.appVersion, "9.0a2") >= 0)
     {
         ACR.Logger.debug("App version >= 9 -- will not use CustomAddonRepostory.jsm");
     }
