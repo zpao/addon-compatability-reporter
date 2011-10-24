@@ -408,128 +408,140 @@ if (!ACRController.isLegacyEM())
         }
     };
 
+    // maybe override default search behaviour -- see bug 678787 and bug 694007
 
-    // override this method for bug 678787
+    var envInfo = ACR.Util.getHostEnvironmentInfo();
+    var versionComparator = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+        .getService(Components.interfaces.nsIVersionComparator);
 
-    gSearchView.show = function(aQuery, aRequest)
+    if (envInfo.appName == "Firefox" && versionComparator.compare(envInfo.appVersion, "9.0a2") >= 0)
     {
-        Components.utils.import("resource://acr/modules/CustomAddonRepository.jsm");
-        ACR.Logger.debug("[CustomAddonRepository.jsm] Loaded");
+        ACR.Logger.debug("App version >= 9 -- will not use CustomAddonRepostory.jsm");
+    }
+    else
+    {
+        ACR.Logger.debug("App version < 9 -- will use CustomAddonRepostory.jsm");
 
-        gEventManager.registerInstallListener(this);
+        gSearchView.show = function(aQuery, aRequest)
+        {
+            Components.utils.import("resource://acr/modules/CustomAddonRepository.jsm");
+            ACR.Logger.debug("[CustomAddonRepository.jsm] Loaded");
 
-        this.showEmptyNotice(false);
-        this.showAllResultsLink(0);
-        this.showLoading(true);
-        this._sorters.showprice = false;
+            gEventManager.registerInstallListener(this);
 
-        gHeader.searchQuery = aQuery;
-        aQuery = aQuery.trim().toLocaleLowerCase();
-        if (this._lastQuery == aQuery) {
-          this.updateView();
-          gViewController.notifyViewChanged();
-          return;
-        }
-        this._lastQuery = aQuery;
+            this.showEmptyNotice(false);
+            this.showAllResultsLink(0);
+            this.showLoading(true);
+            this._sorters.showprice = false;
 
-        if (AddonRepository.isSearching)
-          AddonRepository.cancelSearch();
+            gHeader.searchQuery = aQuery;
+            aQuery = aQuery.trim().toLocaleLowerCase();
+            if (this._lastQuery == aQuery) {
+              this.updateView();
+              gViewController.notifyViewChanged();
+              return;
+            }
+            this._lastQuery = aQuery;
 
-        while (this._listBox.firstChild.localName == "richlistitem")
-          this._listBox.removeChild(this._listBox.firstChild);
+            if (AddonRepository.isSearching)
+              AddonRepository.cancelSearch();
 
-        var self = this;
-        gCachedAddons = {};
-        this._pendingSearches = 2;
-        this._sorters.setSort("relevancescore", false);
+            while (this._listBox.firstChild.localName == "richlistitem")
+              this._listBox.removeChild(this._listBox.firstChild);
 
-        var elements = [];
+            var self = this;
+            gCachedAddons = {};
+            this._pendingSearches = 2;
+            this._sorters.setSort("relevancescore", false);
 
-        function createSearchResults(aObjsList, aIsInstall, aIsRemote) {
-          aObjsList.forEach(function(aObj) {
-            let score = 0;
-            if (aQuery.length > 0) {
-              score = self.getMatchScore(aObj, aQuery);
-              if (score == 0 && !aIsRemote)
+            var elements = [];
+
+            function createSearchResults(aObjsList, aIsInstall, aIsRemote) {
+              aObjsList.forEach(function(aObj) {
+                let score = 0;
+                if (aQuery.length > 0) {
+                  score = self.getMatchScore(aObj, aQuery);
+                  if (score == 0 && !aIsRemote)
+                    return;
+                }
+
+                let item = createItem(aObj, aIsInstall, aIsRemote);
+                item.setAttribute("relevancescore", score);
+                if (aIsRemote) {
+                  gCachedAddons[aObj.id] = aObj;
+                  if (aObj.purchaseURL)
+                    self._sorters.showprice = true;
+                }
+
+                elements.push(item);
+              });
+            }
+
+            function finishSearch(createdCount) {
+              if (elements.length > 0) {
+                sortElements(elements, [self._sorters.sortBy], self._sorters.ascending);
+                elements.forEach(function(aElement) {
+                  self._listBox.insertBefore(aElement, self._listBox.lastChild);
+                });
+                self.updateListAttributes();
+              }
+
+              self._pendingSearches--;
+              self.updateView();
+
+              if (!self.isSearching)
+                gViewController.notifyViewChanged();
+            }
+
+            getAddonsAndInstalls(null, function(aAddons, aInstalls) {
+              if (gViewController && aRequest != gViewController.currentViewRequest)
                 return;
-            }
 
-            let item = createItem(aObj, aIsInstall, aIsRemote);
-            item.setAttribute("relevancescore", score);
-            if (aIsRemote) {
-              gCachedAddons[aObj.id] = aObj;
-              if (aObj.purchaseURL)
-                self._sorters.showprice = true;
-            }
-
-            elements.push(item);
-          });
-        }
-
-        function finishSearch(createdCount) {
-          if (elements.length > 0) {
-            sortElements(elements, [self._sorters.sortBy], self._sorters.ascending);
-            elements.forEach(function(aElement) {
-              self._listBox.insertBefore(aElement, self._listBox.lastChild);
+              createSearchResults(aAddons, false, false);
+              createSearchResults(aInstalls, true, false);
+              finishSearch();
             });
-            self.updateListAttributes();
-          }
 
-          self._pendingSearches--;
-          self.updateView();
+            var maxRemoteResults = 0;
+            try {
+              maxRemoteResults = Services.prefs.getIntPref(PREF_MAXRESULTS);
+            } catch(e) {}
 
-          if (!self.isSearching)
-            gViewController.notifyViewChanged();
-        }
-
-        getAddonsAndInstalls(null, function(aAddons, aInstalls) {
-          if (gViewController && aRequest != gViewController.currentViewRequest)
-            return;
-
-          createSearchResults(aAddons, false, false);
-          createSearchResults(aInstalls, true, false);
-          finishSearch();
-        });
-
-        var maxRemoteResults = 0;
-        try {
-          maxRemoteResults = Services.prefs.getIntPref(PREF_MAXRESULTS);
-        } catch(e) {}
-
-        if (maxRemoteResults <= 0) {
-          finishSearch(0);
-          return;
-        }
-
-        AddonRepository.searchAddons(aQuery, maxRemoteResults, {
-          searchFailed: function() {
-            ACR.Logger.debug("[CustomAddonRepository.jsm] searchFailed");
-
-            if (gViewController && aRequest != gViewController.currentViewRequest)
+            if (maxRemoteResults <= 0) {
+              finishSearch(0);
               return;
+            }
 
-            self._lastRemoteTotal = 0;
+            AddonRepository.searchAddons(aQuery, maxRemoteResults, {
+              searchFailed: function() {
+                ACR.Logger.debug("[CustomAddonRepository.jsm] searchFailed");
 
-            // XXXunf Better handling of AMO search failure. See bug 579502
-            finishSearch(0); // Silently fail
-          },
+                if (gViewController && aRequest != gViewController.currentViewRequest)
+                  return;
 
-          searchSucceeded: function(aAddonsList, aAddonCount, aTotalResults) {
-            ACR.Logger.debug("[CustomAddonRepository.jsm] searchSucceeded, " + aTotalResults + " results");
+                self._lastRemoteTotal = 0;
 
-            if (gViewController && aRequest != gViewController.currentViewRequest)
-              return;
+                // XXXunf Better handling of AMO search failure. See bug 579502
+                finishSearch(0); // Silently fail
+              },
 
-            if (aTotalResults > maxRemoteResults)
-              self._lastRemoteTotal = aTotalResults;
-            else
-              self._lastRemoteTotal = 0;
+              searchSucceeded: function(aAddonsList, aAddonCount, aTotalResults) {
+                ACR.Logger.debug("[CustomAddonRepository.jsm] searchSucceeded, " + aTotalResults + " results");
 
-            var createdCount = createSearchResults(aAddonsList, false, true);
-            finishSearch(createdCount);
-          }
-        });
-    };
+                if (gViewController && aRequest != gViewController.currentViewRequest)
+                  return;
+
+                if (aTotalResults > maxRemoteResults)
+                  self._lastRemoteTotal = aTotalResults;
+                else
+                  self._lastRemoteTotal = 0;
+
+                var createdCount = createSearchResults(aAddonsList, false, true);
+                finishSearch(createdCount);
+              }
+            });
+        };
+    }
 }
 
 addEventListener("load", ACRController.init, false);
