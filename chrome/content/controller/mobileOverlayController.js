@@ -63,7 +63,8 @@ ACRController.init = function()
         try {
             ACR.Logger.debug("This is firstrun");
             ACR.firstrun();
-            // TODO a fennec first run story
+
+            BrowserUI.newTab(ACR.FIRSTRUN_LANDING_PAGE, true);
         }
         catch (e) { ACR.Logger.debug("firstrun fail : "+e); }
     }
@@ -214,7 +215,8 @@ ACRController.init = function()
                     include.collapsed = collapsed;
                     disable.collapsed = collapsed;
                 };
-                stillWorks.addEventListener("command", function(event) { collapseStillWorksUI(event.currentTarget.value); }, true);
+
+                stillWorks.addEventListener("click", function(event) { collapseStillWorksUI(!event.currentTarget.value); }, true);
                 collapseStillWorksUI(stillWorks.value);
 
                 submitButton.addEventListener("command", function()
