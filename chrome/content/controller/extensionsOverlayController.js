@@ -311,7 +311,10 @@ ACRController._invalidateCompatibilityButtonLegacyEM = function()
     var elemSelectedButtons = document.getAnonymousElementByAttribute(elemExtension, "anonid", "selectedButtons");
 
     if (!elemSelectedButtons)
+    {
+        setTimeout(ACRController._invalidateCompatibilityButtonLegacyEM, 500);
         return;
+    }
 
     // No compatibility for plugins 
     if (elemExtension.getAttribute("plugin") == "true")
