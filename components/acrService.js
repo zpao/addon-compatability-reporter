@@ -164,6 +164,13 @@ acrService.prototype = {
     // for debugging
     debug : function acr_dump(str)
     {
+      if (!this.prefsGlobal)
+      {
+          // not initialized yet
+          dump("ACR (Component): " + str + "\n");
+          return;
+      }
+
       var debugOn = (this.prefsGlobal.getBoolPref("extensions.acr.debug") == true)
       if (debugOn) {
 

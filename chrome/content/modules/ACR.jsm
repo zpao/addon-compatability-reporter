@@ -312,7 +312,6 @@ function lastrun()
     }
 
     Preferences.setPreference("firstrun", true);
-    // Disabling for now, see bug 572322
     ACR.Preferences.clearGlobalPreference("extensions.acr.postinstall");
 
     removeAMOShowIncompatibleAddons();
@@ -321,6 +320,10 @@ function lastrun()
 function isDisabled()
 {
     Logger.debug("ACR is disabled");
+    
+    // bug 671252
+    Preferences.clearGlobalPreference("extensions.acr.postinstall");
+
     removeAMOShowIncompatibleAddons();
 }
 
