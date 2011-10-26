@@ -73,239 +73,256 @@ ACRController.init = function()
         catch (e) { ACR.Logger.debug("firstrun fail : "+e); }
     }
 
-    document.getElementById("addons-list").addEventListener("DOMNodeInserted", function(event)
+    var invalidate = function()
     {
-        if (!ACRController.flags.addedSelectedListener)
+        var addons = document.getElementById("addons-list").getElementsByAttribute("typeName", "local");
+
+        for (var i=0; i<addons.length; i++)
         {
-            document.getElementById("addons-list").addEventListener("select", function(event)
-            {
-                if (event.target.nodeName != "richlistbox")
-                    return;
-
-                var addons = document.getElementById("addons-list").getElementsByAttribute("typeName", "local");
-
-                for (var i=0; i<addons.length; i++)
-                {
-                    addons[i].hideCompatibilityBox();
-                }
-            }, true);
-
-            ACRController.flags.addedSelectedListener = true;
+            try { addons[i].removeACRUI(); }
+            catch (e) { /*ACR.Logger.warn(e);*/ }
         }
 
-        if (event.originalTarget.getAttribute("typeName") == "local")
+        var selectedItem = document.getElementById("addons-list").selectedItem;
+
+        if (!selectedItem)
+            return;
+
+        ACR.Logger.debug("in select, selectedItem.nodeName = " + selectedItem.nodeName);
+
+        if (selectedItem.getAttribute("typeName") != "local")
+            return;
+
+        var options = document.getAnonymousElementByAttribute(selectedItem,
+            "anonid",
+            "options-button");
+        options.setAttribute("checkState", "0");
+        options.removeAttribute("checked");
+
+        var addonReport = ACR.AddonReportStorage.getAddonReport(
+            selectedItem.getAttribute("addonID"),
+            selectedItem.getAttribute("version"));
+        addonReport.compatible = selectedItem.addon.isCompatible;
+        
+        var showCompatibilityBox = function()
         {
-            var options = document.getAnonymousElementByAttribute(event.originalTarget,
-                "anonid",
-                "options-button");
+            compatibilityBox.collapsed = false;
+            compatibilityButton.collapsed = false;
+            markedAsCompatible.removeAttribute("class");
+            markedAsIncompatible.removeAttribute("class");
+        }
 
-            var addonReport = ACR.AddonReportStorage.getAddonReport(
-                event.originalTarget.getAttribute("addonID"),
-                event.originalTarget.getAttribute("version"));
-            addonReport.compatible = event.originalTarget.addon.isCompatible;
-            
-            var showCompatibilityBox = function()
+        var createCompatibilityLabel = function(label, image)
+        {
+            var b = document.createElement("hbox");
+            b.collapsed = true;
+            b.setAttribute("align", "center");
+            b.setAttribute("pack", "end");
+            b.setAttribute("flex", "1");
+            b.setAttribute("acr", "acr");
+            var i = document.createElement("image");
+            i.setAttribute("src", image);
+            b.appendChild(i);
+            var l = document.createElement("label");
+            l.setAttribute("value", label);
+            l.setAttribute("class", "prefdesc");
+            b.appendChild(l);
+
+            var m = document.createElement("menupopup");
+            var mi = document.createElement("menuitem");
+            mi.setAttribute("label", stringB.GetStringFromName("clear.compatibility.report"));
+            mi.addEventListener("click", function() {  ACR.AddonReportStorage.deleteAddonReport(addonReport); showCompatibilityBox(); }, true );
+            m.appendChild(mi);
+            b.setAttribute("context", "_child");
+            b.appendChild(m);
+
+            return b;
+        };
+
+        var markedAsCompatible = createCompatibilityLabel(
+            stringB.GetStringFromName("marked.as.compatible"),
+            "chrome://acr/skin/images/greentick.png");
+        selectedItem.appendChild(markedAsCompatible);
+
+        var markedAsIncompatible = createCompatibilityLabel(
+            stringB.GetStringFromName("marked.as.incompatible"),
+            "chrome://acr/skin/images/exclamation.png");
+        selectedItem.appendChild(markedAsIncompatible);
+
+        if (addonReport.state == 1)
+        {
+            markedAsCompatible.setAttribute("class", "show-on-select");
+        }
+        else if (addonReport.state == 2)
+        {
+            markedAsIncompatible.setAttribute("class", "show-on-select");
+        }
+
+        var compatibilityButton = document.createElement("button");
+        compatibilityButton.setAttribute("label", stringB.GetStringFromName("ACR"));
+        compatibilityButton.setAttribute("type", "checkbox");
+        compatibilityButton.setAttribute("acr", "acr");
+        options.parentNode.insertBefore(compatibilityButton, options.nextSibling);
+
+        var compatibilityBox = document.createElement("vbox");
+        compatibilityBox.setAttribute("acr", "acr");
+        compatibilityBox.collapsed = true;
+
+        var stillWorks = document.createElement("setting");
+        stillWorks.setAttribute("type", "bool");
+        stillWorks.setAttribute("title", stringB.GetStringFromName("addon.still.works"));
+        compatibilityBox.appendChild(stillWorks);
+
+        var description = document.createElement("setting");
+        description.setAttribute("type", "string");
+        description.setAttribute("title", stringB.GetStringFromName("send.details"));
+        description.appendChild(document.createTextNode(stringB.GetStringFromName("send.details")));
+        compatibilityBox.appendChild(description);
+
+        var include = document.createElement("setting");
+        include.setAttribute("type", "bool");
+        include.setAttribute("title", stringB.GetStringFromName("include.addons"));
+        include.appendChild(document.createTextNode(stringB.GetStringFromName("send.list.of.addons")));
+        compatibilityBox.appendChild(include);
+
+        var disable = document.createElement("setting");
+        disable.setAttribute("type", "bool");
+        disable.setAttribute("title", stringB.GetStringFromName("disable.this.addon"));
+        compatibilityBox.appendChild(disable);
+
+        var submit = document.createElement("setting");
+        submit.setAttribute("type", "control");
+        var submitButton = document.createElement("button");
+        submitButton.setAttribute("label", stringB.GetStringFromName("submit.report"));
+        submit.appendChild(submitButton);
+        compatibilityBox.appendChild(submit);
+
+        var resultBox = document.createElement("hbox");
+        resultBox.setAttribute("align", "center");
+        var resultHolder = document.createElement("label");
+        resultHolder.setAttribute("class", "prefdesc");
+        resultBox.appendChild(resultHolder);
+        var resultSpacer = document.createElement("spacer");
+        resultSpacer.setAttribute("flex","1");
+        resultBox.appendChild(resultSpacer);
+        var resultSpinner = document.createElement("image");
+        resultSpinner.setAttribute("src", "chrome://acr/skin/images/spinner.gif");
+        resultSpinner.collapsed = true;
+        resultSpinner.style.verticalAlign = "top";
+        resultBox.appendChild(resultSpinner);
+        resultBox.collapsed = true;
+        compatibilityBox.appendChild(resultBox);
+
+        var setResult = function(txt, isError, isLoading)
+        {
+            resultHolder.setAttribute("value", txt);
+            resultHolder.style.color = (isError?"red":"inherit");
+            resultBox.collapsed = false;
+            resultSpinner.collapsed = !isLoading;
+        };
+
+        var setFormEnabled = function(enabled)
+        {
+            stillWorks.setAttribute("disabled", !enabled);
+            description.setAttribute("disabled", !enabled);
+            include.setAttribute("disabled", !enabled);
+            disable.setAttribute("disabled", !enabled);
+            submit.setAttribute("disabled", !enabled);
+        };
+
+        var collapseStillWorksUI = function(collapsed)
+        {
+            description.collapsed = collapsed;
+            include.collapsed = collapsed;
+            disable.collapsed = collapsed;
+        };
+
+        stillWorks.addEventListener("click", function(event) { collapseStillWorksUI(!event.currentTarget.value); }, true);
+        collapseStillWorksUI(stillWorks.value);
+
+        submitButton.addEventListener("command", function()
+        {
+            ACR.Logger.debug("submitreport");
+
+            setFormEnabled(false);
+            setResult(stringB.GetStringFromName("submitting.report"), false, true);
+
+            var cb = function(cbEvent)
             {
-                compatibilityBox.collapsed = false;
-                compatibilityButton.collapsed = false;
-                markedAsCompatible.removeAttribute("class");
-                markedAsIncompatible.removeAttribute("class");
-            }
-
-            var createCompatibilityLabel = function(label, image)
-            {
-                var b = document.createElement("hbox");
-                b.collapsed = true;
-                b.setAttribute("align", "center");
-                b.setAttribute("pack", "end");
-                b.setAttribute("flex", "1");
-                var i = document.createElement("image");
-                i.setAttribute("src", image);
-                b.appendChild(i);
-                var l = document.createElement("label");
-                l.setAttribute("value", label);
-                l.setAttribute("class", "prefdesc");
-                b.appendChild(l);
-
-                var m = document.createElement("menupopup");
-                var mi = document.createElement("menuitem");
-                mi.setAttribute("label", stringB.GetStringFromName("clear.compatibility.report"));
-                mi.addEventListener("click", function() {  ACR.AddonReportStorage.deleteAddonReport(addonReport); showCompatibilityBox(); }, true );
-                m.appendChild(mi);
-                b.setAttribute("context", "_child");
-                b.appendChild(m);
-
-                return b;
-            };
-
-            var markedAsCompatible = createCompatibilityLabel(
-                stringB.GetStringFromName("marked.as.compatible"),
-                "chrome://acr/skin/images/greentick.png");
-            event.originalTarget.appendChild(markedAsCompatible);
-
-            var markedAsIncompatible = createCompatibilityLabel(
-                stringB.GetStringFromName("marked.as.incompatible"),
-                "chrome://acr/skin/images/exclamation.png");
-            event.originalTarget.appendChild(markedAsIncompatible);
-
-            if (addonReport.state == 1)
-            {
-                markedAsCompatible.setAttribute("class", "show-on-select");
-            }
-            else if (addonReport.state == 2)
-            {
-                markedAsIncompatible.setAttribute("class", "show-on-select");
-            }
-
-            var compatibilityButton = document.createElement("button");
-            compatibilityButton.setAttribute("label", "ACR");
-            compatibilityButton.setAttribute("type", "checkbox");
-            options.parentNode.insertBefore(compatibilityButton, options.nextSibling);
-
-            var compatibilityBox = document.createElement("vbox");
-            compatibilityBox.setAttribute("class", "options-box");
-            compatibilityBox.collapsed = true;
-
-            var stillWorks = document.createElement("setting");
-            stillWorks.setAttribute("type", "bool");
-            stillWorks.setAttribute("title", stringB.GetStringFromName("addon.still.works"));
-            compatibilityBox.appendChild(stillWorks);
-
-            var description = document.createElement("setting");
-            description.setAttribute("type", "string");
-            description.setAttribute("title", stringB.GetStringFromName("send.details"));
-            description.appendChild(document.createTextNode(stringB.GetStringFromName("send.details")));
-            compatibilityBox.appendChild(description);
-
-            var include = document.createElement("setting");
-            include.setAttribute("type", "bool");
-            include.setAttribute("title", stringB.GetStringFromName("include.addons"));
-            include.appendChild(document.createTextNode(stringB.GetStringFromName("send.list.of.addons")));
-            compatibilityBox.appendChild(include);
-
-            var disable = document.createElement("setting");
-            disable.setAttribute("type", "bool");
-            disable.setAttribute("title", stringB.GetStringFromName("disable.this.addon"));
-            compatibilityBox.appendChild(disable);
-
-            var submit = document.createElement("setting");
-            submit.setAttribute("type", "control");
-            var submitButton = document.createElement("button");
-            submitButton.setAttribute("label", stringB.GetStringFromName("submit.report"));
-            submit.appendChild(submitButton);
-            compatibilityBox.appendChild(submit);
-
-            var resultBox = document.createElement("hbox");
-            resultBox.setAttribute("align", "center");
-            var resultHolder = document.createElement("label");
-            resultHolder.setAttribute("class", "prefdesc");
-            resultBox.appendChild(resultHolder);
-            var resultSpacer = document.createElement("spacer");
-            resultSpacer.setAttribute("flex","1");
-            resultBox.appendChild(resultSpacer);
-            var resultSpinner = document.createElement("image");
-            resultSpinner.setAttribute("src", "chrome://acr/skin/images/spinner.gif");
-            resultSpinner.collapsed = true;
-            resultSpinner.style.verticalAlign = "top";
-            resultBox.appendChild(resultSpinner);
-            resultBox.collapsed = true;
-            compatibilityBox.appendChild(resultBox);
-
-            var setResult = function(txt, isError, isLoading)
-            {
-                resultHolder.setAttribute("value", txt);
-                resultHolder.style.color = (isError?"red":"inherit");
-                resultBox.collapsed = false;
-                resultSpinner.collapsed = !isLoading;
-            };
-
-            var setFormEnabled = function(enabled)
-            {
-                stillWorks.setAttribute("disabled", !enabled);
-                description.setAttribute("disabled", !enabled);
-                include.setAttribute("disabled", !enabled);
-                disable.setAttribute("disabled", !enabled);
-                submit.setAttribute("disabled", !enabled);
-            };
-
-            var collapseStillWorksUI = function(collapsed)
-            {
-                description.collapsed = collapsed;
-                include.collapsed = collapsed;
-                disable.collapsed = collapsed;
-            };
-
-            stillWorks.addEventListener("click", function(event) { collapseStillWorksUI(!event.currentTarget.value); }, true);
-            collapseStillWorksUI(stillWorks.value);
-
-            submitButton.addEventListener("command", function()
-            {
-                ACR.Logger.debug("submitreport");
-
-                setFormEnabled(false);
-                setResult(stringB.GetStringFromName("submitting.report"), false, true);
-
-                var cb = function(cbEvent)
+                if (cbEvent.isError())
                 {
-                    if (cbEvent.isError())
-                    {
-                        ACR.Logger.debug("In submitReport callback, error = " + cbEvent.getError().toString());
-                        setResult(stringB.GetStringFromName("error.submitting.report"), true, false);
+                    ACR.Logger.debug("In submitReport callback, error = " + cbEvent.getError().toString());
+                    setResult(stringB.GetStringFromName("error.submitting.report"), true, false);
 
-                        setFormEnabled(true);
+                    setFormEnabled(true);
+                }
+                else
+                {
+                    ACR.Logger.debug("In submitReport callback, success!");
+
+                    if (disable.value)
+                        ACR.disableAddon(addonReport);
+
+                    setResult("", false, false);
+                    setFormEnabled(true);
+
+                    compatibilityBox.collapsed = true;
+                    compatibilityButton.collapsed = true;
+
+                    if (stillWorks.value)
+                    {
+                        markedAsCompatible.setAttribute("class", "show-on-select");
                     }
                     else
                     {
-                        ACR.Logger.debug("In submitReport callback, success!");
-
-                        if (disable.value)
-                            ACR.disableAddon(addonReport);
-
-                        setResult("", false, false);
-                        setFormEnabled(true);
-
-                        compatibilityBox.collapsed = true;
-                        compatibilityButton.collapsed = true;
-
-                        if (stillWorks.value)
-                        {
-                            markedAsCompatible.setAttribute("class", "show-on-select");
-                        }
-                        else
-                        {
-                            markedAsIncompatible.setAttribute("class", "show-on-select");
-                        }
-
+                        markedAsIncompatible.setAttribute("class", "show-on-select");
                     }
-                };
 
-                ACR.submitReport(addonReport,
-                    stillWorks.value,
-                    description.value,
-                    include.value,
-                    cb);
-
-            }, true);
-
-            compatibilityButton.addEventListener("command", function() { compatibilityBox.collapsed = !compatibilityBox.collapsed; }, true);
-            event.originalTarget.appendChild(compatibilityBox);
-
-            if (addonReport.state == 1 || addonReport.state == 2)
-            {
-                compatibilityBox.collapsed = true;
-                compatibilityButton.collapsed = true;
-            }
-
-            event.originalTarget.hideCompatibilityBox = function()
-            {
-                if (compatibilityButton)
-                {
-                    compatibilityButton.removeAttribute("checked");
-                    compatibilityBox.collapsed = true;
                 }
             };
+
+            ACR.submitReport(addonReport,
+                stillWorks.value,
+                description.value,
+                include.value,
+                cb);
+
+        }, true);
+
+        compatibilityButton.addEventListener("command", function() { compatibilityBox.collapsed = !compatibilityBox.collapsed; }, true);
+        selectedItem.appendChild(compatibilityBox);
+
+        if (addonReport.state == 1 || addonReport.state == 2)
+        {
+            compatibilityBox.collapsed = true;
+            compatibilityButton.collapsed = true;
         }
 
+        selectedItem.removeACRUI = function()
+        {
+            compatibilityButton.parentNode.removeChild(compatibilityButton);
+            compatibilityBox.parentNode.removeChild(compatibilityBox);
+            markedAsCompatible.parentNode.removeChild(markedAsCompatible);
+            markedAsIncompatible.parentNode.removeChild(markedAsIncompatible);
+        };
+
+        selectedItem.hideCompatibilityBox = function()
+        {
+            compatibilityButton.removeAttribute("checked");
+            compatibilityBox.collapsed = true;
+        };
+    };
+
+    document.getElementById("panel-items").addEventListener("ToolPanelShown", function(aEvent) {
+        setTimeout(invalidate, 500);
+    }, true);
+
+    document.getElementById("addons-list").addEventListener("select", function(event)
+    {
+        if (event.target.nodeName != "richlistbox")
+            return;
+
+        invalidate();
     }, true);
 
     setTimeout(function()
