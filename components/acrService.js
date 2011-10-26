@@ -164,21 +164,21 @@ acrService.prototype = {
     // for debugging
     debug : function acr_dump(str)
     {
-      if (!this.prefsGlobal)
+      try
       {
-          // not initialized yet
-          dump("ACR (Component): " + str + "\n");
-          return;
+          var debugOn = (this.prefsGlobal.getBoolPref("extensions.acr.debug") == true)
+          if (debugOn) {
+
+            var date = new Date();
+            datestr = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+
+            dump("ACR (Component)"+datestr+": " + str + "\n");
+            this.ConsoleService.logStringMessage("ACR (Component)"+datestr+": " + str);
+          }
       }
-
-      var debugOn = (this.prefsGlobal.getBoolPref("extensions.acr.debug") == true)
-      if (debugOn) {
-
-        var date = new Date();
-        datestr = " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
-
-        dump("ACR (Component)"+datestr+": " + str + "\n");
-        this.ConsoleService.logStringMessage("ACR (Component)"+datestr+": " + str);
+      catch (e)
+      {
+          dump("ACR (Component): " + str + "\n");
       }
     },
 
