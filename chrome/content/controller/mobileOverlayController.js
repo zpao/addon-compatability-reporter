@@ -57,7 +57,11 @@ ACRController.init = function()
     }
 
     ACR.Logger.debug("starting init1");
-        
+         
+    var stringB = Components.classes["@mozilla.org/intl/stringbundle;1"]
+        .getService(Components.interfaces.nsIStringBundleService)
+        .createBundle("chrome://acr/locale/mobileOverlayController.properties");
+
     if (ACR.Preferences.getPreference("firstrun") === true)
     {
         try {
@@ -100,8 +104,6 @@ ACRController.init = function()
                 event.originalTarget.getAttribute("version"));
             addonReport.compatible = event.originalTarget.addon.isCompatible;
 
-            // TODO localise strings in following UI
-
             var createCompatibilityLabel = function(label, image)
             {
                 var b = document.createElement("hbox");
@@ -120,12 +122,12 @@ ACRController.init = function()
             };
 
             var markedAsCompatible = createCompatibilityLabel(
-                "You marked this add-on as compatible",
+                stringB.GetStringFromName("marked.as.compatible"),
                 "chrome://acr/skin/images/greentick.png");
             event.originalTarget.appendChild(markedAsCompatible);
 
             var markedAsIncompatible = createCompatibilityLabel(
-                "You marked this add-on as incompatible",
+                stringB.GetStringFromName("marked.as.incompatible"),
                 "chrome://acr/skin/images/exclamation.png");
             event.originalTarget.appendChild(markedAsIncompatible);
 
@@ -149,30 +151,30 @@ ACRController.init = function()
 
                 var stillWorks = document.createElement("setting");
                 stillWorks.setAttribute("type", "bool");
-                stillWorks.setAttribute("title", "This add-on still works");
+                stillWorks.setAttribute("title", stringB.GetStringFromName("addon.still.works"));
                 compatibilityBox.appendChild(stillWorks);
 
                 var description = document.createElement("setting");
                 description.setAttribute("type", "string");
-                description.setAttribute("title", "Send details of problems encountered:");
-                description.appendChild(document.createTextNode("This information will be public"));
+                description.setAttribute("title", stringB.GetStringFromName("send.details"));
+                description.appendChild(document.createTextNode(stringB.GetStringFromName("send.details")));
                 compatibilityBox.appendChild(description);
 
                 var include = document.createElement("setting");
                 include.setAttribute("type", "bool");
-                include.setAttribute("title", "Include add-ons");
-                include.appendChild(document.createTextNode("Send a list of my add-ons with the report"));
+                include.setAttribute("title", stringB.GetStringFromName("include.addons"));
+                include.appendChild(document.createTextNode(stringB.GetStringFromName("send.list.of.addons")));
                 compatibilityBox.appendChild(include);
 
                 var disable = document.createElement("setting");
                 disable.setAttribute("type", "bool");
-                disable.setAttribute("title", "Disable this add-on");
+                disable.setAttribute("title", stringB.GetStringFromName("disable.this.addon"));
                 compatibilityBox.appendChild(disable);
 
                 var submit = document.createElement("setting");
                 submit.setAttribute("type", "control");
                 var submitButton = document.createElement("button");
-                submitButton.setAttribute("label", "Submit Report");
+                submitButton.setAttribute("label", stringB.GetStringFromName("submit.report"));
                 submit.appendChild(submitButton);
                 compatibilityBox.appendChild(submit);
 
@@ -224,14 +226,14 @@ ACRController.init = function()
                     ACR.Logger.debug("submitreport");
 
                     setFormEnabled(false);
-                    setResult("Submitting Report...", false, true);
+                    setResult(stringB.GetStringFromName("submitting.report"), false, true);
 
                     var cb = function(cbEvent)
                     {
                         if (cbEvent.isError())
                         {
                             ACR.Logger.debug("In submitReport callback, error = " + cbEvent.getError().toString());
-                            setResult("Error Submitting Report", true, false);
+                            setResult(stringB.GetStringFromName("error.submitting.report"), true, false);
 
                             setFormEnabled(true);
                         }
