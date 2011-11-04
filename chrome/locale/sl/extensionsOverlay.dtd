@@ -35,10 +35,10 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Združljivost">
-<!ENTITY devcompatible.label                "Marked as compatible by developer">
+<!ENTITY devcompatible.label                "Razvijalec označil kot združljiv">
 <!ENTITY stillworks.label                   "Ta dodatek še deluje">
 <!ENTITY nolongerworks.label                "Ta dodatek ne deluje več">
 <!ENTITY worksproperly.label                "Deluje pravilno">
 <!ENTITY compatibilityproblems.label        "Problemi z združljivostjo">
-<!ENTITY showCompatibilityResults.label     "Show Compatibility Results">
-<!ENTITY clearCompatibilityReport.label     "Clear Compatibility Report">
+<!ENTITY showCompatibilityResults.label     "Pokaži rezultate združljivosti">
+<!ENTITY clearCompatibilityReport.label     "Počisti poročilo o združljivosti">
