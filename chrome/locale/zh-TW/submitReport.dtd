@@ -40,7 +40,7 @@
 <!ENTITY application.label             "應用程式:">
 <!ENTITY operatingSystem.label         "作業系統:">
 <!ENTITY cancel.label                  "取消">
-<!ENTITY submitReport.label            "傳送回報">
+<!ENTITY submitReport.label            "傳送報告">
 <!ENTITY thisAddonStillWorks.label     "這個附加元件仍然能與先前版本一樣正常執行。">
 <!ENTITY thisAddonNoLongerWorks.label  "這個附加元件無法與先前版本一樣正常執行。">
 <!ENTITY pleaseProvideDetails.label    "請提供您所遇到的問題的詳細資訊，包含任何可以重新遇到該問題的方式:">
