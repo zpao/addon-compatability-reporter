@@ -12,6 +12,7 @@ locale    acr   sk            chrome/locale/sk/
 locale    acr   sl            chrome/locale/sl/
 locale    acr   uk            chrome/locale/uk/
 locale    acr   vi            chrome/locale/vi/
+locale    acr   zh-CN         chrome/locale/zh-CN/
 locale    acr   zh-TW         chrome/locale/zh-TW/
 
 # Firefox Desktop overlay
