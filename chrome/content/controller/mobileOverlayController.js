@@ -98,6 +98,9 @@ ACRController.init = function()
             "options-button");
         options.setAttribute("checkState", "0");
         options.removeAttribute("checked");
+        var optionsbox = document.getAnonymousElementByAttribute(selectedItem,
+            "anonid",
+            "options-box");
 
         var addonReport = ACR.AddonReportStorage.getAddonReport(
             selectedItem.getAttribute("addonID"),
@@ -162,7 +165,11 @@ ACRController.init = function()
         compatibilityButton.setAttribute("label", stringB.GetStringFromName("ACR"));
         compatibilityButton.setAttribute("type", "checkbox");
         compatibilityButton.setAttribute("acr", "acr");
-        options.parentNode.insertBefore(compatibilityButton, options.nextSibling);
+        compatibilityButton.className="addon-options"; // indent
+        var compatibilityButtonBox = document.createElement("hbox");
+        compatibilityButtonBox.className="show-on-select buttons-box";
+        compatibilityButtonBox.appendChild(compatibilityButton);
+        selectedItem.appendChild(compatibilityButtonBox);
 
         var compatibilityBox = document.createElement("vbox");
         compatibilityBox.setAttribute("acr", "acr");
