@@ -3,6 +3,9 @@ skin      acr   classic/1.0   chrome/skin/
 locale    acr   en-US         chrome/locale/en-US/
 locale    acr   cs            chrome/locale/cs/
 locale    acr   de            chrome/locale/de/
+locale    acr   es-AR         chrome/locale/es-AR/
+locale    acr   es-ES         chrome/locale/es-ES/
+locale    acr   es-MX         chrome/locale/es-MX/
 locale    acr   it            chrome/locale/it/
 locale    acr   ja            chrome/locale/ja/
 locale    acr   nl            chrome/locale/nl/
