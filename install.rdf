@@ -15,7 +15,7 @@
     <em:contributor>Ioana Chiorean</em:contributor>
     <em:contributor>Some icons used are from the famfamfam Silk Icon Set, licensed under a Creative Commons Attribution 2.5 License</em:contributor>
     <em:description>Allows add-on compatibility issues to be reported to Mozilla</em:description>
-    <em:iconURL>chrome://acr/skin/images/icon64.png</em:iconURL>
+    <em:iconURL>chrome://acr/skin/images/icon48.png</em:iconURL>
     <em:icon64URL>chrome://acr/skin/images/icon64.png</em:icon64URL>
 
     <!-- Firefox -->
