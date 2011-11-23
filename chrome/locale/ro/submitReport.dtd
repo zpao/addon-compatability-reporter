@@ -34,16 +34,16 @@
   - 
   - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY window.title                  "Raport de Compatibilitate">
+<!ENTITY window.title                  "Raport de compatibilitate">
 
 <!ENTITY addon.label                   "Extensia:">
 <!ENTITY application.label             "Aplicație:">
 <!ENTITY operatingSystem.label         "Sistem de operare:">
 <!ENTITY cancel.label                  "Revocare">
-<!ENTITY submitReport.label            "Trimite Raport">
-<!ENTITY thisAddonStillWorks.label     "Această extensie incă funcționează în maniera inițială, corespunzătoare versiunilor anterioare.">
+<!ENTITY submitReport.label            "Trimite raport">
+<!ENTITY thisAddonStillWorks.label     "Această extensie încă funcționează în maniera inițială, corespunzătoare versiunilor anterioare.">
 <!ENTITY thisAddonNoLongerWorks.label  "Această extensie nu mai funcționează la fel ca în versiunile anterioare.">
-<!ENTITY pleaseProvideDetails.label    "Te rog furnizează detalii legate de problemele întâlnite, incluzând pași de reproducere ale acestora:">
+<!ENTITY pleaseProvideDetails.label    "Vă rugăm să furnizați detalii legate de problemele întâlnite, incluzând pașii de reproducere ale acestora:">
 <!ENTITY includeAddonList.label        "Include o listă a extensiilor instalate pentru a identifica posibile conflicte">
 <!ENTITY informationIsPublic.label     "Informația din raport va fi accesibilă la nivel public.">
 <!ENTITY disableThisAddon.label        "Dezactivează această extensie">

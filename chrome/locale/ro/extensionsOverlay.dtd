@@ -35,9 +35,9 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Compatibilitate">
-<!ENTITY devcompatible.label                "Marcat compatibil de către programator">
-<!ENTITY stillworks.label                   "Această extensie incă funcționează">
-<!ENTITY nolongerworks.label                "Această extensie nu mai functionează">
+<!ENTITY devcompatible.label                "Marcat compatibil de către dezvoltator">
+<!ENTITY stillworks.label                   "Această extensie încă funcționează">
+<!ENTITY nolongerworks.label                "Această extensie nu mai funcționează">
 <!ENTITY worksproperly.label                "Funcționează corespunzător">
 <!ENTITY compatibilityproblems.label        "Probleme de compatibilitate">
 <!ENTITY showCompatibilityResults.label     "Arată rezultatele raportului de compatibilitate">
