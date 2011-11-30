@@ -1,4 +1,4 @@
-<!-- ***** BEGIN LICENSE BLOCK *****
+﻿<!-- ***** BEGIN LICENSE BLOCK *****
   -   Version: MPL 1.1/GPL 2.0/LGPL 2.1
   -
   - The contents of this file are subject to the Mozilla Public License Version
@@ -35,8 +35,8 @@
   - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY compatibility.label                "Compatibilidad">
-<!ENTITY devcompatible.label                "Marcado como compatible por el desarrolador">
-<!ENTITY stillworks.label                   "Este complemento a˙n funciona">
+<!ENTITY devcompatible.label                "Marcado como compatible por el desarrollador">
+<!ENTITY stillworks.label                   "Este complemento aún funciona">
 <!ENTITY nolongerworks.label                "Este complemento ya no funciona">
 <!ENTITY worksproperly.label                "Funciona correctamente">
 <!ENTITY compatibilityproblems.label        "Problemas de compatibilidad">

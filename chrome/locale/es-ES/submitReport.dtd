@@ -1,4 +1,4 @@
-<!-- ***** BEGIN LICENSE BLOCK *****
+﻿<!-- ***** BEGIN LICENSE BLOCK *****
   -   Version: MPL 1.1/GPL 2.0/LGPL 2.1
   -
   - The contents of this file are subject to the Mozilla Public License Version
@@ -37,14 +37,14 @@
 <!ENTITY window.title                  "Informe de compatibilidad">
 
 <!ENTITY addon.label                   "Complemento:">
-<!ENTITY application.label             "AplicaciÛn:">
+<!ENTITY application.label             "Aplicación:">
 <!ENTITY operatingSystem.label         "Sistema operativo:">
 <!ENTITY cancel.label                  "Cancelar">
 <!ENTITY submitReport.label            "Enviar informe">
-<!ENTITY thisAddonStillWorks.label     "Este complemento a˙n funciona como en versiones anteriores.">
+<!ENTITY thisAddonStillWorks.label     "Este complemento aún funciona como en versiones anteriores.">
 <!ENTITY thisAddonNoLongerWorks.label  "Este complemento ya no funciona como en versiones anteriores.">
-<!ENTITY pleaseProvideDetails.label    "Por favor, proporcione m·s detalles sobre los problemas que ha encontrado, incluyendo los pasos que hay que seguir:">
+<!ENTITY pleaseProvideDetails.label    "Por favor, proporcione más detalles sobre los problemas que ha encontrado, incluyendo los pasos que hay que seguir:">
 <!ENTITY includeAddonList.label        "Incluir una lista con mis complementos instalados para poder identificar conflictos">
-<!ENTITY informationIsPublic.label     "La informaciÛn de este informe ser· accesible p˙blicamente.">
+<!ENTITY informationIsPublic.label     "La información de este informe será accesible públicamente.">
 <!ENTITY disableThisAddon.label        "Desactivar este complemento">
 
