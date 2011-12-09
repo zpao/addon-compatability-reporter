@@ -3,6 +3,7 @@
  */
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/AddonManager.jsm");
 
 function acrService()
 {
@@ -114,6 +115,11 @@ acrService.prototype = {
 
     _disableCheckCompatibilityPrefs : function acr_disableCheckCompatibilityPrefs()
     {
+        var compatByDefault = ("strictCompatibility" in AddonManager) &&
+                              !AddonManager.strictCompatibility;
+        if (compatByDefault)
+          this.debug("Compatible-by-default is enabled; compatibility checking will not be disabled");
+
         // disable all compatibility checks 
         // if this is firstrun, saves any previous compatibility info for future restore
 
@@ -134,7 +140,7 @@ acrService.prototype = {
 
                 // using different pref, for now -- see bug 572322
                 //if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") == true)
-                if (this.prefsGlobal.getBoolPref("extensions.acr.firstrun") == true)
+                if (this.prefsGlobal.getBoolPref("extensions.acr.firstrun") == true && !compatByDefault)
                 {
                     if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]))
                     {
@@ -149,10 +155,20 @@ acrService.prototype = {
                     }
                 }
 
-                // turn off this compatilibilty pref
+                if (compatByDefault) {
+                  // Don't disable compatibility checking when compatible-by-default is enabled.
+                  if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i])) {
+                    this.debug("Resetting compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "'");
+                    this.prefsGlobal.clearUserPref(this.CHECK_COMPATIBILITY_PREFS[i]);
+                  }
+                }
+                else
+                {
+                  // turn off this compatilibilty pref
 
-                this.debug("Setting compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "' to 'false'");
-                this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
+                  this.debug("Setting compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "' to 'false'");
+                  this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
+                }
             }
             catch (e)
             {
