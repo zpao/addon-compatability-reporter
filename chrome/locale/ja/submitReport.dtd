@@ -44,6 +44,6 @@
 <!ENTITY thisAddonStillWorks.label     "このアドオンは前のバージョンと同じように正常に動作しています。">
 <!ENTITY thisAddonNoLongerWorks.label  "このアドオンは前のバージョンと同じように動作しなくなりました。">
 <!ENTITY pleaseProvideDetails.label    "あなたが見つけた問題の詳細を、再現手順も含めて記入してください:">
-<!ENTITY includeAddonList.label        "競合条件を特定できるよう、インストールされているアドオンの一覧を送信する">
+<!ENTITY includeAddonList.label        "競合条件を特定できるよう、インストールされているアドオンのリストを送信する">
 <!ENTITY informationIsPublic.label     "この報告に含まれている情報は一般に公開されます。">
-<!ENTITY disableThisAddon.label        "このアドオンを無効化する">
+<!ENTITY disableThisAddon.label        "このアドオンを無効化">
