@@ -41,6 +41,7 @@ Components.utils.import("resource://acr/modules/ACR.jsm", ACR);
 var ACRController = new function()
 {
     this._addonReport = null;
+    this._legacyEM = null;
     this._compatibilityButton = null;
     this._COMPATIBILITY_REPORT_URL_BASE = "https://addons.mozilla.org/en-US/firefox/compatibility/reporter/";
 }
@@ -105,8 +106,19 @@ ACRController._createWidget = function()
 
 ACRController.isLegacyEM  = function()
 {
-    // Firefox 3.6 and below
-    return document.getElementById("extensionsView");
+    // Legacy EM is Firefox 3.6 and below
+    if (ACRController._legacyEM)
+    {
+        return true;
+    }
+    try {
+        ACRController._legacyEM = Components.classes["@mozilla.org/extensions/manager;1"]
+                    .getService(Components.interfaces.nsIExtensionManager);
+        return true;
+    }
+    catch(e) {}
+
+    return false;
 }
 
 ACRController.doStillWorks = function()
