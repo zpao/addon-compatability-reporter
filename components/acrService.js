@@ -3,7 +3,10 @@
  */
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import("resource://gre/modules/AddonManager.jsm");
+try { // FF4+ only
+    Components.utils.import("resource://gre/modules/AddonManager.jsm");
+}
+catch(e) {}
 
 function acrService()
 {
@@ -24,7 +27,6 @@ acrService.prototype = {
     {
         this.debug("component init");
 
-        this.version = "0.1";
         this.ConsoleService = Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService);
         this.prefsGlobal = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch(null);
         
@@ -83,15 +85,14 @@ acrService.prototype = {
 
       this._disableCheckCompatibilityPrefs();
 
-      //return; // for now -- see bug 572322
-
       if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") === true)
       {
-          me = this;
-          me.debug("In postinstall - will shutdown addonRepository and restart the application");
-
+        try { // FF4+
           Components.utils.import("resource://gre/modules/AddonRepository.jsm");
           Components.utils.import("resource://gre/modules/Services.jsm");
+
+          me = this;
+          me.debug("In postinstall - will shutdown addonRepository and restart the application");
 
           var observer = {
               observe: function (aSubject, aTopic, aData) {
@@ -104,19 +105,25 @@ acrService.prototype = {
                       var boot = Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup);
                       boot.quit(Components.interfaces.nsIAppStartup.eForceQuit|Components.interfaces.nsIAppStartup.eRestart);
                   }
-              },
+              }
           };
 
           Services.obs.addObserver(observer, "addon-repository-shutdown", false);
           AddonRepository.shutdown();
+        }
+        catch(e) {}
       }
 
     },
 
     _disableCheckCompatibilityPrefs : function acr_disableCheckCompatibilityPrefs()
     {
-        var compatByDefault = ("strictCompatibility" in AddonManager) &&
-                              !AddonManager.strictCompatibility;
+        var compatByDefault = false;
+        try { // AddonManager is FF4+ only
+            compatByDefault = ("strictCompatibility" in AddonManager) &&
+                                  !AddonManager.strictCompatibility;
+        }
+        catch(e) {}
         if (compatByDefault)
           this.debug("Compatible-by-default is enabled; compatibility checking will not be disabled");
 
