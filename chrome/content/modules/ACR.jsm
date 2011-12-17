@@ -286,6 +286,15 @@ function lastrun()
             checkCompatibilityPrefs = CHECK_COMPATIBILITY_PREFS_FB;
     }
 
+    var compatByDefault = false;
+    try { // AddonManager is FF4+ only
+        compatByDefault = ("strictCompatibility" in AddonManager) &&
+                              !AddonManager.strictCompatibility;
+    }
+    catch(e) {}
+    if (compatByDefault)
+      Logger.debug("Compatible-by-default is enabled; compatibility checking will not be disabled");
+
     for (var i=0; i<checkCompatibilityPrefs.length; i++)
     {
         try
@@ -293,10 +302,15 @@ function lastrun()
             if (Preferences.globalHasUserValue(checkCompatibilityPrefs[i]+".previous"))
             {
                 var previous = Preferences.getGlobalPreference(checkCompatibilityPrefs[i]+".previous", true);
-                Preferences.setBoolGlobalPreference(checkCompatibilityPrefs[i], previous);
-                Preferences.clearGlobalPreference(checkCompatibilityPrefs[i]+".previous");
 
-                Logger.debug("Resetting compatibility pref '" + checkCompatibilityPrefs[i] + "' to previous value '" + previous + "'.");
+                if (!compatByDefault)
+                {
+                    // don't turn back on check compatibility if we're in a compat by default browser
+                    Preferences.setBoolGlobalPreference(checkCompatibilityPrefs[i], previous);
+                    Logger.debug("Resetting compatibility pref '" + checkCompatibilityPrefs[i] + "' to previous value '" + previous + "'.");
+                }
+
+                Preferences.clearGlobalPreference(checkCompatibilityPrefs[i]+".previous");
             }
             else
             {

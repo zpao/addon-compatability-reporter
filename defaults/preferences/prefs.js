@@ -2,6 +2,7 @@ pref("extensions.acr.addons", "");
 pref("extensions.acr.addons_reports", "");
 pref("extensions.acr.amo_host", "addons.mozilla.org");
 pref("extensions.acr.previousApplicationVersion", "");
+pref("extensions.acr.autorestart", false);
 pref("extensions.acr.debug", false);
 pref("extensions.acr.firstrun", true);
 pref("extensions.acr.verbose", false);

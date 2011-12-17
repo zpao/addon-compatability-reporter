@@ -83,9 +83,17 @@ acrService.prototype = {
     {
       this.debug("final-ui-startup");
 
+      // if no auto-restart - run any  postinstall stuff now
+      if (this.prefsGlobal.getBoolPref("extensions.acr.autorestart") === false)
+      {
+          this.prefsGlobal.setBoolPref("extensions.acr.postinstall", 
+            this.prefsGlobal.getBoolPref("extensions.acr.firstrun"));
+      }
+
       this._disableCheckCompatibilityPrefs();
 
-      if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") === true)
+      if (this.prefsGlobal.getBoolPref("extensions.acr.autorestart") === true &&
+          this.prefsGlobal.getBoolPref("extensions.acr.postinstall") === true)
       {
         try { // FF4+
           Components.utils.import("resource://gre/modules/AddonRepository.jsm");
@@ -143,11 +151,9 @@ acrService.prototype = {
                     this.prefsGlobal.clearUserPref(this.CHECK_COMPATIBILITY_PREFS[i]);
                 }
 
-                // save previous compat. prefs
+                // save previous compat. prefs (first run only)
 
-                // using different pref, for now -- see bug 572322
-                //if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") == true)
-                if (this.prefsGlobal.getBoolPref("extensions.acr.firstrun") == true && !compatByDefault)
+                if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") === true && !compatByDefault)
                 {
                     if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]))
                     {
@@ -162,9 +168,11 @@ acrService.prototype = {
                     }
                 }
 
-                if (compatByDefault) {
+                if (compatByDefault)
+                {
                   // Don't disable compatibility checking when compatible-by-default is enabled.
-                  if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i])) {
+                  if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]))
+                  {
                     this.debug("Resetting compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "'");
                     this.prefsGlobal.clearUserPref(this.CHECK_COMPATIBILITY_PREFS[i]);
                   }
