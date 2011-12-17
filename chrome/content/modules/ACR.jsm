@@ -314,9 +314,11 @@ function lastrun()
             }
             else
             {
-                Preferences.clearGlobalPreference(checkCompatibilityPrefs[i]);
-
-                Logger.debug("Compatibility pref '" + checkCompatibilityPrefs[i] + "' had no previous value - have cleared this pref.");
+                if (!compatByDefault)
+                {
+                    Preferences.clearGlobalPreference(checkCompatibilityPrefs[i]);
+                    Logger.debug("Compatibility pref '" + checkCompatibilityPrefs[i] + "' had no previous value - have cleared this pref.");
+                }
             }
         }
         catch (e)

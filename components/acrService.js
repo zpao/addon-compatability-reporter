@@ -127,13 +127,20 @@ acrService.prototype = {
     _disableCheckCompatibilityPrefs : function acr_disableCheckCompatibilityPrefs()
     {
         var compatByDefault = false;
+
         try { // AddonManager is FF4+ only
             compatByDefault = ("strictCompatibility" in AddonManager) &&
                                   !AddonManager.strictCompatibility;
         }
         catch(e) {}
+
         if (compatByDefault)
+        {
           this.debug("Compatible-by-default is enabled; compatibility checking will not be disabled");
+
+          // Don't make any compatibility pref changes in this mode (Bug 709225)
+          return;
+        }
 
         // disable all compatibility checks 
         // if this is firstrun, saves any previous compatibility info for future restore
@@ -153,7 +160,7 @@ acrService.prototype = {
 
                 // save previous compat. prefs (first run only)
 
-                if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") === true && !compatByDefault)
+                if (this.prefsGlobal.getBoolPref("extensions.acr.postinstall") === true)
                 {
                     if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]))
                     {
@@ -168,22 +175,10 @@ acrService.prototype = {
                     }
                 }
 
-                if (compatByDefault)
-                {
-                  // Don't disable compatibility checking when compatible-by-default is enabled.
-                  if (this.prefsGlobal.prefHasUserValue(this.CHECK_COMPATIBILITY_PREFS[i]))
-                  {
-                    this.debug("Resetting compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "'");
-                    this.prefsGlobal.clearUserPref(this.CHECK_COMPATIBILITY_PREFS[i]);
-                  }
-                }
-                else
-                {
-                  // turn off this compatilibilty pref
+                // turn off this compatilibilty pref
 
-                  this.debug("Setting compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "' to 'false'");
-                  this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
-                }
+                this.debug("Setting compatibility pref '" + this.CHECK_COMPATIBILITY_PREFS[i] + "' to 'false'");
+                this.prefsGlobal.setBoolPref(this.CHECK_COMPATIBILITY_PREFS[i], false);
             }
             catch (e)
             {
