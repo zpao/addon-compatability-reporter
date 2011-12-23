@@ -135,4 +135,6 @@ var COMPATIBILITY_PREFS_SM = ["extensions.checkCompatibility",
                               "extensions.checkCompatibility.2.7",
                               "extensions.checkCompatibility.2.8a",
                               "extensions.checkCompatibility.2.8",
+                              "extensions.checkCompatibility.2.9a",
+                              "extensions.checkCompatibility.2.9",
                               "extensions.checkCompatibility.nightly"];
