@@ -426,14 +426,27 @@ if (!ACRController.isLegacyEM())
     var versionComparator = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
         .getService(Components.interfaces.nsIVersionComparator);
 
-    if ((envInfo.appName == "Firefox"||envInfo.appName == "Thunderbird")
-        && versionComparator.compare(envInfo.appVersion, "9.0a2") >= 0)
+    var useCAR = false;
+
+    switch (envInfo.appName)
     {
-        ACR.Logger.debug("App version >= 9 -- will not use CustomAddonRepostory.jsm");
+        case "Firefox":
+        case "Thunderbird":
+            useCAR = versionComparator.compare(envInfo.appVersion, "9.0a2") < 0;
+        case "SeaMonkey":
+            // FF 4 equals SM 2.1, 5 -> 2.2, ..., 9 -> 2.6.
+            useCAR = versionComparator.compare(envInfo.appVersion, "2.6a2") < 0;
+        default:
+            ACR.Logger.warn("ACR does not support " + envInfo.appName);
+    }
+
+    if (!useCAR)
+    {
+        ACR.Logger.debug("useCAR = false -- will not use CustomAddonRepostory.jsm");
     }
     else
     {
-        ACR.Logger.debug("App version < 9 -- will use CustomAddonRepostory.jsm");
+        ACR.Logger.debug("useCAR = true -- will use CustomAddonRepostory.jsm");
 
         gSearchView.show = function(aQuery, aRequest)
         {
