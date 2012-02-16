@@ -206,7 +206,7 @@ function checkForApplicationUpgrade(callback)
 {
     // see bug 527249 for an explanation of this method
 
-    var versionRE = /(\d\.\d)(\.\d+)?(([ab])\d.*)?/;
+    var versionRE = /(\d\d?\.\d)(\.\d+)?(([ab])\d.*)?/;
 
     var env = Util.getHostEnvironmentInfo();
     var currAppVersion = env.appVersion;
